@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Forms\Shared\FrmPlatformManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

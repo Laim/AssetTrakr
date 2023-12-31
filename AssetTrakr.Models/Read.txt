@@ -1,0 +1,12 @@
+﻿If a dependency row is deleted, the child is deleted also.
+
+If you delete the Manufacturer, it will delete the License and the Platform.  If you delete the Platform, 
+it'll delete the License and the platform.
+
+License depends on
+	 - Manufacturer
+	 - Platform
+	 - Contract
+
+ Platform depends on
+	 - Manufacturer
