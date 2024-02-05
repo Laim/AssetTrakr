@@ -1,6 +1,6 @@
 ﻿namespace AssetTrakr.App.Forms.Shared
 {
-    partial class FrmSubscriptionPeriodAdd
+    partial class FrmPeriodAdd
     {
         /// <summary>
         /// Required designer variable.
@@ -75,11 +75,11 @@
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(94, 29);
             btnAdd.TabIndex = 20;
-            btnAdd.Text = "Save";
+            btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
-            // FrmSubscriptionPeriodAdd
+            // FrmPeriodAdd
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -90,7 +90,7 @@
             Controls.Add(dtSubStart);
             Controls.Add(lblSubStartDate);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "FrmSubscriptionPeriodAdd";
+            Name = "FrmPeriodAdd";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add New Period";
             ResumeLayout(false);

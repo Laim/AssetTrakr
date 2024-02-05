@@ -50,7 +50,7 @@ namespace AssetTrakr.Models.Extensions
 
             var mappedList = subscriptionPeriods.Select(x => new Period
             {
-                Id = x.Id,
+                PeriodId = x.PeriodId,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
 

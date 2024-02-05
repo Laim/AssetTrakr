@@ -36,10 +36,11 @@
             lblPurchaseDate = new Label();
             dtPurchaseDate = new DateTimePicker();
             cbIsSubscription = new CheckBox();
-            btnAdd = new Button();
+            btnAddUpdate = new Button();
             btnAddAttachment = new Button();
             tabControl1 = new TabControl();
             tabInformation = new TabPage();
+            lnkModifyContract = new LinkLabel();
             lnkAddContract = new LinkLabel();
             lblContract = new Label();
             cmbContracts = new ComboBox();
@@ -63,7 +64,6 @@
             cmbManufacturers = new ComboBox();
             lblManufacturer = new Label();
             tabSubscription = new TabPage();
-            cbInheritFromContract = new CheckBox();
             dgvSubscriptionPeriods = new DataGridView();
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
@@ -151,15 +151,15 @@
             cbIsSubscription.UseVisualStyleBackColor = true;
             cbIsSubscription.CheckedChanged += cbIsSubscription_CheckedChanged;
             // 
-            // btnAdd
+            // btnAddUpdate
             // 
-            btnAdd.Location = new Point(877, 592);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(94, 29);
-            btnAdd.TabIndex = 11;
-            btnAdd.Text = "Save";
-            btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += btnAdd_Click;
+            btnAddUpdate.Location = new Point(877, 592);
+            btnAddUpdate.Name = "btnAddUpdate";
+            btnAddUpdate.Size = new Size(94, 29);
+            btnAddUpdate.TabIndex = 11;
+            btnAddUpdate.Text = "Save";
+            btnAddUpdate.UseVisualStyleBackColor = true;
+            btnAddUpdate.Click += btnAddUpdate_Click;
             // 
             // btnAddAttachment
             // 
@@ -185,6 +185,7 @@
             // 
             // tabInformation
             // 
+            tabInformation.Controls.Add(lnkModifyContract);
             tabInformation.Controls.Add(lnkAddContract);
             tabInformation.Controls.Add(lblContract);
             tabInformation.Controls.Add(cmbContracts);
@@ -217,15 +218,27 @@
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
             // 
+            // lnkModifyContract
+            // 
+            lnkModifyContract.AutoSize = true;
+            lnkModifyContract.Location = new Point(795, 155);
+            lnkModifyContract.Name = "lnkModifyContract";
+            lnkModifyContract.Size = new Size(56, 20);
+            lnkModifyContract.TabIndex = 25;
+            lnkModifyContract.TabStop = true;
+            lnkModifyContract.Text = "Modify";
+            lnkModifyContract.Visible = false;
+            lnkModifyContract.LinkClicked += lnkModifyContract_LinkClicked;
+            // 
             // lnkAddContract
             // 
             lnkAddContract.AutoSize = true;
             lnkAddContract.Location = new Point(752, 155);
             lnkAddContract.Name = "lnkAddContract";
-            lnkAddContract.Size = new Size(71, 20);
+            lnkAddContract.Size = new Size(37, 20);
             lnkAddContract.TabIndex = 24;
             lnkAddContract.TabStop = true;
-            lnkAddContract.Text = "Add New";
+            lnkAddContract.Text = "Add";
             lnkAddContract.LinkClicked += lnkAddContract_LinkClicked;
             // 
             // lblContract
@@ -245,6 +258,7 @@
             cmbContracts.Name = "cmbContracts";
             cmbContracts.Size = new Size(235, 28);
             cmbContracts.TabIndex = 22;
+            cmbContracts.SelectedIndexChanged += cmbContracts_SelectedIndexChanged;
             // 
             // lnkAddPlatform
             // 
@@ -416,7 +430,6 @@
             // 
             // tabSubscription
             // 
-            tabSubscription.Controls.Add(cbInheritFromContract);
             tabSubscription.Controls.Add(dgvSubscriptionPeriods);
             tabSubscription.Controls.Add(btnAddSubPeriod);
             tabSubscription.Controls.Add(cbIsSubscription);
@@ -427,18 +440,6 @@
             tabSubscription.TabIndex = 2;
             tabSubscription.Text = "Subscription";
             tabSubscription.UseVisualStyleBackColor = true;
-            // 
-            // cbInheritFromContract
-            // 
-            cbInheritFromContract.AutoSize = true;
-            cbInheritFromContract.Enabled = false;
-            cbInheritFromContract.Location = new Point(168, 20);
-            cbInheritFromContract.Name = "cbInheritFromContract";
-            cbInheritFromContract.Size = new Size(169, 24);
-            cbInheritFromContract.TabIndex = 17;
-            cbInheritFromContract.Text = "Inherit from Contract";
-            cbInheritFromContract.UseVisualStyleBackColor = true;
-            cbInheritFromContract.CheckedChanged += cbInheritFromContract_CheckedChanged;
             // 
             // dgvSubscriptionPeriods
             // 
@@ -559,16 +560,17 @@
             txtDescription.Size = new Size(941, 531);
             txtDescription.TabIndex = 8;
             // 
-            // FrmLicenseAdd
+            // FrmLicenseModify
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(990, 629);
             Controls.Add(tabControl1);
-            Controls.Add(btnAdd);
+            Controls.Add(btnAddUpdate);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "FrmLicenseAdd";
+            Name = "FrmLicenseModify";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Add New License";
             ((System.ComponentModel.ISupportInitialize)numCount).EndInit();
@@ -598,7 +600,7 @@
         private Label lblPurchaseDate;
         private DateTimePicker dtPurchaseDate;
         private CheckBox cbIsSubscription;
-        private Button btnAdd;
+        private Button btnAddUpdate;
         private Button btnAddAttachment;
         private TabControl tabControl1;
         private TabPage tabInformation;
@@ -635,6 +637,6 @@
         private Label lblContract;
         private ComboBox cmbContracts;
         private LinkLabel lnkAddContract;
-        private CheckBox cbInheritFromContract;
+        private LinkLabel lnkModifyContract;
     }
 }

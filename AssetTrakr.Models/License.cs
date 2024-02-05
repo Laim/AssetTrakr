@@ -22,7 +22,10 @@ namespace AssetTrakr.Models
 
         public DateOnly PurchaseDate { get; set; }
 
-        public List<int>? SubscriptionIds { get; set; }
+        /// <summary>
+        /// Subscription Periods
+        /// </summary>
+        public List<LicensePeriod> LicensePeriods { get; set; } = [];
 
         public bool IsSubscription { get; set; } = false;
 
@@ -35,9 +38,12 @@ namespace AssetTrakr.Models
 
         public required int ManufacturerId { get; set; }
 
-        public List<int>? AttachmentIds { get; set; }
+        /// <summary>
+        /// Assigned Attachments
+        /// </summary>
+        public List<LicenseAttachment> LicenseAttachments { get; set; } = [];
 
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         public string? OrderReference { get; set; }
 
@@ -53,7 +59,7 @@ namespace AssetTrakr.Models
 
         [ForeignKey("ContractId")] // Define ForeignKey attribute to represent the relationship
         public Contract? Contract { get; set; } // Direct navigation property to Contract entity
-
+        
         [ForeignKey("ManufacturerId")] // Define ForeignKey attribute to represent the relationship
         public Manufacturer? Manufacturer { get; set; } // Direct navigation property to Manufacturer entity
 

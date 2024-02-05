@@ -1,40 +1,59 @@
-﻿using AssetTrakr.App.Forms.Attachments;
+﻿using AssetTrakr.App.Forms.Attachment;
 using AssetTrakr.App.Forms.Contract;
 using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.Database;
+using AssetTrakr.Models;
 using AssetTrakr.Models.Extensions;
-using Microsoft.EntityFrameworkCore;
+using AssetTrakr.App.Helpers;
+using System.ComponentModel;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetTrakr.App.Forms.License
 {
-    // TODO: Might be worth optimizing this to use PropertyChange events so that when SubscriptionPeriodIds or AttachmentIds
-    // gets updated, it runs the relevant shit to update the DGV.  Might prevent some code stink?
     public partial class FrmLicenseModify : Form
     {
         private readonly DatabaseContext _dbContext;
-        private List<int> _attachmentIds = [];
-        private List<int> _subscriptionPeriodIds = [];
-        private readonly int _licenseId;
+        private BindingList<Models.Attachment> _attachments = [];
+        private BindingList<Period> _subscriptionPeriods = [];
+        private readonly Models.License? _licenseData;
+        private readonly bool _isEditingMode;
 
-        public FrmLicenseModify(DatabaseContext DbContext, int LicenseId = 0)
+        public FrmLicenseModify(int licenseId = 0)
         {
             InitializeComponent();
 
-            _dbContext ??= DbContext;
-            _licenseId = LicenseId;
+            _dbContext ??= new DatabaseContext();
+
+            if (licenseId <= 0)
+            {
+                return;
+            }
+
+            var license = _dbContext.Licenses
+                    .Include(l => l.Contract)
+                    .Include(l => l.Manufacturer)
+                    .Include(l => l.Platform)
+                    .Include(l => l.LicensePeriods)
+                        .ThenInclude(lp => lp.Period)
+                    .Include(l => l.LicenseAttachments)
+                        .ThenInclude(la => la.Attachment)
+                    .FirstOrDefault(l => l.Id == licenseId);
+
+            if (license != null)
+            {
+                _licenseData = license;
+                _isEditingMode = true;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            cmbManufacturers.DataSource = _dbContext.Manufacturers.Select(m => m.Name).ToComboList();
-            cmbContracts.DataSource = _dbContext.Contracts.Select(c => c.Name).ToComboList();
-            cmbPlatforms.DataSource = _dbContext.Platforms.Select(p => p.Name).ToComboList();
+            PopulateComboBoxes();
 
-            // If modifying a license instead of adding it
-            if(_licenseId != 0)
+            if (_isEditingMode)
             {
                 LoadLicenseData();
             }
@@ -44,164 +63,129 @@ namespace AssetTrakr.App.Forms.License
         {
             btnAddSubPeriod.Enabled = cbIsSubscription.Checked;
             dgvSubscriptionPeriods.Enabled = cbIsSubscription.Checked;
-            cbInheritFromContract.Enabled = cbIsSubscription.Checked;
+
+            // if we uncheck, remove all the periods
+            if (!cbIsSubscription.Checked && dgvSubscriptionPeriods.Rows.Count > 0)
+            {
+                DialogResult dr = MessageBox.Show("Unmarking this as a Subscription License will remove " +
+                    "all of the existing periods.  Do you wish to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (dr == DialogResult.Yes)
+                {
+                    _subscriptionPeriods.Clear();
+                }
+                else if (dr == DialogResult.No)
+                {
+                    // recheck the checkbox
+                    cbIsSubscription.Checked = true;
+                }
+            }
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
+        private void btnAddUpdate_Click(object sender, EventArgs e)
         {
-            if (txtName.Text.Length > 155)
+            if (txtName.Text.Length > 155 || txtName.Text.Length == 0)
             {
-                MessageBox.Show("Name must be be less than 156 characters", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Name is a required field and must be be less than 156 characters", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (txtName.Text.Length == 0)
-            {
-                MessageBox.Show("Name is a required field", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
+            int? selectedContractId = (cmbContracts.SelectedItem as Models.Contract)?.ContractId;
+            var selectedPlatform = cmbPlatforms.SelectedItem as Platform;
 
-            // get ids
-            // TODO: There has to be a better way of doing this since we already populate the combobox
-            var selectedManufacturer = _dbContext.Manufacturers.SingleOrDefault(x => x.Name == cmbManufacturers.Text);
-            int? selectedContractId = _dbContext.Contracts.SingleOrDefault(x => x.Name == cmbContracts.Text)?.ContractId;
-            int selectedPlatformId = _dbContext.Platforms.SingleOrDefault(x => x.Name == cmbPlatforms.Text).PlatformId;
-
-            if (selectedManufacturer == null || selectedManufacturer.ManufacturerId == 0)
+            if (selectedManufacturer == null)
             {
                 MessageBox.Show($"Manufacturer is a required field", "Manufacturer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // UR HERE 31/12/2023
-
-            // TODO: Re-evaluate this, might need to make selectedPlatformId nullable?
-            if(selectedPlatformId == 0)
+            if (selectedPlatform == null)
             {
+                MessageBox.Show($"Platform is a required field", "Platform", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // add license
-            _dbContext.Add(new Models.License
+            if (!_isEditingMode)
             {
-                Name = txtName.Text,
-                Description = txtDescription.Text,
-                Count = Convert.ToInt32(numCount.Value),
-                IsSubscription = cbIsSubscription.Checked,
-                IsSubscriptionContract = cbInheritFromContract.Checked,
-                SubscriptionIds = _subscriptionPeriodIds,
-                PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value),
-                AttachmentIds = _attachmentIds,
-                ManufacturerId = selectedManufacturer.ManufacturerId,
-                Price = Convert.ToInt32(numCost.Value),
-                OrderReference = txtOrderRef.Text,
-                LicenseKey = txtLicenseKey.Text,
-                Version = txtVersion.Text,
-                PlatformId = selectedPlatformId,
-                ContractId = selectedContractId ?? null,
-                RegisteredEmail = txtInfoContactEmail.Text,
-                RegisteredUser = txtInfoContactName.Text
-            });
+                AddLicense(selectedManufacturer, selectedContractId, selectedPlatform);
+            }
+            else
+            {
+                UpdateLicense(selectedManufacturer, selectedContractId, selectedPlatform);
+            }
 
             if (_dbContext.SaveChanges() > 0)
             {
                 MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                Close();
             }
         }
 
         private void btnAddAttachment_Click(object sender, EventArgs e)
         {
-            FrmAttachmentAdd frmAttachmentAdd = new(_dbContext, _attachmentIds);
+            FrmAttachmentAdd frmAttachmentAdd = new(_attachments);
             frmAttachmentAdd.ShowDialog();
 
-            if (frmAttachmentAdd.AttachmentIds != null && frmAttachmentAdd.AttachmentIds.Count > 0)
+            if (frmAttachmentAdd.Attachments != null && frmAttachmentAdd.Attachments.Count > 0)
             {
-                _attachmentIds = frmAttachmentAdd.AttachmentIds;
+                _attachments = frmAttachmentAdd.Attachments;
 
-                UpdateAttachmentDataGrid(_attachmentIds);
+                DataGridViewMethods.UpdateAttachmentDataGrid(_attachments, dgvAttachments);
             }
         }
 
         private void btnAddSubPeriod_Click(object sender, EventArgs e)
         {
-            FrmSubscriptionPeriodAdd frmSubscriptionPeriodAdd = new(_dbContext, _subscriptionPeriodIds);
+            FrmPeriodAdd frmSubscriptionPeriodAdd = new(_subscriptionPeriods);
             frmSubscriptionPeriodAdd.ShowDialog();
 
-            if (frmSubscriptionPeriodAdd.PeriodIds != null && frmSubscriptionPeriodAdd.PeriodIds.Count > 0)
+            if (frmSubscriptionPeriodAdd.Periods != null && frmSubscriptionPeriodAdd.Periods.Count > 0)
             {
-                _subscriptionPeriodIds = frmSubscriptionPeriodAdd.PeriodIds;
+                _subscriptionPeriods = frmSubscriptionPeriodAdd.Periods;
+                DataGridViewMethods.UpdatePeriodsDataGrid(_subscriptionPeriods, dgvSubscriptionPeriods);
             }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv || dgv.Rows.Count == 0)
             {
-                if (dgv.Rows.Count == 0)
+                return;
+            }
+
+            if (dgv.Name == nameof(dgvAttachments))
+            {
+                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem; //.Cells["AttachmentId"].Value;
+
+                if (dataItem is Models.Attachment selectedItem)
                 {
-                    return;
+                    _attachments.Remove(selectedItem);
                 }
-
-                int selectedId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells["Id"].Value;
-
-                if (dgv.Name == nameof(dgvAttachments))
+                else
                 {
-                    var att = _dbContext.Attachments.SingleOrDefault(x => x.AttachmentId == selectedId);
-
-                    if (att != null)
-                    {
-                        _dbContext.Attachments.Remove(att);
-                        _attachmentIds.Remove(selectedId);
-                    }
-                    else
-                    {
-                        throw new Exception("Attachment has not been set or cannot be found");
-                    }
+                    throw new Exception("Attachment has not been set or cannot be found");
                 }
-                else if (dgv.Name == nameof(dgvSubscriptionPeriods))
+            }
+            else if (dgv.Name == nameof(dgvSubscriptionPeriods))
+            {
+                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem; //.Cells["AttachmentId"].Value;
+
+                if (dataItem is Period selectedItem)
                 {
-                    // Only let the user delete if they haven't inherited the period dates
-                    // from a contract
-                    if(!cbInheritFromContract.Checked)
-                    {
-                        var period = _dbContext.Periods.SingleOrDefault(x => x.Id == selectedId);
-
-                        if (period != null)
-                        {
-                            _dbContext.Periods.Remove(period);
-                            _subscriptionPeriodIds.Remove(selectedId);
-                        }
-                        else
-                        {
-                            throw new Exception("Period has not been set or cannot be found");
-                        }
-                    } else
-                    {
-                        // if inherited from contract 
-                        MessageBox.Show(
-                            "Cannot delete period dates inherited from a contract.  Dates must be deleted from the " +
-                            "contract directly.", 
-                            "Period Delete", 
-                            MessageBoxButtons.OK, 
-                            MessageBoxIcon.Error);
-
-                        return;
-                    }
+                    _subscriptionPeriods.Remove(selectedItem);
                 }
-
-                if (_dbContext.SaveChanges() > 0)
+                else
                 {
-                    foreach (DataGridViewRow item in dgv.SelectedRows)
-                    {
-                        dgv.Rows.RemoveAt(item.Index);
-                    }
+                    throw new Exception("Period has not been set or cannot be found");
                 }
+            }
 
-                if (dgv.Rows.Count == 0)
-                {
-                    dgv.DataSource = null;
-                }
+            if (dgv.Rows.Count == 0)
+            {
+                dgv.DataSource = null;
             }
 
         }
@@ -222,201 +206,310 @@ namespace AssetTrakr.App.Forms.License
 
         private void lnkAddContract_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmContractAdd frmContractAdd = new(_dbContext);
-            frmContractAdd.ShowDialog();
+            FrmContractModify frmContractModify = new();
+            frmContractModify.ShowDialog();
 
-            cmbContracts.DataSource = _dbContext.Contracts.Select(c => c.Name).ToComboList();
+            PopulateComboBoxes();
+        }
+
+        private void cmbContracts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sender is not ComboBox cmb)
+            {
+                return;
+            }
+
+            if (cmb.SelectedIndex == 0)
+            {
+                lnkModifyContract.Visible = false;
+                return;
+            }
+
+            lnkModifyContract.Visible = true;
+        }
+
+        private void lnkModifyContract_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FrmContractModify frmContractModify = new(cmbContracts.SelectedItem?.ToString() ?? "");
+            frmContractModify.ShowDialog();
+
+            PopulateComboBoxes();
         }
 
         private void lnkAddManufacturer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmManufacturerManager frmManufacturerManager = new(_dbContext);
+            FrmManufacturerManager frmManufacturerManager = new();
             frmManufacturerManager.ShowDialog();
 
-            cmbManufacturers.DataSource = _dbContext.Manufacturers.Select(m => m.Name).ToComboList();
+            PopulateComboBoxes();
         }
 
         private void lnkAddPlatform_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmPlatformManager frmPlatformManager = new(_dbContext);
+            FrmPlatformManager frmPlatformManager = new();
             frmPlatformManager.ShowDialog();
 
-            cmbPlatforms.DataSource = _dbContext.Platforms.Select(m => m.Name).ToComboList();
-        }
-
-        private void cbInheritFromContract_CheckedChanged(object sender, EventArgs e)
-        {
-            if(cmbContracts.SelectedIndex < 1 && cbInheritFromContract.Checked)
-            {
-                MessageBox.Show("You must assign a contract before inheriting it's Periods", "Inherit from Contract", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                cbInheritFromContract.Checked = false;
-                return;
-            }
-
-            btnAddSubPeriod.Enabled = !cbInheritFromContract.Checked;
-
-            if(cbInheritFromContract.Checked)
-            {
-                List<int>? contractPeriodIds = _dbContext.Contracts
-                .Where(x => x.Name == cmbContracts.Text)
-                .Select(x => x.SubscriptionIds).FirstOrDefault()?.ToList();
-
-                if (contractPeriodIds != null)
-                {
-                    UpdatePeriodsDataGrid(contractPeriodIds);
-                }
-            } else
-            {
-                // clears out the dgv and removes the contract related dates to prevent the user 
-                // accidentally wiping things out
-                dgvSubscriptionPeriods.DataSource = null;
-            }
+            PopulateComboBoxes();
         }
 
         /// <summary>
-        /// Updates the DataGridView for Subscription Periods and hides the irrelevant columns
+        /// This loads the license data from the SQLite database.  This runs if the LicenseId passed at run time is NOT 0.
         /// </summary>
-        /// <param name="periodList">
-        /// Integer list of Subscription Period IDs, see <see cref="Models.Period"/>
-        /// </param>
-        void UpdatePeriodsDataGrid(List<int> periodList)
+        private void LoadLicenseData()
         {
-            dgvSubscriptionPeriods.DataSource = _dbContext.Periods
-                    .Where(l => periodList.Contains(l.Id))
-                    .ToModelSubscriptionPeriod();
-
-            // Hide the non-default columns from the end user
-            dgvSubscriptionPeriods.Columns["Id"].Visible = false;
-            dgvSubscriptionPeriods.Columns["CreatedDate"].Visible = false;
-            dgvSubscriptionPeriods.Columns["UpdatedDate"].Visible = false;
-            dgvSubscriptionPeriods.Columns["CreatedBy"].Visible = false;
-            dgvSubscriptionPeriods.Columns["UpdatedBy"].Visible = false;
-        }
-
-        /// <summary>
-        /// Updates the DataGridView for Attachments and hides the irrelevant columns
-        /// </summary>
-        /// <param name="attachmentList">
-        /// Integer list of Attachment IDs, see <see cref="Models.Attachment"/>
-        /// </param>
-        void UpdateAttachmentDataGrid(List<int> attachmentList)
-        {
-
-            dgvAttachments.DataSource = _dbContext.Attachments
-                .Where(l => attachmentList.Contains(l.AttachmentId))
-                .ToModelAttachment();
-
-            // Hide the non-default columns from the end user
-            dgvAttachments.Columns["AttachmentId"].Visible = false;
-            dgvAttachments.Columns["Data"].Visible = false;
-            dgvAttachments.Columns["DataType"].Visible = false;
-            dgvAttachments.Columns["Url"].Visible = false;
-            dgvAttachments.Columns["IsUrl"].Visible = false;
-            dgvAttachments.Columns["CreatedDate"].Visible = false;
-            dgvAttachments.Columns["UpdatedDate"].Visible = false;
-            dgvAttachments.Columns["CreatedBy"].Visible = false;
-            dgvAttachments.Columns["UpdatedBy"].Visible = false;
-        }
-
-        /// <summary>
-        /// Converts a string value from the database to the Index of the ComboBox.
-        /// </summary>
-        /// <param name="comboBox">Your ComboBox</param>
-        /// <param name="value">Database String Value</param>
-        /// <returns>
-        /// ComboBox SelectedIndex for <paramref name="value"/> otherwise -1.
-        /// </returns>
-        private int ConvertDbStringToComboId(ComboBox comboBox, string value)
-        {
-            if(comboBox.Items.Count == 0)
+            if (_licenseData == null)
             {
-                throw new Exception("comboBox contains no items");
-            }
-
-            int index = -1;
-            for (int i = 0; i < comboBox.Items.Count; i++)
-            {
-                var item = comboBox.Items[i]?.ToString();
-
-                if (item != null && item == value)
-                {
-                    index = i;
-                    break;
-                }
-            }
- 
-            return index;
-        }
-
-        /// <summary>
-        /// This loads the license data from the SQLite database.  This runs if the LicenseId passed at run time is NOT 0, 
-        /// i.e we are modifying a license instead of adding a new one. See Constructor for more info.
-        /// </summary>
-        void LoadLicenseData()
-        {
-            var data = _dbContext.Licenses
-                        .Include(l => l.Contract)
-                        .Include(l => l.Manufacturer)
-                        .Include(l => l.Platform)
-                        .Where(x => x.Id == _licenseId).FirstOrDefault();
-
-            if (data == null)
-            {
-                MessageBox.Show($"Could not find License Data for LicenseID = {_licenseId}.", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Could not find License Data.", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
                 return; // just in case lol
             }
 
             // Update general form info
-            btnAdd.Text = "Update";
-            this.Text = "Modify License";
+            btnAddUpdate.Text = "Update";
+            Text = $"Modify License - {_licenseData.Name}";
 
-            // Info tab
-            txtName.Text = data.Name;
-            dtPurchaseDate.Value = data.PurchaseDate.ToDateTime(TimeOnly.MinValue);
-            numCost.Value = (decimal)data.Price;
-            numCount.Value = data.Count;
+            txtName.Text = _licenseData.Name;
+            dtPurchaseDate.Value = _licenseData.PurchaseDate.ToDateTime(TimeOnly.MinValue);
+            numCost.Value = _licenseData.Price;
+            numCount.Value = _licenseData.Count;
 
-            cmbManufacturers.SelectedIndex = ConvertDbStringToComboId(cmbManufacturers, data.Manufacturer?.Name ?? "");
-            cmbPlatforms.SelectedIndex = ConvertDbStringToComboId(cmbPlatforms, data.Platform?.Name ?? "");
-            cmbContracts.SelectedIndex = ConvertDbStringToComboId(cmbContracts, data.Contract?.Name ?? "");
-            
-            txtLicenseKey.Text = data.LicenseKey;
-            txtOrderRef.Text = data.OrderReference;
-            txtVersion.Text = data.Version;
-            txtInfoContactName.Text = data.RegisteredUser;
-            txtInfoContactEmail.Text = data.RegisteredEmail;
+            cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(_licenseData.Manufacturer?.Name);
+            cmbPlatforms.SelectedIndex = cmbPlatforms.FindStringExact(_licenseData.Platform?.Name);
+            cmbContracts.SelectedIndex = cmbContracts.FindStringExact(_licenseData.Contract?.Name);
 
-            // Subscription Tab
-            if(data.IsSubscription)
+            txtLicenseKey.Text = _licenseData.LicenseKey;
+            txtOrderRef.Text = _licenseData.OrderReference;
+            txtVersion.Text = _licenseData.Version;
+            txtInfoContactName.Text = _licenseData.RegisteredUser;
+            txtInfoContactEmail.Text = _licenseData.RegisteredEmail;
+            txtDescription.Text = _licenseData.Description;
+
+            // Load in Subscription Periods
+            if (_licenseData.IsSubscription && _licenseData.LicensePeriods.Count > 0)
             {
-                cbIsSubscription.Checked = data.IsSubscription;
-                cbInheritFromContract.Checked = data.IsSubscriptionContract;
+                cbIsSubscription.Checked = _licenseData.IsSubscription;
 
-                List<int>? contractPeriodIds = _dbContext.Contracts
-                    .Where(x => x.ContractId == data.ContractId)
-                    .Select(x => x.SubscriptionIds).FirstOrDefault()?.ToList();
-
-                if(contractPeriodIds != null)
+                foreach (var period in _licenseData.LicensePeriods)
                 {
-                    UpdatePeriodsDataGrid(contractPeriodIds);
+                    _subscriptionPeriods.Add(period.Period);
+                }
+
+                DataGridViewMethods.UpdatePeriodsDataGrid(_subscriptionPeriods, dgvSubscriptionPeriods);
+            }
+
+            // Load in Attachments
+            if (_licenseData.LicenseAttachments.Count > 0)
+            {
+                foreach (var attachment in _licenseData.LicenseAttachments)
+                {
+                    _attachments.Add(attachment.Attachment);
+                }
+
+                DataGridViewMethods.UpdateAttachmentDataGrid(_attachments, dgvAttachments);
+            }
+
+        }
+
+        /// <summary>
+        /// Adds a new license to the <see cref="DatabaseContext"/> but does not save it.
+        /// </summary>
+        /// <param name="manufacturer">
+        /// Manufacturer of the license, <see cref="Manufacturer"/>
+        /// </param>
+        /// <param name="contractId">
+        /// Id of the contract being assigned, <see cref="Models.Contract"/>
+        /// </param>
+        /// <param name="platform">
+        /// Platform the license runs on, <see cref="Platform"/>
+        /// </param>
+        private void AddLicense(Manufacturer manufacturer, int? contractId, Platform platform)
+        {
+            // Ensure we don't mark it as having a Subscription if there are no periods
+            if (_subscriptionPeriods.Count == 0)
+            {
+                cbIsSubscription.Checked = false;
+            }
+
+            var licenseData = new Models.License
+            {
+                Name = txtName.Text,
+                Description = txtDescription.Text,
+                Count = Convert.ToInt32(numCount.Value),
+                IsSubscription = cbIsSubscription.Checked,
+                IsSubscriptionContract = false, // TODO: Implement
+                PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value),
+                ManufacturerId = manufacturer.ManufacturerId,
+                Price = Convert.ToInt32(numCost.Value),
+                OrderReference = txtOrderRef.Text,
+                LicenseKey = txtLicenseKey.Text,
+                Version = txtVersion.Text,
+                PlatformId = platform.PlatformId,
+                ContractId = contractId ?? null,
+                RegisteredEmail = txtInfoContactEmail.Text,
+                RegisteredUser = txtInfoContactName.Text
+            };
+
+            foreach (var period in _subscriptionPeriods)
+            {
+                LicensePeriod licensePeriod = new()
+                {
+                    License = licenseData,
+                    Period = period
+                };
+
+                licenseData.LicensePeriods.Add(licensePeriod);
+            }
+
+            foreach (var attachment in _attachments)
+            {
+                LicenseAttachment licenseAttachment = new()
+                {
+                    License = licenseData,
+                    Attachment = attachment
+                };
+                licenseData.LicenseAttachments.Add(licenseAttachment);
+            }
+
+            _dbContext.Licenses.Add(licenseData);
+        }
+
+        /// <summary>
+        /// Updates the license against the <see cref="DatabaseContext"/> but does not save it.
+        /// </summary>
+        /// <param name="manufacturer">
+        /// Manufacturer of the license, <see cref="Manufacturer"/>
+        /// </param>
+        /// <param name="contractId">
+        /// Id of the contract being assigned, <see cref="Models.Contract"/>
+        /// </param>
+        /// <param name="platform">
+        /// Platform the license runs on, <see cref="Platform"/>
+        /// </param>
+        /// <exception cref="EntryPointNotFoundException">
+        /// Exception thrown if _licenseData is null
+        /// </exception>
+        private void UpdateLicense(Manufacturer manufacturer, int? contractId, Platform platform)
+        {
+            if (_licenseData == null)
+            {
+                throw new Exception("LicenseData has not been populated");
+            }
+
+            if (_subscriptionPeriods.Count == 0)
+            {
+                cbIsSubscription.Checked = false;
+            }
+
+            _licenseData.Name = txtName.Text;
+            _licenseData.Description = txtDescription.Text;
+            _licenseData.Count = Convert.ToInt32(numCount.Value);
+            _licenseData.IsSubscription = cbIsSubscription.Checked;
+            _licenseData.IsSubscriptionContract = false; // TODO: Implement
+            _licenseData.PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value);
+            _licenseData.ManufacturerId = manufacturer.ManufacturerId;
+            _licenseData.Price = Convert.ToInt32(numCost.Value);
+            _licenseData.OrderReference = txtOrderRef.Text;
+            _licenseData.LicenseKey = txtLicenseKey.Text;
+            _licenseData.Version = txtVersion.Text;
+            _licenseData.PlatformId = platform.PlatformId;
+            _licenseData.ContractId = contractId ?? null;
+            _licenseData.RegisteredUser = txtInfoContactName.Text;
+            _licenseData.RegisteredEmail = txtInfoContactEmail.Text;
+            _licenseData.Platform = platform;
+
+            // Remove Subscription and Attachment associations that are no longer present
+            var existingPeriods = _dbContext.LicensePeriods.Where(lp => lp.LicenseId == _licenseData.Id).ToList();
+            var existingAttachments = _dbContext.LicenseAttachments.Where(la => la.LicenseId == _licenseData.Id).ToList();
+
+            foreach (var existingPeriod in existingPeriods)
+            {
+                // Check if the existing period is in the updated list of periods
+                bool isPeriodInUpdatedList = _subscriptionPeriods.Any(period => period.PeriodId == existingPeriod.PeriodId);
+
+                if (!isPeriodInUpdatedList)
+                {
+                    _dbContext.Periods.Remove(existingPeriod.Period);
                 }
             }
 
-
-            // Attachment Tab
-            if(data.AttachmentIds != null)
+            foreach (var existingAttachment in existingAttachments)
             {
-                List<int>? attachmentIds = _dbContext.Attachments
-                    .Where(x => data.AttachmentIds.Contains(x.AttachmentId))
-                    .Select(x => x.AttachmentId).ToList();
+                bool isAttachmentInUpdatedList = _attachments.Any(attachment => attachment.AttachmentId == existingAttachment.AttachmentId);
 
-                if(attachmentIds != null)
+                if (!isAttachmentInUpdatedList)
                 {
-                    UpdateAttachmentDataGrid(attachmentIds);
+                    _dbContext.Attachments.Remove(existingAttachment.Attachment);
                 }
             }
 
+            // Update the associated periods for the License
+            foreach (var period in _subscriptionPeriods)
+            {
+                // Check if the period is already associated with the license
+                bool isPeriodAssociated = _licenseData.LicensePeriods.Any(lp => lp.PeriodId == period.PeriodId);
+
+                if (!isPeriodAssociated)
+                {
+                    // If the period is not associated, create a new PeriodLicenses entry
+                    LicensePeriod licensePeriod = new()
+                    {
+                        LicenseId = _licenseData.Id,
+                        License = _licenseData,
+                        PeriodId = period.PeriodId,
+                        Period = period
+                    };
+
+                    _dbContext.LicensePeriods.Add(licensePeriod);
+                }
+            }
+
+            foreach (var attachment in _attachments)
+            {
+                bool isAttachmentAssociated = _licenseData.LicenseAttachments.Any(la => la.AttachmentId == attachment.AttachmentId);
+
+                if (!isAttachmentAssociated)
+                {
+                    LicenseAttachment licenseAttachment = new()
+                    {
+                        LicenseId = _licenseData.Id,
+                        License = _licenseData,
+                        AttachmentId = attachment.AttachmentId,
+                        Attachment = attachment,
+                    };
+
+                    _dbContext.LicenseAttachments.Add(licenseAttachment);
+                }
+            }
+
+            _dbContext.Licenses.Update(_licenseData);
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+
+            _dbContext.Dispose();
+        }
+    
+        /// <summary>
+        /// Populates the relevant ComboBoxes
+        /// </summary>
+        private void PopulateComboBoxes()
+        {
+            // Load Manufacturer Data into the ComboBox
+            cmbManufacturers.DataSource = _dbContext.Manufacturers.ToList();
+            cmbManufacturers.DisplayMember = "Name";
+            cmbManufacturers.ValueMember = "ManufacturerId";
+
+            // Load Contract Data into the ComboBox
+            cmbContracts.DataSource = _dbContext.Contracts.ToList();
+            cmbContracts.DisplayMember = "Name";
+            cmbContracts.ValueMember = "ContractId";
+
+            // Load the Platform Data into the ComboBox
+            cmbPlatforms.DataSource = _dbContext.Platforms.ToList();
+            cmbPlatforms.DisplayMember = "Name";
+            cmbPlatforms.ValueMember = "PlatformId";
         }
     }
 }

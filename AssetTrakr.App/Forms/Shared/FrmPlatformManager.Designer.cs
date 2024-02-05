@@ -40,7 +40,7 @@
             lblNotes = new Label();
             txtNotes = new TextBox();
             lblManufacturer = new Label();
-            cmbManufacturersList = new ComboBox();
+            cmbManufacturers = new ComboBox();
             contextMenuStripListbx.SuspendLayout();
             SuspendLayout();
             // 
@@ -147,21 +147,21 @@
             lblManufacturer.Text = "Manufacturer";
             lblManufacturer.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // cmbManufacturersList
+            // cmbManufacturers
             // 
-            cmbManufacturersList.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbManufacturersList.FormattingEnabled = true;
-            cmbManufacturersList.Location = new Point(458, 62);
-            cmbManufacturersList.Name = "cmbManufacturersList";
-            cmbManufacturersList.Size = new Size(319, 28);
-            cmbManufacturersList.TabIndex = 19;
+            cmbManufacturers.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbManufacturers.FormattingEnabled = true;
+            cmbManufacturers.Location = new Point(458, 62);
+            cmbManufacturers.Name = "cmbManufacturers";
+            cmbManufacturers.Size = new Size(319, 28);
+            cmbManufacturers.TabIndex = 19;
             // 
             // FrmPlatformManager
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 426);
-            Controls.Add(cmbManufacturersList);
+            Controls.Add(cmbManufacturers);
             Controls.Add(btnUpdate);
             Controls.Add(btnAdd);
             Controls.Add(btnDelete);
@@ -177,7 +177,7 @@
             MinimizeBox = false;
             MinimumSize = new Size(818, 473);
             Name = "FrmPlatformManager";
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Platform Manager";
             contextMenuStripListbx.ResumeLayout(false);
             ResumeLayout(false);
@@ -197,6 +197,6 @@
         private Label lblNotes;
         private TextBox txtNotes;
         private Label lblManufacturer;
-        private ComboBox cmbManufacturersList;
+        private ComboBox cmbManufacturers;
     }
 }

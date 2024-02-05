@@ -1,9 +1,9 @@
 ﻿namespace AssetTrakr.Models
 {
-    public class LicensePeriod
+    public class ContractPeriod
     {
-        public int? LicenseId { get; set; } = null;
-        public virtual required License License { get; set; }
+        public int? ContractId { get; set; } = null;
+        public virtual required Contract Contract { get; set; }
 
         public int? PeriodId { get; set; } = null;
         public virtual required Period Period { get; set; }

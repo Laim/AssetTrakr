@@ -1,4 +1,4 @@
-﻿namespace AssetTrakr.App.Forms.Attachments
+﻿namespace AssetTrakr.App.Forms.Attachment
 {
     partial class FrmAttachmentAdd
     {

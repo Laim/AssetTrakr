@@ -235,7 +235,7 @@
             MinimizeBox = false;
             MinimumSize = new Size(818, 473);
             Name = "FrmManufacturerManager";
-            StartPosition = FormStartPosition.CenterParent;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Manufacturer Manager";
             contextMenuStripListbx.ResumeLayout(false);
             ResumeLayout(false);

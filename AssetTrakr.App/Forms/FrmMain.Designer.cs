@@ -32,6 +32,8 @@
             licensesToolStripMenuItem = new ToolStripMenuItem();
             addLicenseToolStripMenuItem = new ToolStripMenuItem();
             viewLicensesToolStripMenuItem = new ToolStripMenuItem();
+            assetsToolStripMenuItem = new ToolStripMenuItem();
+            addAssetToolStripMenuItem = new ToolStripMenuItem();
             button1 = new Button();
             textBox1 = new TextBox();
             menuStrip1.SuspendLayout();
@@ -40,7 +42,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1262, 28);
@@ -67,6 +69,20 @@
             viewLicensesToolStripMenuItem.Size = new Size(182, 26);
             viewLicensesToolStripMenuItem.Text = "View Licenses";
             viewLicensesToolStripMenuItem.Click += viewLicensesToolStripMenuItem_Click;
+            // 
+            // assetsToolStripMenuItem
+            // 
+            assetsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { addAssetToolStripMenuItem });
+            assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
+            assetsToolStripMenuItem.Size = new Size(64, 24);
+            assetsToolStripMenuItem.Text = "Assets";
+            // 
+            // addAssetToolStripMenuItem
+            // 
+            addAssetToolStripMenuItem.Name = "addAssetToolStripMenuItem";
+            addAssetToolStripMenuItem.Size = new Size(224, 26);
+            addAssetToolStripMenuItem.Text = "Add Asset";
+            addAssetToolStripMenuItem.Click += addAssetToolStripMenuItem_Click;
             // 
             // button1
             // 
@@ -97,7 +113,7 @@
             MinimumSize = new Size(1280, 720);
             Name = "FrmMain";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "AssetTrakr &bullet; Dashboard";
+            Text = "AssetTrakr • Dashboard";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -112,5 +128,7 @@
         private ToolStripMenuItem viewLicensesToolStripMenuItem;
         private Button button1;
         private TextBox textBox1;
+        private ToolStripMenuItem assetsToolStripMenuItem;
+        private ToolStripMenuItem addAssetToolStripMenuItem;
     }
 }

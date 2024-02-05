@@ -1,4 +1,4 @@
-﻿namespace AssetTrakr.Models.Enums
+﻿namespace AssetTrakr.Utils.Enums
 {
     public enum AttachmentType
     {

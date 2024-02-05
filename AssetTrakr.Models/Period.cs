@@ -1,16 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AssetTrakr.Models.Assets;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AssetTrakr.Models
 {
-    [PrimaryKey(nameof(Id))]
+    [PrimaryKey(nameof(PeriodId))]
     public class Period : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int PeriodId { get; set; }
 
         public required DateOnly StartDate { get; set; }
 
         public required DateOnly EndDate { get; set; }
+
+        [ForeignKey("PeriodId")] // Define ForeignKey attribute to represent the relationship
+        public virtual List<LicensePeriod> LicensePeriods { get; set; } = [];
+
+        [ForeignKey("PeriodId")] // Define ForeignKey attribute to represent the relationship
+        public virtual List<ContractPeriod> ContractPeriods { get; set; } = [];
+
+        [ForeignKey("PeriodId")] // Define ForeignKey attribute to represent the relationship
+        public virtual List<AssetPeriod> AssetPeriods { get; set; } = [];
     }
 }

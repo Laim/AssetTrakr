@@ -34,7 +34,10 @@ namespace AssetTrakr.App.Forms.Shared
 
             foreach (string column in AvailableColumns)
             {
-                chkLbColumns.Items.Add(column);
+                if(!column.EndsWith("Id"))
+                {
+                    chkLbColumns.Items.Add(column);
+                }
             }
 
             foreach (string column in SelectedColumns)

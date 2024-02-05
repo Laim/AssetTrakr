@@ -21,10 +21,15 @@ namespace AssetTrakr.Models
         [MaxLength(150)]
         public required string OrderRef { get; set; } // UNIQUE
 
-        [Required]
-        public required List<int> SubscriptionIds { get; set; }
+        /// <summary>
+        /// Assigned Attachments
+        /// </summary>
+        public List<ContractAttachment> ContractAttachments { get; set; } = [];
 
-        public List<int>? AttachmentIds { get; set; }
+        /// <summary>
+        /// Subscription Periods
+        /// </summary>
+        public List<ContractPeriod> ContractPeriods { get; set; } = [];
 
         public string? Description { get; set; }
 

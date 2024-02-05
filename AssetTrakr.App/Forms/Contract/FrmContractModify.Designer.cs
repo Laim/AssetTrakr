@@ -1,6 +1,6 @@
 ﻿namespace AssetTrakr.App.Forms.Contract
 {
-    partial class FrmContractAdd
+    partial class FrmContractModify
     {
         /// <summary>
         /// Required designer variable.
@@ -47,7 +47,7 @@
             tabAttachments = new TabPage();
             btnAddAttachment = new Button();
             dgvAttachments = new DataGridView();
-            btnAdd = new Button();
+            btnAddUpdate = new Button();
             tabControlContract.SuspendLayout();
             tabInformation.SuspendLayout();
             tabPeriods.SuspendLayout();
@@ -62,8 +62,8 @@
             // 
             tabControlContract.Controls.Add(tabInformation);
             tabControlContract.Controls.Add(tabPeriods);
-            tabControlContract.Controls.Add(tabNotes);
             tabControlContract.Controls.Add(tabAttachments);
+            tabControlContract.Controls.Add(tabNotes);
             tabControlContract.Location = new Point(20, 20);
             tabControlContract.Name = "tabControlContract";
             tabControlContract.SelectedIndex = 0;
@@ -256,26 +256,26 @@
             dgvAttachments.Size = new Size(669, 300);
             dgvAttachments.TabIndex = 14;
             // 
-            // btnAdd
+            // btnAddUpdate
             // 
-            btnAdd.Location = new Point(642, 452);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(94, 29);
-            btnAdd.TabIndex = 12;
-            btnAdd.Text = "Save";
-            btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += btnAdd_Click;
+            btnAddUpdate.Location = new Point(642, 452);
+            btnAddUpdate.Name = "btnAddUpdate";
+            btnAddUpdate.Size = new Size(94, 29);
+            btnAddUpdate.TabIndex = 12;
+            btnAddUpdate.Text = "Save";
+            btnAddUpdate.UseVisualStyleBackColor = true;
+            btnAddUpdate.Click += btnAddUpdate_Click;
             // 
-            // FrmContractAdd
+            // FrmContractModify
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(764, 491);
-            Controls.Add(btnAdd);
+            Controls.Add(btnAddUpdate);
             Controls.Add(tabControlContract);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "FrmContractAdd";
+            Name = "FrmContractModify";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add New Contract";
             tabControlContract.ResumeLayout(false);
@@ -296,7 +296,7 @@
         private TabControl tabControlContract;
         private TabPage tabInformation;
         private TabPage tabNotes;
-        private Button btnAdd;
+        private Button btnAddUpdate;
         private TextBox txtDescription;
         private TabPage tabPeriods;
         private TabPage tabAttachments;

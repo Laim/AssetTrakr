@@ -10,11 +10,11 @@ namespace AssetTrakr.App.Forms.Shared
         private List<Manufacturer> _manufacturerList;
         private int _selectedManufacturerId;
 
-        public FrmManufacturerManager(DatabaseContext DbContext)
+        public FrmManufacturerManager()
         {
             InitializeComponent();
 
-            _dbContext ??= DbContext;
+            _dbContext ??= new DatabaseContext();
 
             // We load in all manufacturers here to prevent having to do multiple database calls
             // every time we want to pull the property data for each manufacturer.

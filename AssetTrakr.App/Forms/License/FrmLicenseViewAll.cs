@@ -6,11 +6,11 @@ namespace AssetTrakr.App.Forms.License
     {
         private readonly DatabaseContext _dbContext;
 
-        public FrmLicenseViewAll(DatabaseContext DbContext)
+        public FrmLicenseViewAll()
         {
             InitializeComponent();
 
-            _dbContext ??= DbContext;
+            _dbContext ??= new DatabaseContext();
         }
 
         protected override void OnLoad(EventArgs e)

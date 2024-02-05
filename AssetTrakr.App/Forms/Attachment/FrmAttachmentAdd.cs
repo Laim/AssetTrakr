@@ -1,26 +1,22 @@
-﻿using AssetTrakr.Database;
-using AssetTrakr.Models.Enums;
+﻿using AssetTrakr.Utils.Enums;
+using System.ComponentModel;
 
-namespace AssetTrakr.App.Forms.Attachments
+namespace AssetTrakr.App.Forms.Attachment
 {
     public partial class FrmAttachmentAdd : Form
     {
-        public readonly DatabaseContext _dbContext;
+        public BindingList<Models.Attachment> Attachments;
 
-        public List<int> AttachmentIds;
-
-        public FrmAttachmentAdd(DatabaseContext DbContext, List<int> AttachIds)
+        public FrmAttachmentAdd(BindingList<Models.Attachment> attachments)
         {
             InitializeComponent();
 
-            _dbContext ??= DbContext;
-
-            AttachmentIds ??= [];
+            Attachments ??= [];
 
             // To account for previously added and prevent data loss on user end
-            if (AttachIds != null)
+            if (attachments != null)
             {
-                AttachmentIds = AttachIds;
+                Attachments = attachments;
             }
         }
 
@@ -66,7 +62,7 @@ namespace AssetTrakr.App.Forms.Attachments
                 attachmentType = AttachmentType.File;
             }
 
-            var entry = new Models.Attachment
+            Attachments.Add(new Models.Attachment
             {
                 Name = txtName.Text,
                 Description = txtDescription.Text,
@@ -75,19 +71,9 @@ namespace AssetTrakr.App.Forms.Attachments
                 IsUrl = cbIsUrl.Checked,
                 Type = attachmentType,
                 Url = attachmentUrl
-            };
+            });
 
-            _dbContext.Add(entry);
-
-            if (_dbContext.SaveChanges() > 0)
-            {
-                MessageBox.Show($"{txtName.Text} saved successfully", "Attachment", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                AttachmentIds.Add(entry.AttachmentId);
-            }
-            else
-            {
-                MessageBox.Show($"{txtName.Text} was not added successfully", "Attachment", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            MessageBox.Show($"Attachment '{txtName.Text}' added", "Attachment", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnAttachmentFileBrowse_Click(object sender, EventArgs e)

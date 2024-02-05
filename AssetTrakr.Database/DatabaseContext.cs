@@ -1,4 +1,6 @@
-﻿using AssetTrakr.Models.Enums;
+﻿using AssetTrakr.Models;
+using AssetTrakr.Models.Assets;
+using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -7,12 +9,23 @@ namespace AssetTrakr.Database
     public class DatabaseContext : DbContext
     {
         // All Models must be referenced here
-        public DbSet<Models.License> Licenses { get; set; }
-        public DbSet<Models.Contract> Contracts { get; set; }
-        public DbSet<Models.Attachment> Attachments { get; set; }
-        public DbSet<Models.Manufacturer> Manufacturers { get; set; }
-        public DbSet<Models.Period> Periods { get; set; }
-        public DbSet<Models.Platform> Platforms { get; set; }
+        public DbSet<License> Licenses { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+        public DbSet<Period> Periods { get; set; }
+        public DbSet<Platform> Platforms { get; set; }
+        public DbSet<LicensePeriod> LicensePeriods { get; set; }
+        public DbSet<LicenseAttachment> LicenseAttachments { get; set; }
+        public DbSet<ContractPeriod> ContractPeriods { get; set; }
+        public DbSet<ContractAttachment> ContractAttachments { get; set; }
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<AssetAttachment> AssetAttachments { get; set; }
+        public DbSet<AssetHardDrive> AssetHardDrives { get; set; }
+        public DbSet<AssetHardware> AssetHardwares { get; set; }
+        public DbSet<AssetNetworkAdapter> AssetNetworkAdapters { get; set; }
+        public DbSet<AssetOperatingSystem> AssetOperatingSystems { get; set; }
+        public DbSet<AssetPeriod> AssetPeriods { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,51 +36,141 @@ namespace AssetTrakr.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // Converts the enum int value to the string value, so instead of saving into the database as
             // type = 1, it'll save as type = File
             // Source: https://jonathancrozier.com/blog/store-and-retrieve-enums-as-strings-with-entity-framework-core
-            modelBuilder.Entity<Models.Attachment>()
+            modelBuilder.Entity<Attachment>()
                 .Property(a => a.Type)
                 .HasConversion(new EnumToStringConverter<AttachmentType>());
 
-            // make fields unique, cant do this via the model for some reason?
-            // TODO: Review https://stackoverflow.com/a/67075842/12954031
-            modelBuilder.Entity<Models.Manufacturer>()
+            modelBuilder.Entity<Manufacturer>()
                 .HasIndex(m => m.Name).IsUnique();
 
-            modelBuilder.Entity<Models.Platform>()
-                .HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<Asset>()
+                .HasIndex("OperatingSystemId")
+                .IsUnique(false);
 
-            // Configure relationships using Fluent API
-            #region License
-            modelBuilder.Entity<Models.License>()
-                .HasOne(l => l.Contract)
-                .WithMany()
-                .HasForeignKey(l => l.ContractId);
+            modelBuilder.Entity<Platform>(e =>
+            {
+                e.HasIndex(p => p.Name)
+                    .IsUnique();
 
-            modelBuilder.Entity<Models.License>()
-                .HasOne(l => l.Manufacturer)
-                .WithMany()
-                .HasForeignKey(l => l.ManufacturerId);
+                e.HasOne(l => l.Manufacturer)
+                    .WithMany()
+                    .HasForeignKey(l => l.ManufacturerId);
+            });
 
-            modelBuilder.Entity<Models.License>()
-                .HasOne(l => l.Platform)
-                .WithMany()
-                .HasForeignKey(l => l.PlatformId);
-            #endregion
+            modelBuilder.Entity<License>(e =>
+            {
+                e.HasOne(l => l.Contract)
+                    .WithMany()
+                    .HasForeignKey(l => l.ContractId);
 
-            #region Platform
-            modelBuilder.Entity<Models.Platform>()
-                .HasOne(l => l.Manufacturer)
-                .WithMany()
-                .HasForeignKey(l => l.ManufacturerId);
-            #endregion
+                e.HasOne(l => l.Manufacturer)
+                    .WithMany()
+                    .HasForeignKey(l => l.ManufacturerId);
+
+                e.HasOne(l => l.Platform)
+                    .WithMany()
+                    .HasForeignKey(l => l.PlatformId);
+            });
+
+            modelBuilder.Entity<LicensePeriod>(e =>
+            {
+                e.HasKey(pj => new { pj.LicenseId, pj.PeriodId });
+
+                e.HasOne(pj => pj.License)
+                    .WithMany(l => l.LicensePeriods)
+                    .HasForeignKey(l => l.LicenseId);
+
+                e.HasOne(lp => lp.Period)
+                    .WithMany(p => p.LicensePeriods)
+                    .HasForeignKey(l => l.PeriodId);
+            });
+
+            modelBuilder.Entity<LicenseAttachment>(e =>
+            {
+                e.HasKey(la => new { la.LicenseId, la.AttachmentId });
+
+                e.HasOne(la => la.License)
+                    .WithMany(l => l.LicenseAttachments)
+                    .HasForeignKey(la => la.LicenseId);
+
+                e.HasOne(la => la.Attachment)
+                    .WithMany(a => a.LicenseAttachments)
+                    .HasForeignKey(la => la.AttachmentId);
+            });
+
+            modelBuilder.Entity<ContractPeriod>(e =>
+            {
+                e.HasKey(pj => new { pj.ContractId, pj.PeriodId });
+
+                e.HasOne(pj => pj.Contract)
+                    .WithMany(l => l.ContractPeriods)
+                    .HasForeignKey(l => l.ContractId);
+
+                e.HasOne(lp => lp.Period)
+                    .WithMany(p => p.ContractPeriods)
+                    .HasForeignKey(l => l.PeriodId);
+
+                e.HasOne(lp => lp.Period)
+                    .WithMany(p => p.ContractPeriods)
+                    .HasForeignKey(l => l.PeriodId);
+            });
+
+            modelBuilder.Entity<ContractAttachment>(e =>
+            {
+                e.HasKey(la => new { la.ContractId, la.AttachmentId });
+
+                e.HasOne(la => la.Contract)
+                    .WithMany(l => l.ContractAttachments)
+                    .HasForeignKey(la => la.ContractId);
+
+                e.HasOne(la => la.Attachment)
+                    .WithMany(a => a.ContractAttachments)
+                    .HasForeignKey(la => la.AttachmentId);
+            });
+
+            modelBuilder.Entity<AssetPeriod>(e =>
+            {
+                e.HasKey(pj => new { pj.AssetId, pj.PeriodId });
+
+                e.HasOne(pj => pj.Asset)
+                    .WithMany(l => l.Warranties)
+                    .HasForeignKey(l => l.AssetId);
+
+                e.HasOne(lp => lp.Period)
+                    .WithMany(p => p.AssetPeriods)
+                    .HasForeignKey(l => l.PeriodId);
+
+                e.HasOne(lp => lp.Period)
+                    .WithMany(p => p.AssetPeriods)
+                    .HasForeignKey(l => l.PeriodId);
+            });
+
+            modelBuilder.Entity<AssetAttachment>(e =>
+            {
+                e.HasKey(la => new { la.AssetId, la.AttachmentId });
+
+                e.HasOne(la => la.Asset)
+                    .WithMany(l => l.AssetAttachments)
+                    .HasForeignKey(aa => aa.AssetId);
+
+                e.HasOne(la => la.Attachment)
+                    .WithMany(a => a.AssetAttachments)
+                    .HasForeignKey(la => la.AttachmentId);
+            });
+
 #if DEBUG
-            AddSampleData(modelBuilder);
+            DatabaseSeeder ds = new(modelBuilder);
+            ds.Seed();
 #endif
+
         }
 
-        // Source: https://threewill.com/how-to-auto-generate-created-updated-field-in-ef-core/
+        // Below Source: https://threewill.com/how-to-auto-generate-created-updated-field-in-ef-core/
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -116,60 +219,5 @@ namespace AssetTrakr.Database
                 }
             }
         }
-
-
-        #region Sample Data [Debug Only]
-        private void AddSampleData(ModelBuilder modelBuilder)
-        {
-
-            modelBuilder.Entity<Models.Manufacturer>().HasData(
-                new Models.Manufacturer
-                {
-                    ManufacturerId = 1,
-                    Name = "Microsoft Corporation",
-                    Url = "https://microsoft.com",
-                    SupportEmail = "",
-                    SupportPhone = "",
-                    SupportUrl = "https://support.microsoft.com/en-us/home/"
-                }
-            );
-
-            modelBuilder.Entity<Models.Platform>().HasData(
-                new Models.Platform
-                {
-                    PlatformId = 1,
-                    Name = "Windows", 
-                    ManufacturerId = 1,
-                }
-            );
-
-            modelBuilder.Entity<Models.Contract>().HasData(
-                new Models.Contract
-                {
-                    ContractId = 1,
-                    Name = "SBMPSA 2023",
-                    OrderRef = "",
-                    SubscriptionIds = [],
-                }
-            );
-
-            modelBuilder.Entity<Models.License>().HasData(
-                new Models.License
-                {
-                    Id = 1,
-                    Name = "Example",
-                    Count = 1,
-                    Description = "Example License",
-                    IsSubscription = false,
-                    PurchaseDate = DateOnly.FromDateTime(DateTime.Today),
-                    ManufacturerId = 1,
-                    PlatformId = 1,
-                    ContractId = 1,
-                    Price = 0
-                }
-            );
-        }
-
-        #endregion
     }
 }

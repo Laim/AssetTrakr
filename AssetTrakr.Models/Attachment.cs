@@ -1,4 +1,5 @@
-﻿using AssetTrakr.Models.Enums;
+﻿using AssetTrakr.Models.Assets;
+using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,10 +23,20 @@ namespace AssetTrakr.Models
         public byte[]? Data { get; set; }
         
         public string? DataType { get; set; } // jpg, pdf, png etc.
+
         public AttachmentType Type { get; set; }
         
         public string? Url { get; set; }
 
         public bool IsUrl { get; set; } = false;
+
+        [ForeignKey("AttachmentId")] // Define ForeignKey attribute to represent the relationship
+        public List<LicenseAttachment> LicenseAttachments { get; set; } = [];
+
+        [ForeignKey("AttachmentId")] // Define ForeignKey attribute to represent the relationship
+        public List<ContractAttachment> ContractAttachments { get; set; } = [];
+
+        [ForeignKey("AttachmentId")] // Define ForeignKey attribute to represent the relationship
+        public List<AssetAttachment> AssetAttachments { get; set; } = [];
     }
 }

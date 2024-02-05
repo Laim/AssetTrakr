@@ -11,18 +11,13 @@ namespace AssetTrakr.App.Forms.Shared
         private List<Platform> _platformList;
         private int _selectedPlatformId;
 
-        public FrmPlatformManager(DatabaseContext DbContext)
+        public FrmPlatformManager()
         {
             InitializeComponent();
 
-            _dbContext ??= DbContext;
+            _dbContext ??= new DatabaseContext();
 
-            // We load in all platforms here to prevent having to do multiple database calls
-            // every time we want to pull the property data for each platform.
-            // We can also refresh this each time something is added, deleted or edited w/ less.
-            // load on the db, hopefully.
-            // TODO:  This might need optimized later on. [See RefreshPlatformList also during review]
-            _platformList ??= _dbContext.Platforms.ToList();
+            RefreshPlatformList();
         }
 
         /// <summary>
@@ -30,20 +25,20 @@ namespace AssetTrakr.App.Forms.Shared
         /// </summary>
         private void RefreshPlatformList()
         {
-
-            if (_platformList.Count > 0)
+            if(_platformList != null)
             {
-                _platformList.Clear();
-                lbPlatforms.Items.Clear();
+                if (_platformList.Count > 0)
+                {
+                    _platformList.Clear();
+                }
             }
 
             _platformList = [.. _dbContext.Platforms];
 
             // populate the user visible listbox
-            foreach (var platform in _platformList)
-            {
-                lbPlatforms.Items.Add(platform.Name);
-            }
+            lbPlatforms.DataSource = _platformList;
+            lbPlatforms.DisplayMember = "Name";
+            lbPlatforms.ValueMember = "PlatformId";
         }
 
         protected override void OnLoad(EventArgs e)
@@ -52,7 +47,9 @@ namespace AssetTrakr.App.Forms.Shared
 
             RefreshPlatformList();
 
-            cmbManufacturersList.DataSource = _dbContext.Manufacturers.Select(m => m.Name).ToComboList();
+            cmbManufacturers.DataSource = _dbContext.Manufacturers.ToList();
+            cmbManufacturers.DisplayMember = "Name";
+            cmbManufacturers.ValueMember = "ManufacturerId";
         }
 
         private void lbPlatforms_SelectedIndexChanged(object sender, EventArgs e)
@@ -69,15 +66,16 @@ namespace AssetTrakr.App.Forms.Shared
             btnDelete.Enabled = true;
             btnUpdate.Enabled = true;
 
-            var platform = _platformList[lbPlatforms.SelectedIndex];
+            var platform = lbPlatforms.SelectedItem as Platform;
 
             _selectedPlatformId = platform.PlatformId;
             txtName.Text = platform.Name;
+            cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(_dbContext.Manufacturers.SingleOrDefault(x => x.ManufacturerId == platform.ManufacturerId).Name);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            var platform = _dbContext.Platforms.SingleOrDefault(x => x.PlatformId == _selectedPlatformId);
+            var platform = lbPlatforms.SelectedItem as Platform;
 
             if (platform == null)
             {
@@ -91,20 +89,20 @@ namespace AssetTrakr.App.Forms.Shared
             }
 
             // TODO: There has to be a better way of doing this since we already populate the combobox
-            var selectedManufacturer = _dbContext.Manufacturers.SingleOrDefault(x => x.Name == cmbManufacturersList.Text);
+            var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
 
-            if(selectedManufacturer == null)
+            if (selectedManufacturer == null)
             {
                 MessageBox.Show($"Platform has not been updated as 'selectedManufacturer' is null", "Add", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             platform.Name = txtName.Text;
-            platform.ManufacturerId = selectedManufacturer.ManufacturerId;
+            platform.Manufacturer = selectedManufacturer;
 
             if (_dbContext.SaveChanges() > 0)
             {
-                MessageBox.Show("Manufacturer updated successfully", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Platform updated successfully", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 RefreshPlatformList();
                 return;
             }
@@ -116,7 +114,7 @@ namespace AssetTrakr.App.Forms.Shared
             lbPlatforms.SelectedIndex = -1;
 
             txtName.Text = string.Empty;
-            cmbManufacturersList.SelectedIndex = 0;
+            cmbManufacturers.SelectedIndex = 0;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -135,7 +133,8 @@ namespace AssetTrakr.App.Forms.Shared
             }
 
             // TODO: There has to be a better way of doing this since we already populate the combobox
-            var selectedManufacturer = _dbContext.Manufacturers.SingleOrDefault(x => x.Name == cmbManufacturersList.Text);
+            var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
+
             if (selectedManufacturer == null)
             {
                 MessageBox.Show($"Platform has not been added as Manufacturer is null", "Add", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -145,7 +144,7 @@ namespace AssetTrakr.App.Forms.Shared
             _dbContext.Platforms.Add(new Platform
             {
                 Name = txtName.Text,
-                ManufacturerId = selectedManufacturer.ManufacturerId
+                Manufacturer = selectedManufacturer,
             });
 
             if (_dbContext.SaveChanges() > 0)

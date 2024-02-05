@@ -15,7 +15,7 @@ namespace AssetTrakr.Models
         [MaxLength(100)]
         public required string Name { get; set; }
 
-        public required int ManufacturerId { get; set; }
+        public int ManufacturerId { get; set; }
 
         [ForeignKey("ManufacturerId")] // Define ForeignKey attribute to represent the relationship
         public Manufacturer? Manufacturer { get; set; } // Direct navigation property to Manufacturer entity
