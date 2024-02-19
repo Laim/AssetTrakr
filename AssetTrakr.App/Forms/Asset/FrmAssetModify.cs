@@ -461,25 +461,51 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // network adapters -- new
-            foreach(var adapter in _networkAdapters)
+            foreach (var adapter in _networkAdapters)
             {
-                bool isAdapaterAssociated = _assetData.Hardware.NetworkAdapters.Any(na => na.NetworkAdapterId ==  adapter.NetworkAdapterId);
+                bool isAdapaterAssociated = _assetData.Hardware.NetworkAdapters.Any(na => na.NetworkAdapterId == adapter.NetworkAdapterId);
 
                 if(!isAdapaterAssociated)
                 {
                     AssetNetworkAdapter networkAdapter = new()
                     {
-                        AssetHardware = _assetData.Hardware,
                         Name = adapter.Name,
                         IpAddress = adapter.IpAddress,
                         MacAddress = adapter.MacAddress,
                     };
 
-                    _dbContext.AssetNetworkAdapters.Add(adapter);
+                    _assetData.Hardware.NetworkAdapters.Add(networkAdapter);
                 }
             }
 
-            _dbContext.Assets.Update(_assetData);
+            // hard drives -- new
+            foreach(var drive in _hardDrives)
+            {
+                bool isDriveAssociated = _assetData.Hardware.HardDrives.Any(hd => hd.HardDriveId == drive.HardDriveId);
+
+                if (!isDriveAssociated)
+                {
+                    AssetHardDrive hardDrive = new()
+                    {
+                        Name = drive.Name, 
+                        Manufacturer = drive.Manufacturer,
+                        ManufacturerId = drive.ManufacturerId,
+                        SerialNumber = drive.SerialNumber,
+                        SizeInGB = drive.SizeInGB                        
+                    };
+
+                    _assetData.Hardware.HardDrives.Add(hardDrive);
+                }
+            }
+
+
+            try
+            {
+                _dbContext.Assets.Update(_assetData);
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.InnerException);
+            }
 
         }
 

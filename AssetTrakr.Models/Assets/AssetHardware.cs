@@ -33,7 +33,8 @@ namespace AssetTrakr.Models.Assets
     public class AssetNetworkAdapter
     {
         public int AssetHardwareId { get; set; }
-        
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int NetworkAdapterId { get; set; }
         
         public required string Name { get; set; }
