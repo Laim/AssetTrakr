@@ -32,19 +32,26 @@ namespace AssetTrakr.App.Forms.Shared
         {
             base.OnLoad(e);
 
-            foreach (string column in AvailableColumns)
-            {
-                if(!column.EndsWith("Id"))
-                {
-                    chkLbColumns.Items.Add(column);
-                }
-            }
-
             foreach (string column in SelectedColumns)
             {
                 chkLbColumns.Items.Add(column);
                 // minus one to prevent index outta range
                 chkLbColumns.SetItemChecked(chkLbColumns.Items.Count - 1, true);
+            }
+
+            List<string> columnsToHide = ["AssetHardware", "Manufacturer"];
+
+            foreach (string column in AvailableColumns)
+            {
+                if(!column.EndsWith("Id")) // Hide the Id columns, user doesn't need them
+                {
+                    if (columnsToHide.Contains(column))
+                    { 
+                        continue; 
+                    }
+
+                    chkLbColumns.Items.Add(column);
+                }
             }
         }
 

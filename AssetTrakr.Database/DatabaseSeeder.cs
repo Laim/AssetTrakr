@@ -9,7 +9,7 @@ namespace AssetTrakr.Database
         public ModelBuilder Seed()
         {
             modelBuilder.Entity<Manufacturer>().HasData(GetManufacturers());
-            //modelBuilder.Entity<Platform>().HasData(GetPlatforms());
+            modelBuilder.Entity<Platform>().HasData(GetPlatforms());
             modelBuilder.Entity<AssetOperatingSystem>().HasData(GetAssetOperatingSystems());
 
             return modelBuilder;

@@ -1,4 +1,5 @@
 ﻿using AssetTrakr.Models;
+using AssetTrakr.Models.Assets;
 using System.ComponentModel;
 
 namespace AssetTrakr.App.Helpers
@@ -20,6 +21,10 @@ namespace AssetTrakr.App.Helpers
 
             dgv.DataSource = null;
             dgv.DataSource = periodList;
+
+            // Renames the columns so they're less generic[?] lol
+            dgv.Columns["StartDate"].HeaderText = "Start";
+            dgv.Columns["EndDate"].HeaderText = "End";
 
             // Hide the non-default columns from the end user
             dgv.Columns["PeriodId"].Visible = false;
@@ -76,9 +81,52 @@ namespace AssetTrakr.App.Helpers
 
             dgv.DataSource = null;
             dgv.DataSource = genericList;
+        }
+
+        /// <summary>
+        /// Updates the DataGridView for Hard Drvies and hides the irrelevant columns
+        /// </summary>
+        /// <param name="driveList">
+        /// BindingList of <see cref="AssetHardDrive"/>s
+        /// </param>
+        /// <param name="dgv">
+        /// The DataGridView you want to modify
+        /// </param>
+        public static void UpdateDriveDataGrid(BindingList<AssetHardDrive> driveList, DataGridView dgv)
+        {
+            if (driveList == null) { return; }
+
+            dgv.DataSource = null;
+            dgv.DataSource = driveList;
 
             // Hide the non-default columns from the end user
-            dgv.Columns["Id"].Visible = false;
+            dgv.Columns["AssetHardwareId"].Visible = false;
+            dgv.Columns["AssetHardware"].Visible = false;
+            dgv.Columns["HardDriveId"].Visible = false;
+            dgv.Columns["ManufacturerId"].Visible = false;
+            dgv.Columns["Manufacturer"].Visible = false;
+        }
+
+        /// <summary>
+        /// Updates the DataGridView for Network Adapaters and hides the irrelevant columns
+        /// </summary>
+        /// <param name="networkList">
+        /// BindingList of <see cref="AssetNetworkAdapter"/>s
+        /// </param>
+        /// <param name="dgv">
+        /// The DataGridView you want to modify
+        /// </param>
+        public static void UpdateNetworkDataGrid(BindingList<AssetNetworkAdapter> networkList, DataGridView dgv)
+        {
+            if (networkList == null) { return; }
+
+            dgv.DataSource = null;
+            dgv.DataSource = networkList;
+
+            // Hide the non-default columns from the end user
+            dgv.Columns["AssetHardwareId"].Visible = false;
+            dgv.Columns["NetworkAdapterId"].Visible = false;
+            dgv.Columns["AssetHardware"].Visible = false;
         }
     }
 }

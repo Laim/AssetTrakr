@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
+    <ApplicationIcon>icons8-database-70.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="icons8-database-70.ico" />
   </ItemGroup>
 
   <ItemGroup>

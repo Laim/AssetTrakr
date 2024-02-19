@@ -5,10 +5,9 @@ using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
 using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
-using AssetTrakr.Models.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
-using System.Data;
+using System.Security.Policy;
 
 namespace AssetTrakr.App.Forms.Asset
 {
@@ -39,6 +38,9 @@ namespace AssetTrakr.App.Forms.Asset
                 .Include(a => a.Platform)
                 .Include(a => a.OperatingSystem)
                 .Include(a => a.Hardware)
+                    .ThenInclude(aa => aa.NetworkAdapters)
+                .Include(a => a.Hardware)
+                    .ThenInclude(aa => aa.HardDrives)
                 .Include(a => a.Warranties)
                     .ThenInclude(wp => wp.Period)
                 .Include(a => a.AssetAttachments)
@@ -98,19 +100,29 @@ namespace AssetTrakr.App.Forms.Asset
 
             txtBiosSerialNumber.Text = _assetData.Hardware.BiosSerialNumber;
             txtProcessor.Text = _assetData.Hardware.Processor;
-            numRamSizeInGB.Value = _assetData.Hardware.RamSizeInMB;
+            numRamSizeInGB.Value = _assetData.Hardware.RamSizeInGB;
             numRamSticks.Value = _assetData.Hardware.RamSticks;
 
             // Load in Network Adapters
             if (_assetData.Hardware.NetworkAdapters.Count > 0)
             {
-                // TODO: Implement
+                foreach(var adapter in _assetData.Hardware.NetworkAdapters)
+                {
+                    _networkAdapters.Add(adapter);
+                }
+
+                DataGridViewMethods.UpdateNetworkDataGrid(_networkAdapters, dgvNetworkAdapters);
             }
 
             // Load in Hard Drives
             if (_assetData.Hardware.HardDrives.Count > 0)
             {
-                // TODO: Implement
+                foreach(var drive in _assetData.Hardware.HardDrives)
+                { 
+                    _hardDrives.Add(drive);
+                }
+
+                DataGridViewMethods.UpdateDriveDataGrid(_hardDrives, dgvHardDrives);
             }
 
             // Load in Warranty Information
@@ -332,6 +344,7 @@ namespace AssetTrakr.App.Forms.Asset
 
             var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
             int? selectedContractId = (cmbContracts.SelectedItem as Models.Contract)?.ContractId;
+            var selectedContract = cmbContracts.SelectedItem as Models.Contract;
             var selectedPlatform = cmbPlatforms.SelectedItem as Platform;
             var selectedOS = cmbOperatingSystems.SelectedItem as AssetOperatingSystem;
 
@@ -355,11 +368,11 @@ namespace AssetTrakr.App.Forms.Asset
 
             if (!_isEditingMode)
             {
-                AddAsset(selectedManufacturer, selectedContractId, selectedPlatform, selectedOS);
+                AddAsset(selectedManufacturer, selectedContractId, selectedPlatform, selectedOS, selectedContract);
             }
             else
             {
-                UpdateAsset(selectedManufacturer, selectedContractId, selectedPlatform, selectedOS);
+                UpdateAsset(selectedManufacturer, selectedContractId, selectedPlatform, selectedOS, selectedContract);
             }
 
             if (_dbContext.SaveChanges() > 0)
@@ -369,7 +382,7 @@ namespace AssetTrakr.App.Forms.Asset
             }
         }
 
-        private void UpdateAsset(Manufacturer manufacturer, int? contractId, Platform platform, AssetOperatingSystem os)
+        private void UpdateAsset(Manufacturer manufacturer, int? contractId, Platform platform, AssetOperatingSystem operatingSystem, Models.Contract contract)
         {
             if (_assetData == null)
             {
@@ -381,10 +394,96 @@ namespace AssetTrakr.App.Forms.Asset
                 cbHasWarranty.Checked = false;
             }
 
-            // TODO: Implement
+            if(_warrantyPeriods.Count == 0)
+            {
+                cbHasWarranty.Checked = false;
+            }
+
+            _assetData.Name = txtName.Text;
+            _assetData.Description = txtDescription.Text;
+            _assetData.PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value);
+            _assetData.Price = Convert.ToInt32(numCost.Value);
+            _assetData.Model = txtModel.Text;
+            _assetData.Manufacturer = manufacturer;
+            _assetData.ManufacturerId = manufacturer.ManufacturerId;
+            _assetData.Platform = platform;
+            _assetData.PlatformId = platform.PlatformId;
+            _assetData.LicenseKey = txtLicenseKey.Text;
+            _assetData.OrderReference = txtOrderRef.Text;
+            _assetData.OperatingSystem = operatingSystem;
+            _assetData.Contract = contract;
+            _assetData.ContractId = contractId;
+            _assetData.RegisteredEmail = txtInfoContactEmail.Text;
+            _assetData.RegisteredUser = txtInfoContactName.Text;
+
+            _assetData.Hardware.Processor = txtProcessor.Text;
+            _assetData.Hardware.BiosSerialNumber = txtBiosSerialNumber.Text;
+            _assetData.Hardware.RamSizeInGB = Convert.ToInt32(numRamSizeInGB.Value);
+            _assetData.Hardware.RamSticks = Convert.ToInt32(numRamSticks.Value);
+
+            // network adapaters -- existing
+            var existingAdapters = _dbContext.AssetNetworkAdapters.Where(na => na.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
+            
+            foreach(var existing in existingAdapters)
+            {
+                bool isAdapterInUpdatedList = _networkAdapters.Any(adapter => adapter.NetworkAdapterId == existing.NetworkAdapterId);
+
+                if(!isAdapterInUpdatedList)
+                {
+                    _dbContext.AssetNetworkAdapters.Remove(existing);
+                }
+            }
+
+            // hard drives -- existing
+            var existingDrives = _dbContext.AssetHardDrives.Where(hd => hd.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
+
+            foreach(var existing in existingDrives)
+            {
+                bool isDriveInUpdatedList = _hardDrives.Any(drive => drive.HardDriveId == existing.HardDriveId);
+
+                if(!isDriveInUpdatedList)
+                {
+                    _dbContext.AssetHardDrives.Remove(existing);
+                }
+            }
+
+            // warranty -- existing
+            var existingPeriods = _dbContext.AssetPeriods.Where(ap => ap.AssetId == _assetData.Id).ToList();
+
+            foreach (var existing in existingPeriods)
+            {
+                bool isPeriodInUpdatedList = _warrantyPeriods.Any(period => period.PeriodId == existing.PeriodId);
+
+                if (!isPeriodInUpdatedList)
+                {
+                    _dbContext.Periods.Remove(existing.Period);
+                }
+            }
+
+            // network adapters -- new
+            foreach(var adapter in _networkAdapters)
+            {
+                bool isAdapaterAssociated = _assetData.Hardware.NetworkAdapters.Any(na => na.NetworkAdapterId ==  adapter.NetworkAdapterId);
+
+                if(!isAdapaterAssociated)
+                {
+                    AssetNetworkAdapter networkAdapter = new()
+                    {
+                        AssetHardware = _assetData.Hardware,
+                        Name = adapter.Name,
+                        IpAddress = adapter.IpAddress,
+                        MacAddress = adapter.MacAddress,
+                    };
+
+                    _dbContext.AssetNetworkAdapters.Add(adapter);
+                }
+            }
+
+            _dbContext.Assets.Update(_assetData);
+
         }
 
-        private void AddAsset(Manufacturer manufacturer, int? contractId, Platform platform, AssetOperatingSystem os)
+        private void AddAsset(Manufacturer manufacturer, int? contractId, Platform platform, AssetOperatingSystem os, Models.Contract contract)
         {
             // Ensure that we don't accidentally mark it as having warranty if there are no warranty periods available
             if (_warrantyPeriods.Count == 0)
@@ -393,13 +492,13 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             List<AssetHardDrive> driveList = [];
-            foreach(var drive in _hardDrives)
+            foreach (var drive in _hardDrives)
             {
                 driveList.Add(drive);
             }
 
             List<AssetNetworkAdapter> adapterList = [];
-            foreach(var adapter in _networkAdapters)
+            foreach (var adapter in _networkAdapters)
             {
                 adapterList.Add(adapter);
             }
@@ -426,7 +525,7 @@ namespace AssetTrakr.App.Forms.Asset
                     HardDrives = driveList,
                     NetworkAdapters = adapterList,
                     Processor = txtProcessor.Text,
-                    RamSizeInMB = Convert.ToInt32(numRamSizeInGB.Value),
+                    RamSizeInGB = Convert.ToInt32(numRamSizeInGB.Value),
                     RamSticks = Convert.ToInt32(numRamSticks.Value)
                 }
             };
@@ -466,7 +565,7 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 _networkAdapters = frmAssetNetworkAdapter.NetworkAdapters;
 
-                DataGridViewMethods.UpdateGenericDataGrid(_networkAdapters, dgvNetworkAdapters);
+                DataGridViewMethods.UpdateNetworkDataGrid(_networkAdapters, dgvNetworkAdapters);
             }
         }
 
@@ -475,11 +574,11 @@ namespace AssetTrakr.App.Forms.Asset
             FrmAssetHardDriveAdd frmAssetHardDriveAdd = new(_hardDrives);
             frmAssetHardDriveAdd.ShowDialog();
 
-            if(frmAssetHardDriveAdd.HardDrives != null && frmAssetHardDriveAdd.HardDrives.Count > 0)
+            if (frmAssetHardDriveAdd.HardDrives != null && frmAssetHardDriveAdd.HardDrives.Count > 0)
             {
                 _hardDrives = frmAssetHardDriveAdd.HardDrives;
 
-                DataGridViewMethods.UpdateGenericDataGrid(_hardDrives, dgvHardDrives);
+                DataGridViewMethods.UpdateDriveDataGrid(_hardDrives, dgvHardDrives);
             }
         }
 

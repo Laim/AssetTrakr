@@ -22,7 +22,7 @@ namespace AssetTrakr.Database
         public DbSet<Asset> Assets { get; set; }
         public DbSet<AssetAttachment> AssetAttachments { get; set; }
         public DbSet<AssetHardDrive> AssetHardDrives { get; set; }
-        public DbSet<AssetHardware> AssetHardwares { get; set; }
+        public DbSet<AssetHardware> AssetHardware { get; set; }
         public DbSet<AssetNetworkAdapter> AssetNetworkAdapters { get; set; }
         public DbSet<AssetOperatingSystem> AssetOperatingSystems { get; set; }
         public DbSet<AssetPeriod> AssetPeriods { get; set; }
@@ -57,9 +57,9 @@ namespace AssetTrakr.Database
                 e.HasIndex(p => p.Name)
                     .IsUnique();
 
-                e.HasOne(l => l.Manufacturer)
+                e.HasOne(p => p.Manufacturer)
                     .WithMany()
-                    .HasForeignKey(l => l.ManufacturerId);
+                    .HasForeignKey(p => p.ManufacturerId);
             });
 
             modelBuilder.Entity<License>(e =>
@@ -161,6 +161,20 @@ namespace AssetTrakr.Database
                 e.HasOne(la => la.Attachment)
                     .WithMany(a => a.AssetAttachments)
                     .HasForeignKey(la => la.AttachmentId);
+            });
+
+            modelBuilder.Entity<AssetNetworkAdapter>(e =>
+            {
+                e.HasOne(na => na.AssetHardware)
+                    .WithMany(ah => ah.NetworkAdapters)
+                    .HasForeignKey(na => na.AssetHardwareId);
+            });
+
+            modelBuilder.Entity<AssetHardDrive>(e =>
+            {
+                e.HasOne(hd => hd.AssetHardware)
+                    .WithMany(ah => ah.HardDrives)
+                    .HasForeignKey(hd  => hd.AssetHardwareId);
             });
 
 #if DEBUG

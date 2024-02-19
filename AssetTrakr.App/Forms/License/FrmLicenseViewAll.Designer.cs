@@ -28,35 +28,86 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dataGridView1 = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            components = new System.ComponentModel.Container();
+            cmsDgvRightClick = new ContextMenuStrip(components);
+            columnSelectorToolStripMenuItem = new ToolStripMenuItem();
+            dgvViewAll = new DataGridView();
+            toolStripSeparator1 = new ToolStripSeparator();
+            deleteLicenseToolStripMenuItem = new ToolStripMenuItem();
+            cmsDgvRightClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvViewAll).BeginInit();
             SuspendLayout();
             // 
-            // dataGridView1
+            // cmsDgvRightClick
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 0);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1098, 661);
-            dataGridView1.TabIndex = 0;
+            cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, deleteLicenseToolStripMenuItem });
+            cmsDgvRightClick.Name = "contextMenuStrip1";
+            cmsDgvRightClick.Size = new Size(211, 86);
+            // 
+            // columnSelectorToolStripMenuItem
+            // 
+            columnSelectorToolStripMenuItem.Name = "columnSelectorToolStripMenuItem";
+            columnSelectorToolStripMenuItem.Size = new Size(210, 24);
+            columnSelectorToolStripMenuItem.Text = "Column Selector";
+            columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
+            // 
+            // dgvViewAll
+            // 
+            dgvViewAll.AllowUserToAddRows = false;
+            dgvViewAll.AllowUserToDeleteRows = false;
+            dgvViewAll.AllowUserToResizeColumns = false;
+            dgvViewAll.AllowUserToResizeRows = false;
+            dgvViewAll.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvViewAll.BackgroundColor = Color.White;
+            dgvViewAll.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvViewAll.ContextMenuStrip = cmsDgvRightClick;
+            dgvViewAll.Dock = DockStyle.Fill;
+            dgvViewAll.Location = new Point(0, 0);
+            dgvViewAll.MultiSelect = false;
+            dgvViewAll.Name = "dgvViewAll";
+            dgvViewAll.ReadOnly = true;
+            dgvViewAll.RowHeadersVisible = false;
+            dgvViewAll.RowHeadersWidth = 51;
+            dgvViewAll.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgvViewAll.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvViewAll.ShowCellErrors = false;
+            dgvViewAll.ShowCellToolTips = false;
+            dgvViewAll.ShowEditingIcon = false;
+            dgvViewAll.ShowRowErrors = false;
+            dgvViewAll.Size = new Size(1098, 661);
+            dgvViewAll.TabIndex = 18;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(207, 6);
+            // 
+            // deleteLicenseToolStripMenuItem
+            // 
+            deleteLicenseToolStripMenuItem.Name = "deleteLicenseToolStripMenuItem";
+            deleteLicenseToolStripMenuItem.Size = new Size(210, 24);
+            deleteLicenseToolStripMenuItem.Text = "Delete License";
             // 
             // FrmLicenseViewAll
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1098, 661);
-            Controls.Add(dataGridView1);
+            Controls.Add(dgvViewAll);
             Name = "FrmLicenseViewAll";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View All Licenses";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            cmsDgvRightClick.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvViewAll).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
-
-        private DataGridView dataGridView1;
+        private ContextMenuStrip cmsDgvRightClick;
+        private ToolStripMenuItem columnSelectorToolStripMenuItem;
+        private DataGridView dgvViewAll;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem deleteLicenseToolStripMenuItem;
     }
 }
