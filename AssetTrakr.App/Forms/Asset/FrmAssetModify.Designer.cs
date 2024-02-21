@@ -527,24 +527,24 @@
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
             cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(211, 86);
+            cmsDgvRightClick.Size = new Size(188, 58);
             // 
             // columnSelectorToolStripMenuItem
             // 
             columnSelectorToolStripMenuItem.Name = "columnSelectorToolStripMenuItem";
-            columnSelectorToolStripMenuItem.Size = new Size(210, 24);
+            columnSelectorToolStripMenuItem.Size = new Size(187, 24);
             columnSelectorToolStripMenuItem.Text = "Column Selector";
             columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(207, 6);
+            toolStripSeparator1.Size = new Size(184, 6);
             // 
             // deleteToolStripMenuItem
             // 
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(210, 24);
+            deleteToolStripMenuItem.Size = new Size(187, 24);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -621,7 +621,7 @@
             lblRamSizeInGB.Name = "lblRamSizeInGB";
             lblRamSizeInGB.Size = new Size(103, 20);
             lblRamSizeInGB.TabIndex = 13;
-            lblRamSizeInGB.Text = "RAM (MB)";
+            lblRamSizeInGB.Text = "RAM (GB)";
             lblRamSizeInGB.TextAlign = ContentAlignment.MiddleRight;
             // 
             // numRamSizeInGB

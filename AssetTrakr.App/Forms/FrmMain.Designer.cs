@@ -28,26 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
+            menuStripMain = new MenuStrip();
             licensesToolStripMenuItem = new ToolStripMenuItem();
             addLicenseToolStripMenuItem = new ToolStripMenuItem();
             viewLicensesToolStripMenuItem = new ToolStripMenuItem();
             assetsToolStripMenuItem = new ToolStripMenuItem();
             addAssetToolStripMenuItem = new ToolStripMenuItem();
+            administrationToolStripMenuItem = new ToolStripMenuItem();
+            actionLogToolStripMenuItem = new ToolStripMenuItem();
             button1 = new Button();
             textBox1 = new TextBox();
-            menuStrip1.SuspendLayout();
+            gbLicenseCount = new GroupBox();
+            lblLicenseCount = new Label();
+            gbAssetsCount = new GroupBox();
+            lblAssetCount = new Label();
+            menuStripMain.SuspendLayout();
+            gbLicenseCount.SuspendLayout();
+            gbAssetsCount.SuspendLayout();
             SuspendLayout();
             // 
-            // menuStrip1
+            // menuStripMain
             // 
-            menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1262, 28);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
+            menuStripMain.ImageScalingSize = new Size(20, 20);
+            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, administrationToolStripMenuItem });
+            menuStripMain.Location = new Point(0, 0);
+            menuStripMain.Name = "menuStripMain";
+            menuStripMain.Size = new Size(1262, 28);
+            menuStripMain.TabIndex = 0;
+            menuStripMain.Text = "Menu Strip";
             // 
             // licensesToolStripMenuItem
             // 
@@ -80,13 +88,27 @@
             // addAssetToolStripMenuItem
             // 
             addAssetToolStripMenuItem.Name = "addAssetToolStripMenuItem";
-            addAssetToolStripMenuItem.Size = new Size(224, 26);
+            addAssetToolStripMenuItem.Size = new Size(159, 26);
             addAssetToolStripMenuItem.Text = "Add Asset";
             addAssetToolStripMenuItem.Click += addAssetToolStripMenuItem_Click;
             // 
+            // administrationToolStripMenuItem
+            // 
+            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem });
+            administrationToolStripMenuItem.Name = "administrationToolStripMenuItem";
+            administrationToolStripMenuItem.Size = new Size(121, 24);
+            administrationToolStripMenuItem.Text = "Administration";
+            // 
+            // actionLogToolStripMenuItem
+            // 
+            actionLogToolStripMenuItem.Name = "actionLogToolStripMenuItem";
+            actionLogToolStripMenuItem.Size = new Size(164, 26);
+            actionLogToolStripMenuItem.Text = "Action Log";
+            actionLogToolStripMenuItem.Click += actionLogToolStripMenuItem_Click;
+            // 
             // button1
             // 
-            button1.Location = new Point(188, 219);
+            button1.Location = new Point(574, 547);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 1;
@@ -96,33 +118,82 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(288, 219);
+            textBox1.Location = new Point(674, 547);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(125, 27);
             textBox1.TabIndex = 2;
+            // 
+            // gbLicenseCount
+            // 
+            gbLicenseCount.Controls.Add(lblLicenseCount);
+            gbLicenseCount.Location = new Point(20, 40);
+            gbLicenseCount.Name = "gbLicenseCount";
+            gbLicenseCount.Size = new Size(200, 200);
+            gbLicenseCount.TabIndex = 3;
+            gbLicenseCount.TabStop = false;
+            gbLicenseCount.Text = "Licenses";
+            // 
+            // lblLicenseCount
+            // 
+            lblLicenseCount.Dock = DockStyle.Fill;
+            lblLicenseCount.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLicenseCount.ForeColor = Color.Red;
+            lblLicenseCount.Location = new Point(3, 23);
+            lblLicenseCount.Name = "lblLicenseCount";
+            lblLicenseCount.Size = new Size(194, 174);
+            lblLicenseCount.TabIndex = 0;
+            lblLicenseCount.Text = "0";
+            lblLicenseCount.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // gbAssetsCount
+            // 
+            gbAssetsCount.Controls.Add(lblAssetCount);
+            gbAssetsCount.Location = new Point(226, 40);
+            gbAssetsCount.Name = "gbAssetsCount";
+            gbAssetsCount.Size = new Size(200, 200);
+            gbAssetsCount.TabIndex = 4;
+            gbAssetsCount.TabStop = false;
+            gbAssetsCount.Text = "Assets";
+            // 
+            // lblAssetCount
+            // 
+            lblAssetCount.Dock = DockStyle.Fill;
+            lblAssetCount.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAssetCount.ForeColor = Color.Red;
+            lblAssetCount.Location = new Point(3, 23);
+            lblAssetCount.Name = "lblAssetCount";
+            lblAssetCount.Size = new Size(194, 174);
+            lblAssetCount.TabIndex = 1;
+            lblAssetCount.Text = "0";
+            lblAssetCount.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // FrmMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(1262, 673);
+            Controls.Add(gbAssetsCount);
+            Controls.Add(gbLicenseCount);
             Controls.Add(textBox1);
             Controls.Add(button1);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
+            Controls.Add(menuStripMain);
+            MainMenuStrip = menuStripMain;
             MinimumSize = new Size(1280, 720);
             Name = "FrmMain";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AssetTrakr • Dashboard";
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            menuStripMain.ResumeLayout(false);
+            menuStripMain.PerformLayout();
+            gbLicenseCount.ResumeLayout(false);
+            gbAssetsCount.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStripMain;
         private ToolStripMenuItem licensesToolStripMenuItem;
         private ToolStripMenuItem addLicenseToolStripMenuItem;
         private ToolStripMenuItem viewLicensesToolStripMenuItem;
@@ -130,5 +201,11 @@
         private TextBox textBox1;
         private ToolStripMenuItem assetsToolStripMenuItem;
         private ToolStripMenuItem addAssetToolStripMenuItem;
+        private GroupBox gbLicenseCount;
+        private Label lblLicenseCount;
+        private GroupBox gbAssetsCount;
+        private Label lblAssetCount;
+        private ToolStripMenuItem administrationToolStripMenuItem;
+        private ToolStripMenuItem actionLogToolStripMenuItem;
     }
 }

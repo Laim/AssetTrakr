@@ -1,5 +1,6 @@
 ﻿using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
+using AssetTrakr.Models.Extensions;
 using System.ComponentModel;
 
 namespace AssetTrakr.App.Helpers
@@ -21,10 +22,6 @@ namespace AssetTrakr.App.Helpers
 
             dgv.DataSource = null;
             dgv.DataSource = periodList;
-
-            // Renames the columns so they're less generic[?] lol
-            dgv.Columns["StartDate"].HeaderText = "Start";
-            dgv.Columns["EndDate"].HeaderText = "End";
 
             // Hide the non-default columns from the end user
             dgv.Columns["PeriodId"].Visible = false;
@@ -97,14 +94,24 @@ namespace AssetTrakr.App.Helpers
             if (driveList == null) { return; }
 
             dgv.DataSource = null;
-            dgv.DataSource = driveList;
+            dgv.DataSource = driveList
+                .Select(d => new
+                {
+                    d.AssetHardwareId,
+                    d.HardDriveId,
+                    d.Name,
+                    Manufacturer = d.Manufacturer?.Name ?? "",
+                    Size = $"{d.SizeInGB} GB",
+                    Serial_Number = d.SerialNumber
+                }).ToBindingList();
+
+            // Anonymous Types ignore the DisplayName attribute in models
+            // Need to do this to get the nice format
+            dgv.Columns["Serial_Number"].HeaderText = "Serial Number";
 
             // Hide the non-default columns from the end user
             dgv.Columns["AssetHardwareId"].Visible = false;
-            dgv.Columns["AssetHardware"].Visible = false;
             dgv.Columns["HardDriveId"].Visible = false;
-            dgv.Columns["ManufacturerId"].Visible = false;
-            dgv.Columns["Manufacturer"].Visible = false;
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace AssetTrakr.App.Forms.Asset
                     .ThenInclude(aa => aa.NetworkAdapters)
                 .Include(a => a.Hardware)
                     .ThenInclude(aa => aa.HardDrives)
-                .Include(a => a.Warranties)
+                .Include(a => a.AssetPeriods)
                     .ThenInclude(wp => wp.Period)
                 .Include(a => a.AssetAttachments)
                     .ThenInclude(aa => aa.Attachment)
@@ -126,11 +126,11 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // Load in Warranty Information
-            if (_assetData.IsUnderWarranty && _assetData.Warranties.Count > 0)
+            if (_assetData.IsUnderWarranty && _assetData.AssetPeriods.Count > 0)
             {
                 cbHasWarranty.Checked = _assetData.IsUnderWarranty;
 
-                foreach (var period in _assetData.Warranties)
+                foreach (var period in _assetData.AssetPeriods)
                 {
                     _warrantyPeriods.Add(period.Period);
                 }
@@ -206,31 +206,30 @@ namespace AssetTrakr.App.Forms.Asset
                 return;
             }
 
-            if (dgv.Name == nameof(dgvAttachments))
-            {
-                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
+            var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
 
-                if (dataItem is Models.Attachment selectedItem)
-                {
-                    _attachments.Remove(selectedItem);
-                }
-                else
-                {
-                    throw new Exception("Attachment has not been set or cannot be found");
-                }
+            // If attachments datagrid
+            if (dataItem is Models.Attachment attachment)
+            {
+                _attachments.Remove(attachment);
             }
-            else if (dgv.Name == nameof(dgvWarrantyPeriods))
-            {
-                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
 
-                if (dataItem is Period selectedItem)
-                {
-                    _warrantyPeriods.Remove(selectedItem);
-                }
-                else
-                {
-                    throw new Exception("Period has not been set or cannot be found");
-                }
+            // If warranty datagrid
+            if (dataItem is Period warranty)
+            {
+                _warrantyPeriods.Remove(warranty);
+            }
+
+            // If network adapaters datagrid
+            if (dataItem is AssetNetworkAdapter networkAdapter)
+            {
+                _networkAdapters.Remove(networkAdapter);
+            }
+
+            // If hard drives datagrid
+            if (dataItem is AssetHardDrive hardDrive)
+            {
+                _hardDrives.Remove(hardDrive);
             }
 
             if (dgv.Rows.Count == 0)
@@ -379,6 +378,10 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
+            } 
+            else
+            {
+                MessageBox.Show($"Something has gone wrong during save of {txtName.Text}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -423,7 +426,6 @@ namespace AssetTrakr.App.Forms.Asset
 
             // network adapaters -- existing
             var existingAdapters = _dbContext.AssetNetworkAdapters.Where(na => na.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
-            
             foreach(var existing in existingAdapters)
             {
                 bool isAdapterInUpdatedList = _networkAdapters.Any(adapter => adapter.NetworkAdapterId == existing.NetworkAdapterId);
@@ -436,7 +438,6 @@ namespace AssetTrakr.App.Forms.Asset
 
             // hard drives -- existing
             var existingDrives = _dbContext.AssetHardDrives.Where(hd => hd.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
-
             foreach(var existing in existingDrives)
             {
                 bool isDriveInUpdatedList = _hardDrives.Any(drive => drive.HardDriveId == existing.HardDriveId);
@@ -449,7 +450,6 @@ namespace AssetTrakr.App.Forms.Asset
 
             // warranty -- existing
             var existingPeriods = _dbContext.AssetPeriods.Where(ap => ap.AssetId == _assetData.Id).ToList();
-
             foreach (var existing in existingPeriods)
             {
                 bool isPeriodInUpdatedList = _warrantyPeriods.Any(period => period.PeriodId == existing.PeriodId);
@@ -457,6 +457,18 @@ namespace AssetTrakr.App.Forms.Asset
                 if (!isPeriodInUpdatedList)
                 {
                     _dbContext.Periods.Remove(existing.Period);
+                }
+            }
+
+            // attachments -- existing
+            var existingAttachments = _dbContext.AssetAttachments.Where(aa => aa.AssetId == _assetData.Id).ToList();
+            foreach(var existing in existingAttachments)
+            {
+                bool isAttachmentInUpdatedList = _attachments.Any(attach => attach.AttachmentId == existing.AttachmentId);
+
+                if(!isAttachmentInUpdatedList)
+                {
+                    _dbContext.Attachments.Remove(existing.Attachment);
                 }
             }
 
@@ -498,13 +510,54 @@ namespace AssetTrakr.App.Forms.Asset
                 }
             }
 
+            // attachments -- new
+            foreach(var attachment in _attachments)
+            {
+                bool isAttachmentAssociated = _assetData.AssetAttachments.Any(aa => aa.AttachmentId == attachment.AttachmentId);
+
+                if(!isAttachmentAssociated)
+                {
+                    AssetAttachment assetAttachment = new()
+                    {
+                        AssetId = _assetData.Id,
+                        Asset = _assetData,
+                        AttachmentId = attachment.AttachmentId,
+                        Attachment = attachment,
+                    };
+
+                    _dbContext.AssetAttachments.Add(assetAttachment);
+
+                }
+            }
+
+            // warranty -- new
+            foreach(var warrantyPeriod in _warrantyPeriods)
+            {
+                bool isWarrantyAssociated = _assetData.AssetPeriods.Any(aw => aw.PeriodId == warrantyPeriod.PeriodId);
+
+                if(!isWarrantyAssociated)
+                {
+                    AssetPeriod assetPeriod = new()
+                    {
+                        AssetId = _assetData.Id,
+                        Asset = _assetData,
+                        PeriodId = warrantyPeriod.PeriodId,
+                        Period = warrantyPeriod
+                    };
+
+                    _dbContext.AssetPeriods.Add(assetPeriod);
+                }
+            }
 
             try
             {
                 _dbContext.Assets.Update(_assetData);
-            } catch(Exception ex)
+
+                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionCategory.ASSET, txtName.Text);
+            } 
+            catch(Exception ex)
             {
-                MessageBox.Show(ex.Message + ex.InnerException);
+                MessageBox.Show(ex.Message + ex.InnerException, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -565,7 +618,7 @@ namespace AssetTrakr.App.Forms.Asset
                     Period = period
                 };
 
-                assetData.Warranties.Add(assetPeriod);
+                assetData.AssetPeriods.Add(assetPeriod);
             }
 
             foreach (var attachment in _attachments)
@@ -579,7 +632,16 @@ namespace AssetTrakr.App.Forms.Asset
                 assetData.AssetAttachments.Add(assetAttachment);
             }
 
-            _dbContext.Assets.Add(assetData);
+            try
+            {
+                _dbContext.Assets.Add(assetData);
+
+                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionCategory.ASSET, txtName.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.InnerException, "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnAddNetworkAdapter_Click(object sender, EventArgs e)

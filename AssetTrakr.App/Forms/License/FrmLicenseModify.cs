@@ -3,7 +3,6 @@ using AssetTrakr.App.Forms.Contract;
 using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.Database;
 using AssetTrakr.Models;
-using AssetTrakr.Models.Extensions;
 using AssetTrakr.App.Helpers;
 using System.ComponentModel;
 using System.Data;
@@ -121,6 +120,10 @@ namespace AssetTrakr.App.Forms.License
                 MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
             }
+            else
+            {
+                MessageBox.Show($"Something has gone wrong during save of {txtName.Text}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void btnAddAttachment_Click(object sender, EventArgs e)
@@ -156,31 +159,18 @@ namespace AssetTrakr.App.Forms.License
                 return;
             }
 
-            if (dgv.Name == nameof(dgvAttachments))
-            {
-                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem; //.Cells["AttachmentId"].Value;
+            var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
 
-                if (dataItem is Models.Attachment selectedItem)
-                {
-                    _attachments.Remove(selectedItem);
-                }
-                else
-                {
-                    throw new Exception("Attachment has not been set or cannot be found");
-                }
+            // If attachment datagrid
+            if (dataItem is Models.Attachment attachment)
+            {
+                _attachments.Remove(attachment);
             }
-            else if (dgv.Name == nameof(dgvSubscriptionPeriods))
-            {
-                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem; //.Cells["AttachmentId"].Value;
 
-                if (dataItem is Period selectedItem)
-                {
-                    _subscriptionPeriods.Remove(selectedItem);
-                }
-                else
-                {
-                    throw new Exception("Period has not been set or cannot be found");
-                }
+            // If subscription datagrid
+            if (dataItem is Period subscription)
+            {
+                _subscriptionPeriods.Remove(subscription);
             }
 
             if (dgv.Rows.Count == 0)
@@ -370,7 +360,17 @@ namespace AssetTrakr.App.Forms.License
                 licenseData.LicenseAttachments.Add(licenseAttachment);
             }
 
-            _dbContext.Licenses.Add(licenseData);
+            try
+            {
+                _dbContext.Licenses.Add(licenseData);
+
+                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionCategory.LICENSE, txtName.Text);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.InnerException, "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -481,7 +481,16 @@ namespace AssetTrakr.App.Forms.License
                 }
             }
 
-            _dbContext.Licenses.Update(_licenseData);
+            try
+            {
+                _dbContext.Licenses.Update(_licenseData);
+
+                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionCategory.LICENSE, txtName.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.InnerException, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

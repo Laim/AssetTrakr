@@ -3,6 +3,7 @@ using AssetTrakr.Database;
 using AssetTrakr.Models.Assets;
 using AssetTrakr.Models.Extensions;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 
 namespace AssetTrakr.App.Forms.Asset
@@ -55,6 +56,7 @@ namespace AssetTrakr.App.Forms.Asset
             HardDrives.Add(new AssetHardDrive
             {
                 ManufacturerId = selectedManufacturer.ManufacturerId,
+                Manufacturer = selectedManufacturer,
                 Name = txtName.Text,
                 SizeInGB = Convert.ToInt32(numSizeBytes.Value)
             });

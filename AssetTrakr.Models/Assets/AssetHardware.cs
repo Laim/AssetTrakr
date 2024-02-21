@@ -60,7 +60,7 @@ namespace AssetTrakr.Models.Assets
         [DisplayName("Serial Number")]
         public string? SerialNumber { get; set; }
 
-        [DisplayName("Size (GB)")]
+        [DisplayName("Size")]
         public int SizeInGB { get; set; }
 
         public required int ManufacturerId { get; set; }
@@ -69,8 +69,5 @@ namespace AssetTrakr.Models.Assets
         public Manufacturer? Manufacturer { get; set; }
 
         public AssetHardware AssetHardware { get; set; }
-
-        [DisplayName("Manufacturer")]
-        public string ManufacturerName => Manufacturer?.Name;
     }
 }

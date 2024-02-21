@@ -26,6 +26,7 @@ namespace AssetTrakr.Database
         public DbSet<AssetNetworkAdapter> AssetNetworkAdapters { get; set; }
         public DbSet<AssetOperatingSystem> AssetOperatingSystems { get; set; }
         public DbSet<AssetPeriod> AssetPeriods { get; set; }
+        public DbSet<ActionLog> ActionLogEntries { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -138,7 +139,7 @@ namespace AssetTrakr.Database
                 e.HasKey(pj => new { pj.AssetId, pj.PeriodId });
 
                 e.HasOne(pj => pj.Asset)
-                    .WithMany(l => l.Warranties)
+                    .WithMany(l => l.AssetPeriods)
                     .HasForeignKey(l => l.AssetId);
 
                 e.HasOne(lp => lp.Period)

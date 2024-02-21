@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace AssetTrakr.Models.Assets
 {
@@ -17,14 +18,18 @@ namespace AssetTrakr.Models.Assets
 
         public required string Model { get; set; }
 
+        [DisplayName("License Key")]
         public string? LicenseKey { get; set; }
 
         public string? Description { get; set; }
 
+        [DisplayName("Purchase Date")]
         public DateOnly PurchaseDate { get; set; }
 
+        [DisplayName("User")]
         public string? RegisteredUser { get; set; }
 
+        [DisplayName("User Email")]
         public string? RegisteredEmail { get; set; }
 
         public int? ContractId { get; set; }
@@ -35,11 +40,14 @@ namespace AssetTrakr.Models.Assets
 
         public decimal Price { get; set; }
 
+        [DisplayName("Order Reference")]
         public string? OrderReference { get; set; }
 
+        [DisplayName("Warranty")]
         public bool IsUnderWarranty { get; set; } = false;
 
-        public List<AssetPeriod> Warranties { get; set; } = [];
+        [DisplayName("Warranties")]
+        public List<AssetPeriod> AssetPeriods { get; set; } = [];
 
         /// <summary>
         /// Assigned Attachments

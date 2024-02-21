@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace AssetTrakr.Models
 {
@@ -20,6 +21,7 @@ namespace AssetTrakr.Models
         [Required]
         public int Count { get; set; } = 0;
 
+        [DisplayName("Purchase Date")]
         public DateOnly PurchaseDate { get; set; }
 
         /// <summary>
@@ -27,8 +29,10 @@ namespace AssetTrakr.Models
         /// </summary>
         public List<LicensePeriod> LicensePeriods { get; set; } = [];
 
+        [DisplayName("Subscription")]
         public bool IsSubscription { get; set; } = false;
 
+        [DisplayName("Subscription via Contract")]
         /// <summary>
         /// If the subscription periods are inherited from the contract
         /// </summary>
@@ -45,16 +49,20 @@ namespace AssetTrakr.Models
 
         public decimal Price { get; set; }
 
+        [DisplayName("Order Reference")]
         public string? OrderReference { get; set; }
 
         public string? Version { get; set; }
 
         public int PlatformId { get; set; } = 0;
 
+        [DisplayName("User")]
         public string? RegisteredUser { get; set; }
 
+        [DisplayName("User Email")]
         public string? RegisteredEmail { get; set; }
 
+        [DisplayName("License Key")]
         public string? LicenseKey { get; set; }
 
         [ForeignKey("ContractId")] // Define ForeignKey attribute to represent the relationship

@@ -247,7 +247,17 @@ namespace AssetTrakr.App.Forms.Contract
                 contractData.ContractAttachments.Add(contractAttachment);
             }
 
-            _dbContext.Contracts.Add(contractData);
+            try
+            {
+                _dbContext.Contracts.Add(contractData);
+
+                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionCategory.CONTRACT, txtName.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.InnerException, "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void UpdateContract()
@@ -335,7 +345,15 @@ namespace AssetTrakr.App.Forms.Contract
                 }
             }
 
-            _dbContext.Contracts.Update(_contractData);
+            try
+            {
+                _dbContext.Contracts.Update(_contractData);
+                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionCategory.CONTRACT, txtName.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.InnerException, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

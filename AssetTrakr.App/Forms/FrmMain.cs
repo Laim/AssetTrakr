@@ -1,5 +1,6 @@
 ﻿using AssetTrakr.App.Forms.Asset;
 using AssetTrakr.App.Forms.License;
+using AssetTrakr.App.Forms.Miscellaneous;
 using AssetTrakr.Database;
 using System.ComponentModel;
 
@@ -28,6 +29,41 @@ namespace AssetTrakr.App.Forms
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Boot Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+
+            LoadWidgets();
+        }
+
+        private void LoadWidgets()
+        {
+            lblLicenseCount.Text = $"{_dbContext.Licenses.Count()}";
+            lblAssetCount.Text = $"{_dbContext.Assets.Count()}";
+
+            // set colors
+            SetTextColor(this);
+        }
+
+        /// <summary>
+        /// Sets the color of the labels that contain 'Count' in their name to green if they contain anything other than 0
+        /// </summary>
+        /// <param name="control">The parent <see cref="Control"/></param>
+        private static void SetTextColor(Control control)
+        {
+            foreach (Control ctrl in control.Controls)
+            {
+                if (ctrl is Label l && l.Name.EndsWith("Count"))
+                {
+                    if (int.TryParse(l.Text, out int value) && value != 0)
+                    {
+                        l.ForeColor = Color.Green;
+                    }
+                }
+
+                if (ctrl.HasChildren)
+                {
+                    SetTextColor(ctrl);
+                }
             }
         }
 
@@ -62,6 +98,12 @@ namespace AssetTrakr.App.Forms
         {
             FrmAssetModify frmAssetModify = new();
             frmAssetModify.ShowDialog();
+        }
+
+        private void actionLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmActionLog frmActionLog = new();
+            frmActionLog.ShowDialog();
         }
     }
 }
