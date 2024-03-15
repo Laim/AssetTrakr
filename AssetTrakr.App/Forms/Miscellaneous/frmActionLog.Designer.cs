@@ -29,9 +29,12 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmActionLog));
             dgvActionLog = new DataGridView();
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            exportToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgvActionLog).BeginInit();
             cmsDgvRightClick.SuspendLayout();
             SuspendLayout();
@@ -65,24 +68,38 @@
             // cmsDgvRightClick
             // 
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
-            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem });
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, exportToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(188, 28);
+            cmsDgvRightClick.Size = new Size(211, 86);
             // 
             // columnSelectorToolStripMenuItem
             // 
             columnSelectorToolStripMenuItem.Name = "columnSelectorToolStripMenuItem";
-            columnSelectorToolStripMenuItem.Size = new Size(187, 24);
+            columnSelectorToolStripMenuItem.Size = new Size(210, 24);
             columnSelectorToolStripMenuItem.Text = "Column Selector";
+            columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
             // 
-            // frmActionLog
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(207, 6);
+            // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(210, 24);
+            exportToolStripMenuItem.Text = "Export";
+            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
+            // 
+            // FrmActionLog
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(dgvActionLog);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimizeBox = false;
-            Name = "frmActionLog";
+            Name = "FrmActionLog";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Action Log";
             ((System.ComponentModel.ISupportInitialize)dgvActionLog).EndInit();
@@ -95,5 +112,7 @@
         private DataGridView dgvActionLog;
         private ContextMenuStrip cmsDgvRightClick;
         private ToolStripMenuItem columnSelectorToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem exportToolStripMenuItem;
     }
 }

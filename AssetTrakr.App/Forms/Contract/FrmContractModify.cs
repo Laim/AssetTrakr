@@ -251,7 +251,7 @@ namespace AssetTrakr.App.Forms.Contract
             {
                 _dbContext.Contracts.Add(contractData);
 
-                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionCategory.CONTRACT, txtName.Text);
+                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionAlertCategory.Contract, txtName.Text);
             }
             catch (Exception ex)
             {
@@ -348,7 +348,7 @@ namespace AssetTrakr.App.Forms.Contract
             try
             {
                 _dbContext.Contracts.Update(_contractData);
-                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionCategory.CONTRACT, txtName.Text);
+                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionAlertCategory.Contract, txtName.Text);
             }
             catch (Exception ex)
             {

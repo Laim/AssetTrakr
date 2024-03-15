@@ -5,9 +5,9 @@ using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
 using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
+using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
-using System.Security.Policy;
 
 namespace AssetTrakr.App.Forms.Asset
 {
@@ -21,7 +21,7 @@ namespace AssetTrakr.App.Forms.Asset
         private readonly Models.Assets.Asset? _assetData;
         private readonly bool _isEditingMode;
 
-        public FrmAssetModify(int assetId = 0)
+        public FrmAssetModify(int assetId = 0, bool isReadOnly = false)
         {
             InitializeComponent();
 
@@ -45,7 +45,7 @@ namespace AssetTrakr.App.Forms.Asset
                     .ThenInclude(wp => wp.Period)
                 .Include(a => a.AssetAttachments)
                     .ThenInclude(aa => aa.Attachment)
-                .FirstOrDefault(l => l.Id == assetId);
+                .FirstOrDefault(l => l.AssetId == assetId);
 
             if (asset != null)
             {
@@ -94,6 +94,7 @@ namespace AssetTrakr.App.Forms.Asset
             cmbPlatforms.SelectedIndex = cmbPlatforms.FindStringExact(_assetData.Platform?.Name);
             cmbContracts.SelectedIndex = cmbContracts.FindStringExact(_assetData.Contract?.Name);
             cmbOperatingSystems.SelectedIndex = cmbOperatingSystems.FindStringExact(_assetData.OperatingSystem?.Name);
+            cmbAssetType.SelectedIndex = (int)_assetData.Hardware.AssetType;
 
             numCost.Value = _assetData.Price;
             txtOrderRef.Text = _assetData.OrderReference;
@@ -367,11 +368,11 @@ namespace AssetTrakr.App.Forms.Asset
 
             if (!_isEditingMode)
             {
-                AddAsset(selectedManufacturer, selectedContractId, selectedPlatform, selectedOS, selectedContract);
+                AddAsset(selectedManufacturer, selectedPlatform, selectedOS, selectedContract);
             }
             else
             {
-                UpdateAsset(selectedManufacturer, selectedContractId, selectedPlatform, selectedOS, selectedContract);
+                UpdateAsset(selectedManufacturer, selectedPlatform, selectedOS, selectedContract);
             }
 
             if (_dbContext.SaveChanges() > 0)
@@ -385,7 +386,7 @@ namespace AssetTrakr.App.Forms.Asset
             }
         }
 
-        private void UpdateAsset(Manufacturer manufacturer, int? contractId, Platform platform, AssetOperatingSystem operatingSystem, Models.Contract contract)
+        private void UpdateAsset(Manufacturer manufacturer, Platform platform, AssetOperatingSystem operatingSystem, Models.Contract contract)
         {
             if (_assetData == null)
             {
@@ -397,25 +398,17 @@ namespace AssetTrakr.App.Forms.Asset
                 cbHasWarranty.Checked = false;
             }
 
-            if(_warrantyPeriods.Count == 0)
-            {
-                cbHasWarranty.Checked = false;
-            }
-
             _assetData.Name = txtName.Text;
             _assetData.Description = txtDescription.Text;
             _assetData.PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value);
             _assetData.Price = Convert.ToInt32(numCost.Value);
             _assetData.Model = txtModel.Text;
             _assetData.Manufacturer = manufacturer;
-            _assetData.ManufacturerId = manufacturer.ManufacturerId;
             _assetData.Platform = platform;
-            _assetData.PlatformId = platform.PlatformId;
             _assetData.LicenseKey = txtLicenseKey.Text;
             _assetData.OrderReference = txtOrderRef.Text;
             _assetData.OperatingSystem = operatingSystem;
             _assetData.Contract = contract;
-            _assetData.ContractId = contractId;
             _assetData.RegisteredEmail = txtInfoContactEmail.Text;
             _assetData.RegisteredUser = txtInfoContactName.Text;
 
@@ -423,6 +416,7 @@ namespace AssetTrakr.App.Forms.Asset
             _assetData.Hardware.BiosSerialNumber = txtBiosSerialNumber.Text;
             _assetData.Hardware.RamSizeInGB = Convert.ToInt32(numRamSizeInGB.Value);
             _assetData.Hardware.RamSticks = Convert.ToInt32(numRamSticks.Value);
+            _assetData.Hardware.AssetType = (AssetType)cmbAssetType.SelectedIndex;
 
             // network adapaters -- existing
             var existingAdapters = _dbContext.AssetNetworkAdapters.Where(na => na.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
@@ -449,7 +443,7 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // warranty -- existing
-            var existingPeriods = _dbContext.AssetPeriods.Where(ap => ap.AssetId == _assetData.Id).ToList();
+            var existingPeriods = _dbContext.AssetPeriods.Where(ap => ap.AssetId == _assetData.AssetId).ToList();
             foreach (var existing in existingPeriods)
             {
                 bool isPeriodInUpdatedList = _warrantyPeriods.Any(period => period.PeriodId == existing.PeriodId);
@@ -461,7 +455,7 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // attachments -- existing
-            var existingAttachments = _dbContext.AssetAttachments.Where(aa => aa.AssetId == _assetData.Id).ToList();
+            var existingAttachments = _dbContext.AssetAttachments.Where(aa => aa.AssetId == _assetData.AssetId).ToList();
             foreach(var existing in existingAttachments)
             {
                 bool isAttachmentInUpdatedList = _attachments.Any(attach => attach.AttachmentId == existing.AttachmentId);
@@ -501,7 +495,6 @@ namespace AssetTrakr.App.Forms.Asset
                     {
                         Name = drive.Name, 
                         Manufacturer = drive.Manufacturer,
-                        ManufacturerId = drive.ManufacturerId,
                         SerialNumber = drive.SerialNumber,
                         SizeInGB = drive.SizeInGB                        
                     };
@@ -519,7 +512,7 @@ namespace AssetTrakr.App.Forms.Asset
                 {
                     AssetAttachment assetAttachment = new()
                     {
-                        AssetId = _assetData.Id,
+                        AssetId = _assetData.AssetId,
                         Asset = _assetData,
                         AttachmentId = attachment.AttachmentId,
                         Attachment = attachment,
@@ -539,7 +532,7 @@ namespace AssetTrakr.App.Forms.Asset
                 {
                     AssetPeriod assetPeriod = new()
                     {
-                        AssetId = _assetData.Id,
+                        AssetId = _assetData.AssetId,
                         Asset = _assetData,
                         PeriodId = warrantyPeriod.PeriodId,
                         Period = warrantyPeriod
@@ -553,7 +546,7 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 _dbContext.Assets.Update(_assetData);
 
-                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionCategory.ASSET, txtName.Text);
+                ActionLogMethods.Updated(_dbContext, ActionAlertCategory.Asset, txtName.Text);
             } 
             catch(Exception ex)
             {
@@ -562,7 +555,7 @@ namespace AssetTrakr.App.Forms.Asset
 
         }
 
-        private void AddAsset(Manufacturer manufacturer, int? contractId, Platform platform, AssetOperatingSystem os, Models.Contract contract)
+        private void AddAsset(Manufacturer manufacturer, Platform platform, AssetOperatingSystem os, Models.Contract contract)
         {
             // Ensure that we don't accidentally mark it as having warranty if there are no warranty periods available
             if (_warrantyPeriods.Count == 0)
@@ -591,9 +584,9 @@ namespace AssetTrakr.App.Forms.Asset
                 PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value),
                 RegisteredUser = txtInfoContactName.Text,
                 RegisteredEmail = txtInfoContactEmail.Text,
-                ContractId = contractId ?? null,
-                PlatformId = platform.PlatformId,
-                ManufacturerId = manufacturer.ManufacturerId,
+                Contract = contract,
+                Platform = platform,
+                Manufacturer = manufacturer,
                 OperatingSystem = os,
                 Price = Convert.ToInt32(numCost.Value),
                 OrderReference = txtOrderRef.Text,
@@ -605,7 +598,8 @@ namespace AssetTrakr.App.Forms.Asset
                     NetworkAdapters = adapterList,
                     Processor = txtProcessor.Text,
                     RamSizeInGB = Convert.ToInt32(numRamSizeInGB.Value),
-                    RamSticks = Convert.ToInt32(numRamSticks.Value)
+                    RamSticks = Convert.ToInt32(numRamSticks.Value),
+                    AssetType = (AssetType)cmbAssetType.SelectedIndex,
                 }
             };
 
@@ -636,7 +630,7 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 _dbContext.Assets.Add(assetData);
 
-                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionCategory.ASSET, txtName.Text);
+                ActionLogMethods.Added(_dbContext, ActionAlertCategory.Asset, txtName.Text);
             }
             catch (Exception ex)
             {
@@ -659,7 +653,7 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void btnAddHardDrive_Click(object sender, EventArgs e)
         {
-            FrmAssetHardDriveAdd frmAssetHardDriveAdd = new(_hardDrives);
+            FrmAssetHardDriveAdd frmAssetHardDriveAdd = new(_hardDrives, _dbContext.Manufacturers.ToList());
             frmAssetHardDriveAdd.ShowDialog();
 
             if (frmAssetHardDriveAdd.HardDrives != null && frmAssetHardDriveAdd.HardDrives.Count > 0)
@@ -694,6 +688,9 @@ namespace AssetTrakr.App.Forms.Asset
             cmbOperatingSystems.DataSource = _dbContext.AssetOperatingSystems.ToList();
             cmbOperatingSystems.DisplayMember = "Name";
             cmbOperatingSystems.ValueMember = "OperatingSystemId";
+
+            // Load the Asset Types into The ComboBox
+            cmbAssetType.DataSource = Enum.GetNames(typeof(AssetType));
         }
     }
 }

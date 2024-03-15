@@ -1,27 +1,18 @@
 ﻿using AssetTrakr.Database;
+using AssetTrakr.Extensions;
 using AssetTrakr.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace AssetTrakr.App.Forms.Shared
 {
     public partial class FrmManufacturerManager : Form
     {
         private readonly DatabaseContext _dbContext;
-        private List<Manufacturer> _manufacturerList;
-        private int _selectedManufacturerId;
 
         public FrmManufacturerManager()
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
-
-            // We load in all manufacturers here to prevent having to do multiple database calls
-            // every time we want to pull the property data for each manufacturer.
-            // We can also refresh this each time something is added, deleted or edited w/ less.
-            // load on the db, hopefully.
-            // TODO:  This might need optimized later on. [See RefreshManufacturerList also during review]
-            _manufacturerList ??= _dbContext.Manufacturers.ToList();
         }
 
         /// <summary>
@@ -29,46 +20,30 @@ namespace AssetTrakr.App.Forms.Shared
         /// </summary>
         private void RefreshManufacturerList()
         {
-
-            if (_manufacturerList.Count > 0)
-            {
-                _manufacturerList.Clear();
-                lbManufacturers.Items.Clear();
-            }
-
-            _manufacturerList = [.. _dbContext.Manufacturers];
-
-            // populate the user visible listbox
-            foreach (var manufacturer in _manufacturerList)
-            {
-                lbManufacturers.Items.Add(manufacturer.Name);
-            }
+            lbManufacturers.DataSource = _dbContext.Manufacturers.ToList();
+            lbManufacturers.DisplayMember = "Name";
+            lbManufacturers.ValueMember = "ManufacturerId";
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            _dbContext.Manufacturers.Load();
-
+            base.OnLoad(e);
             RefreshManufacturerList();
         }
 
         private void lbManufacturers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lbManufacturers.SelectedIndex < 0)
+            btnAdd.Enabled = lbManufacturers.SelectedIndex < 0;
+            btnDelete.Enabled = btnUpdate.Enabled = !btnAdd.Enabled;
+
+            if(lbManufacturers.SelectedIndex < 0) { return; }
+
+            if (lbManufacturers.SelectedItem is not Manufacturer manufacturer)
             {
-                btnDelete.Enabled = false;
-                btnUpdate.Enabled = false;
-                btnAdd.Enabled = true;
+                MessageBox.Show("Selected Item is not a manufacturer, this should never happen.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            btnAdd.Enabled = false;
-            btnDelete.Enabled = true;
-            btnUpdate.Enabled = true;
-
-            var manufacturer = _manufacturerList[lbManufacturers.SelectedIndex];
-
-            _selectedManufacturerId = manufacturer.ManufacturerId;
             txtName.Text = manufacturer.Name;
             txtUrl.Text = manufacturer.Url;
             txtSupportUrl.Text = manufacturer.SupportUrl;
@@ -79,22 +54,13 @@ namespace AssetTrakr.App.Forms.Shared
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            var manufacturer = _dbContext.Manufacturers.SingleOrDefault(x => x.ManufacturerId == _selectedManufacturerId);
-
-            if (manufacturer == null)
+            if (lbManufacturers.SelectedItem is not Manufacturer manufacturer)
             {
                 return;
             }
 
-            if (txtName.Text.Length < 1)
+            if(txtName.IsEmpty("Name") || txtUrl.IsEmpty("URL"))
             {
-                MessageBox.Show("Name is a required field", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (txtUrl.Text.Length < 1)
-            {
-                MessageBox.Show("URL is a required field", "URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -105,11 +71,18 @@ namespace AssetTrakr.App.Forms.Shared
             manufacturer.SupportEmail = txtSupportEmail.Text;
             manufacturer.Notes = txtNotes.Text;
 
-            if (_dbContext.SaveChanges() > 0)
+            try
             {
-                MessageBox.Show("Manufacturer updated successfully", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RefreshManufacturerList();
-                return;
+                if (_dbContext.SaveChanges() > 0)
+                {
+                    MessageBox.Show("Manufacturer updated successfully", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RefreshManufacturerList();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -118,30 +91,24 @@ namespace AssetTrakr.App.Forms.Shared
             // deselects the listbox, lets users add items
             lbManufacturers.SelectedIndex = -1;
 
-            txtName.Text = string.Empty;
-            txtUrl.Text = string.Empty;
-            txtSupportEmail.Text = string.Empty;
-            txtSupportPhone.Text = string.Empty;
-            txtSupportUrl.Text = string.Empty;
-            txtNotes.Text = string.Empty;
+            foreach(Control control in this.Controls)
+            {
+                if(control is TextBox)
+                {
+                    control.Text = string.Empty;
+                }
+            }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
 
-            if (txtName.Text.Length < 1)
+            if (txtName.IsEmpty("Name") || txtUrl.IsEmpty("URL"))
             {
-                MessageBox.Show("Name is a required field", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (txtUrl.Text.Length < 1)
-            {
-                MessageBox.Show("URL is a required field", "URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            if (_manufacturerList.SingleOrDefault(x => x.Name == txtName.Text) != null)
+            if (lbManufacturers.Items.Cast<Manufacturer>().Any(m => m.Name == txtName.Text))
             {
                 MessageBox.Show($"Manufacturer with the name {txtName.Text} already exists.", "Add", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -157,12 +124,20 @@ namespace AssetTrakr.App.Forms.Shared
                 Notes = txtNotes.Text
             });
 
-            if (_dbContext.SaveChanges() > 0)
+            try
             {
-                MessageBox.Show($"{txtName.Text} added successfully", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RefreshManufacturerList();
-                return;
-            };
+
+                if (_dbContext.SaveChanges() > 0)
+                {
+                    MessageBox.Show($"{txtName.Text} added successfully", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RefreshManufacturerList();
+                    return;
+                };
+            } 
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -172,38 +147,50 @@ namespace AssetTrakr.App.Forms.Shared
                 return;
             }
 
-            var manufacturer = _manufacturerList[lbManufacturers.SelectedIndex];
-
-            if (manufacturer == null)
+            if (lbManufacturers.SelectedItem is not Manufacturer manufacturer)
             {
                 return;
             }
 
-            // TODO: Add 'Asset' ghost check later
-            int licenseGhostCheck = _dbContext.Licenses.Where(x => x.ManufacturerId == manufacturer.ManufacturerId).Count();
-            int platformGhostCheck = _dbContext.Platforms.Where(x => x.ManufacturerId == manufacturer.ManufacturerId).Count();
+            // TODO: Remember to add a ghost check here if it relies on Manufacturer values
+            List<Func<int>> ghostChecks =
+            [
+                () => _dbContext.Licenses.Count(l => l.Manufacturer == manufacturer),
+                () => _dbContext.Platforms.Count(p => p.Manufacturer == manufacturer),
+                () => _dbContext.Assets.Count(a => a.Manufacturer == manufacturer),
+                () => _dbContext.AssetHardDrives.Count(ahd => ahd.Manufacturer == manufacturer),
+                () => _dbContext.AssetOperatingSystems.Count(aos => aos.Manufacturer == manufacturer)
+            ];
 
-            if (licenseGhostCheck != 0)
+            int totalRecords = ghostChecks.Sum(check => check());
+
+            if (totalRecords != 0)
             {
-                MessageBox.Show(
-                    $"Cannot delete {manufacturer.Name} as it has {licenseGhostCheck + platformGhostCheck} entities registered against it",
-                    "Delete Failure", MessageBoxButtons.OK, MessageBoxIcon.Hand
-                );
+                string entityValue = (totalRecords < 2) ? "entity" : "entities";
+
+                MessageBox.Show($"Cannot delete {manufacturer.Name} as it has {totalRecords} {entityValue} registered against it", "Dependency Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 return;
             }
 
-            DialogResult dr = MessageBox.Show($"Do you want to delete {manufacturer.Name}?", "Delete Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult dr = MessageBox.Show($"Do you want to delete {manufacturer.Name}?", "Confirmation Required", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if(dr == DialogResult.Yes)
             {
-                _dbContext.Manufacturers.Remove(manufacturer);
-
-                if (_dbContext.SaveChanges() > 0)
+                try
                 {
-                    MessageBox.Show($"{manufacturer.Name} was deleted successfully", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    RefreshManufacturerList();
-                    return;
+                    _dbContext.Manufacturers.Remove(manufacturer);
+
+                    if (_dbContext.SaveChanges() > 0)
+                    {
+                        MessageBox.Show($"{manufacturer.Name} was deleted successfully", "Deleted", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        RefreshManufacturerList();
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

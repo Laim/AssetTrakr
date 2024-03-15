@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.App", "AssetTrakr.App\AssetTrakr.App.csproj", "{1268F79A-8277-4F8A-AD79-A5BBB28394E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{32FA774F-9C37-49D4-8811-E25618803CE1} = {32FA774F-9C37-49D4-8811-E25618803CE1}
+		{6E281FCD-64C1-4E05-B4C4-72313B72D036} = {6E281FCD-64C1-4E05-B4C4-72313B72D036}
 		{906B8163-0913-4CF7-8445-EB60FCD5F7B7} = {906B8163-0913-4CF7-8445-EB60FCD5F7B7}
 	EndProjectSection
 EndProject
@@ -14,6 +15,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Database", "AssetTrakr.Database\AssetTrakr.Database.csproj", "{906B8163-0913-4CF7-8445-EB60FCD5F7B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Utils", "AssetTrakr.Utils\AssetTrakr.Utils.csproj", "{DEA44D11-A4B0-4B8F-B6B1-A4BE3EF73AFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Extensions", "AssetTrakr.Extensions\AssetTrakr.Extensions.csproj", "{6E281FCD-64C1-4E05-B4C4-72313B72D036}"
+	ProjectSection(ProjectDependencies) = postProject
+		{32FA774F-9C37-49D4-8811-E25618803CE1} = {32FA774F-9C37-49D4-8811-E25618803CE1}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetTrakr.Update.App", "AssetTrakr.Update.App\AssetTrakr.Update.App.csproj", "{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +45,14 @@ Global
 		{DEA44D11-A4B0-4B8F-B6B1-A4BE3EF73AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEA44D11-A4B0-4B8F-B6B1-A4BE3EF73AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEA44D11-A4B0-4B8F-B6B1-A4BE3EF73AFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E281FCD-64C1-4E05-B4C4-72313B72D036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E281FCD-64C1-4E05-B4C4-72313B72D036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E281FCD-64C1-4E05-B4C4-72313B72D036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E281FCD-64C1-4E05-B4C4-72313B72D036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

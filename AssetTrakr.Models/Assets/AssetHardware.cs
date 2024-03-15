@@ -2,8 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices;
-using AssetTrakr.Models.Attributes;
+using AssetTrakr.Utils.Enums;
 
 namespace AssetTrakr.Models.Assets
 {
@@ -27,6 +26,9 @@ namespace AssetTrakr.Models.Assets
         public List<AssetNetworkAdapter> NetworkAdapters { get; set; } = [];
 
         public List<AssetHardDrive> HardDrives { get; set; } = [];
+
+        [DisplayName("Type")]
+        public AssetType AssetType { get; set; }
     }
 
     [PrimaryKey(nameof(NetworkAdapterId))]
@@ -63,7 +65,6 @@ namespace AssetTrakr.Models.Assets
         [DisplayName("Size")]
         public int SizeInGB { get; set; }
 
-        public required int ManufacturerId { get; set; }
 
         [ForeignKey("ManufacturerId")]
         public Manufacturer? Manufacturer { get; set; }

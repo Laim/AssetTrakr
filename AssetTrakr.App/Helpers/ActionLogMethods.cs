@@ -14,12 +14,12 @@ namespace AssetTrakr.App.Helpers
         /// The existing database context that was used to add the entity
         /// </param>
         /// <param name="category">
-        /// The <see cref="ActionCategory"/> of the entity
+        /// The <see cref="ActionAlertCategory"/> of the entity
         /// </param>
         /// <param name="actionName">
         /// The name of the entity
         /// </param>
-        public static void Added(DatabaseContext dbContext, ActionCategory category, string actionName)
+        public static void Added(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
         {
             dbContext.ActionLogEntries.Add(new ActionLog
             {
@@ -38,19 +38,25 @@ namespace AssetTrakr.App.Helpers
         /// The existing database context that was used to add the entity
         /// </param>
         /// <param name="category">
-        /// The <see cref="ActionCategory"/> of the entity
+        /// The <see cref="ActionAlertCategory"/> of the entity
         /// </param>
         /// <param name="actionName">
         /// The name of the entity
         /// </param>
-        public static void Updated(DatabaseContext dbContext, ActionCategory category, string actionName)
+        public static void Updated(DatabaseContext dbContext, ActionAlertCategory category, string actionName, string actionedBy = "")
         {
+
+            if(actionedBy == string.Empty)
+            {
+                actionedBy = Environment.UserName;
+            }
+
             dbContext.ActionLogEntries.Add(new ActionLog
             {
                 ActionCategory = category,
                 ActionType = ActionType.UPDATED,
                 ActionName = actionName,
-                ActionBy = Environment.UserName,
+                ActionBy = actionedBy,
             });
         }
 
@@ -61,12 +67,12 @@ namespace AssetTrakr.App.Helpers
         /// The existing database context that was used to add the entity
         /// </param>
         /// <param name="category">
-        /// The <see cref="ActionCategory"/> of the entity
+        /// The <see cref="ActionAlertCategory"/> of the entity
         /// </param>
         /// <param name="actionName">
         /// The name of the entity
         /// </param>
-        public static void Deleted(DatabaseContext dbContext, ActionCategory category, string actionName)
+        public static void Deleted(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
         {
             dbContext.ActionLogEntries.Add(new ActionLog
             {

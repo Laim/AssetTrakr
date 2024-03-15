@@ -4,6 +4,6 @@
     {
         License,
         Contract,
-        Computer
+        Asset // 'Computers' 
     }
 }

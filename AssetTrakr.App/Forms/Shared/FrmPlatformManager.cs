@@ -1,15 +1,12 @@
 ﻿using AssetTrakr.Database;
+using AssetTrakr.Extensions;
 using AssetTrakr.Models;
-using AssetTrakr.Models.Extensions;
-using Microsoft.EntityFrameworkCore;
 
 namespace AssetTrakr.App.Forms.Shared
 {
     public partial class FrmPlatformManager : Form
     {
         private readonly DatabaseContext _dbContext;
-        private List<Platform> _platformList;
-        private int _selectedPlatformId;
 
         public FrmPlatformManager()
         {
@@ -25,86 +22,73 @@ namespace AssetTrakr.App.Forms.Shared
         /// </summary>
         private void RefreshPlatformList()
         {
-            if(_platformList != null)
-            {
-                if (_platformList.Count > 0)
-                {
-                    _platformList.Clear();
-                }
-            }
-
-            _platformList = [.. _dbContext.Platforms];
-
             // populate the user visible listbox
-            lbPlatforms.DataSource = _platformList;
+            lbPlatforms.DataSource = _dbContext.Platforms.ToList();
             lbPlatforms.DisplayMember = "Name";
             lbPlatforms.ValueMember = "PlatformId";
-        }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            _dbContext.Platforms.Load();
-
-            RefreshPlatformList();
-
+            // Populate manufacturers too, we need those
             cmbManufacturers.DataSource = _dbContext.Manufacturers.ToList();
             cmbManufacturers.DisplayMember = "Name";
             cmbManufacturers.ValueMember = "ManufacturerId";
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            RefreshPlatformList();
+        }
+
         private void lbPlatforms_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lbPlatforms.SelectedIndex < 0)
+            btnAdd.Enabled = lbPlatforms.SelectedIndex < 0;
+            btnDelete.Enabled = btnUpdate.Enabled = !btnAdd.Enabled;
+
+            if (lbPlatforms.SelectedIndex < 0) { return; }
+
+            if (lbPlatforms.SelectedItem is not Platform platform)
             {
-                btnDelete.Enabled = false;
-                btnUpdate.Enabled = false;
-                btnAdd.Enabled = true;
+                MessageBox.Show("Selected Item is not a platform, this should never happen.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            btnAdd.Enabled = false;
-            btnDelete.Enabled = true;
-            btnUpdate.Enabled = true;
-
-            var platform = lbPlatforms.SelectedItem as Platform;
-
-            _selectedPlatformId = platform.PlatformId;
             txtName.Text = platform.Name;
-            cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(_dbContext.Manufacturers.SingleOrDefault(x => x.ManufacturerId == platform.ManufacturerId).Name);
+            cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(platform.Manufacturer?.Name);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            var platform = lbPlatforms.SelectedItem as Platform;
-
-            if (platform == null)
+            if (lbPlatforms.SelectedItem is not Platform platform)
             {
                 return;
             }
 
-            if (txtName.Text.Length < 1)
+            if (txtName.IsEmpty("Name"))
             {
-                MessageBox.Show("Name is a required field", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // TODO: There has to be a better way of doing this since we already populate the combobox
-            var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
-
-            if (selectedManufacturer == null)
+            if (cmbManufacturers.SelectedItem is not Manufacturer selectedManufacturer)
             {
-                MessageBox.Show($"Platform has not been updated as 'selectedManufacturer' is null", "Add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Platform has not been updated as Manufacturer is null", "Manufacturer Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             platform.Name = txtName.Text;
             platform.Manufacturer = selectedManufacturer;
 
-            if (_dbContext.SaveChanges() > 0)
+            try
             {
-                MessageBox.Show("Platform updated successfully", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RefreshPlatformList();
-                return;
+                if (_dbContext.SaveChanges() > 0)
+                {
+                    MessageBox.Show("Platform updated successfully", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RefreshPlatformList();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -119,25 +103,22 @@ namespace AssetTrakr.App.Forms.Shared
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-
-            if (txtName.Text.Length < 1)
+            if (txtName.IsEmpty("Name"))
             {
-                MessageBox.Show("Name is a required field", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (_platformList.SingleOrDefault(x => x.Name == txtName.Text) != null)
+            if (lbPlatforms.Items.Cast<Platform>().Any(m => m.Name == txtName.Text))
             {
                 MessageBox.Show($"Platform with the name {txtName.Text} already exists.", "Add", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             // TODO: There has to be a better way of doing this since we already populate the combobox
-            var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
 
-            if (selectedManufacturer == null)
+            if (cmbManufacturers.SelectedItem is not Manufacturer selectedManufacturer)
             {
-                MessageBox.Show($"Platform has not been added as Manufacturer is null", "Add", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Platform has not been added as Manufacturer is null", "Manufacturer Missing", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -147,12 +128,19 @@ namespace AssetTrakr.App.Forms.Shared
                 Manufacturer = selectedManufacturer,
             });
 
-            if (_dbContext.SaveChanges() > 0)
+            try
             {
-                MessageBox.Show($"{txtName.Text} added successfully", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                RefreshPlatformList();
-                return;
-            };
+                if (_dbContext.SaveChanges() > 0)
+                {
+                    MessageBox.Show($"{txtName.Text} added successfully", "Add", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RefreshPlatformList();
+                    return;
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -162,23 +150,25 @@ namespace AssetTrakr.App.Forms.Shared
                 return;
             }
 
-            var platform = _platformList[lbPlatforms.SelectedIndex];
-
-            if (platform == null)
+            if (lbPlatforms.SelectedItem is not Platform platform)
             {
                 return;
             }
 
-            // TODO: Add 'Asset' ghost check later
-            int licenseGhostCheck = _dbContext.Licenses.Where(x => x.PlatformId == platform.PlatformId).Count();
-            //int contractGhostCheck = _dbContext.Contracts.Select(x => x.PlatformId == platform.Id).Count();
+            // TODO: Remember to add a ghost check here if it relies on Platform values
+            List<Func<int>> ghostChecks =
+            [
+                () => _dbContext.Assets.Count(a => a.Platform == platform),
+                () => _dbContext.Licenses.Count(l => l.Platform == platform)
+            ];
 
-            if (licenseGhostCheck != 0)
+            int totalRecords = ghostChecks.Sum(check => check());
+
+            if (totalRecords != 0)
             {
-                MessageBox.Show(
-                    $"Cannot delete {platform.Name} as it has {licenseGhostCheck} entities registered against it",
-                    "Delete Failure", MessageBoxButtons.OK, MessageBoxIcon.Hand
-                );
+                string entityValue = (totalRecords < 2) ? "entity" : "entities";
+
+                MessageBox.Show($"Cannot delete {platform.Name} as it has {totalRecords} {entityValue} registered against it", "Dependency Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 return;
             }
@@ -187,13 +177,20 @@ namespace AssetTrakr.App.Forms.Shared
 
             if (dr == DialogResult.Yes)
             {
-                _dbContext.Platforms.Remove(platform);
-
-                if (_dbContext.SaveChanges() > 0)
+                try
                 {
-                    MessageBox.Show($"{platform.Name} was deleted successfully", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    RefreshPlatformList();
-                    return;
+                    _dbContext.Platforms.Remove(platform);
+
+                    if (_dbContext.SaveChanges() > 0)
+                    {
+                        MessageBox.Show($"{platform.Name} was deleted successfully", "Delete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        RefreshPlatformList();
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

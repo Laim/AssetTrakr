@@ -1,6 +1,6 @@
 ﻿using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
-using AssetTrakr.Models.Extensions;
+using AssetTrakr.Extensions;
 using System.ComponentModel;
 
 namespace AssetTrakr.App.Helpers

@@ -28,29 +28,57 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             menuStripMain = new MenuStrip();
             licensesToolStripMenuItem = new ToolStripMenuItem();
             addLicenseToolStripMenuItem = new ToolStripMenuItem();
             viewLicensesToolStripMenuItem = new ToolStripMenuItem();
             assetsToolStripMenuItem = new ToolStripMenuItem();
             addAssetToolStripMenuItem = new ToolStripMenuItem();
+            viewAssetsToolStripMenuItem = new ToolStripMenuItem();
+            contractsToolStripMenuItem = new ToolStripMenuItem();
+            addContractToolStripMenuItem = new ToolStripMenuItem();
+            reportsToolStripMenuItem = new ToolStripMenuItem();
+            defaultReportsToolStripMenuItem = new ToolStripMenuItem();
+            customReportToolStripMenuItem = new ToolStripMenuItem();
             administrationToolStripMenuItem = new ToolStripMenuItem();
             actionLogToolStripMenuItem = new ToolStripMenuItem();
-            button1 = new Button();
-            textBox1 = new TextBox();
+            manufacturerManagerToolStripMenuItem = new ToolStripMenuItem();
+            platformManagerToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             gbLicenseCount = new GroupBox();
             lblLicenseCount = new Label();
             gbAssetsCount = new GroupBox();
             lblAssetCount = new Label();
+            gbManufacturers = new GroupBox();
+            lblManufacturerCount = new Label();
+            gbContracts = new GroupBox();
+            lblContractCount = new Label();
+            lblAlertList = new Label();
+            dgvAlerts = new DataGridView();
+            cmsDgvRightClick = new ContextMenuStrip(components);
+            columnSelectorToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            exportToolStripMenuItem = new ToolStripMenuItem();
+            gbPlatforms = new GroupBox();
+            lblPlatformsCount = new Label();
+            lnkRefreshDashboard = new LinkLabel();
+            viewContractsToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             gbLicenseCount.SuspendLayout();
             gbAssetsCount.SuspendLayout();
+            gbManufacturers.SuspendLayout();
+            gbContracts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvAlerts).BeginInit();
+            cmsDgvRightClick.SuspendLayout();
+            gbPlatforms.SuspendLayout();
             SuspendLayout();
             // 
             // menuStripMain
             // 
             menuStripMain.ImageScalingSize = new Size(20, 20);
-            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, administrationToolStripMenuItem });
+            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, contractsToolStripMenuItem, reportsToolStripMenuItem, administrationToolStripMenuItem, toolStripMenuItem1 });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
             menuStripMain.Size = new Size(1262, 28);
@@ -80,7 +108,7 @@
             // 
             // assetsToolStripMenuItem
             // 
-            assetsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { addAssetToolStripMenuItem });
+            assetsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { addAssetToolStripMenuItem, viewAssetsToolStripMenuItem });
             assetsToolStripMenuItem.Name = "assetsToolStripMenuItem";
             assetsToolStripMenuItem.Size = new Size(64, 24);
             assetsToolStripMenuItem.Text = "Assets";
@@ -88,13 +116,54 @@
             // addAssetToolStripMenuItem
             // 
             addAssetToolStripMenuItem.Name = "addAssetToolStripMenuItem";
-            addAssetToolStripMenuItem.Size = new Size(159, 26);
+            addAssetToolStripMenuItem.Size = new Size(224, 26);
             addAssetToolStripMenuItem.Text = "Add Asset";
             addAssetToolStripMenuItem.Click += addAssetToolStripMenuItem_Click;
             // 
+            // viewAssetsToolStripMenuItem
+            // 
+            viewAssetsToolStripMenuItem.Name = "viewAssetsToolStripMenuItem";
+            viewAssetsToolStripMenuItem.Size = new Size(224, 26);
+            viewAssetsToolStripMenuItem.Text = "View Assets";
+            viewAssetsToolStripMenuItem.Click += viewAssetsToolStripMenuItem_Click;
+            // 
+            // contractsToolStripMenuItem
+            // 
+            contractsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { addContractToolStripMenuItem, viewContractsToolStripMenuItem });
+            contractsToolStripMenuItem.Name = "contractsToolStripMenuItem";
+            contractsToolStripMenuItem.Size = new Size(85, 24);
+            contractsToolStripMenuItem.Text = "Contracts";
+            // 
+            // addContractToolStripMenuItem
+            // 
+            addContractToolStripMenuItem.Name = "addContractToolStripMenuItem";
+            addContractToolStripMenuItem.Size = new Size(224, 26);
+            addContractToolStripMenuItem.Text = "Add Contract";
+            addContractToolStripMenuItem.Click += addContractToolStripMenuItem_Click;
+            // 
+            // reportsToolStripMenuItem
+            // 
+            reportsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { defaultReportsToolStripMenuItem, customReportToolStripMenuItem });
+            reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
+            reportsToolStripMenuItem.Size = new Size(74, 24);
+            reportsToolStripMenuItem.Text = "Reports";
+            // 
+            // defaultReportsToolStripMenuItem
+            // 
+            defaultReportsToolStripMenuItem.Name = "defaultReportsToolStripMenuItem";
+            defaultReportsToolStripMenuItem.Size = new Size(224, 26);
+            defaultReportsToolStripMenuItem.Text = "Default Reports";
+            defaultReportsToolStripMenuItem.Click += defaultReportsToolStripMenuItem_Click;
+            // 
+            // customReportToolStripMenuItem
+            // 
+            customReportToolStripMenuItem.Name = "customReportToolStripMenuItem";
+            customReportToolStripMenuItem.Size = new Size(224, 26);
+            customReportToolStripMenuItem.Text = "Custom Report";
+            // 
             // administrationToolStripMenuItem
             // 
-            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem });
+            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem, manufacturerManagerToolStripMenuItem, platformManagerToolStripMenuItem });
             administrationToolStripMenuItem.Name = "administrationToolStripMenuItem";
             administrationToolStripMenuItem.Size = new Size(121, 24);
             administrationToolStripMenuItem.Text = "Administration";
@@ -102,26 +171,28 @@
             // actionLogToolStripMenuItem
             // 
             actionLogToolStripMenuItem.Name = "actionLogToolStripMenuItem";
-            actionLogToolStripMenuItem.Size = new Size(164, 26);
+            actionLogToolStripMenuItem.Size = new Size(243, 26);
             actionLogToolStripMenuItem.Text = "Action Log";
             actionLogToolStripMenuItem.Click += actionLogToolStripMenuItem_Click;
             // 
-            // button1
+            // manufacturerManagerToolStripMenuItem
             // 
-            button1.Location = new Point(574, 547);
-            button1.Name = "button1";
-            button1.Size = new Size(94, 29);
-            button1.TabIndex = 1;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            manufacturerManagerToolStripMenuItem.Name = "manufacturerManagerToolStripMenuItem";
+            manufacturerManagerToolStripMenuItem.Size = new Size(243, 26);
+            manufacturerManagerToolStripMenuItem.Text = "Manufacturer Manager";
+            manufacturerManagerToolStripMenuItem.Click += manufacturerManagerToolStripMenuItem_Click;
             // 
-            // textBox1
+            // platformManagerToolStripMenuItem
             // 
-            textBox1.Location = new Point(674, 547);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(125, 27);
-            textBox1.TabIndex = 2;
+            platformManagerToolStripMenuItem.Name = "platformManagerToolStripMenuItem";
+            platformManagerToolStripMenuItem.Size = new Size(243, 26);
+            platformManagerToolStripMenuItem.Text = "Platform Manager";
+            platformManagerToolStripMenuItem.Click += platformManagerToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(14, 24);
             // 
             // gbLicenseCount
             // 
@@ -167,17 +238,166 @@
             lblAssetCount.Text = "0";
             lblAssetCount.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // gbManufacturers
+            // 
+            gbManufacturers.Controls.Add(lblManufacturerCount);
+            gbManufacturers.Location = new Point(638, 40);
+            gbManufacturers.Name = "gbManufacturers";
+            gbManufacturers.Size = new Size(200, 200);
+            gbManufacturers.TabIndex = 5;
+            gbManufacturers.TabStop = false;
+            gbManufacturers.Text = "Manufacturers";
+            // 
+            // lblManufacturerCount
+            // 
+            lblManufacturerCount.Dock = DockStyle.Fill;
+            lblManufacturerCount.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblManufacturerCount.ForeColor = Color.Red;
+            lblManufacturerCount.Location = new Point(3, 23);
+            lblManufacturerCount.Name = "lblManufacturerCount";
+            lblManufacturerCount.Size = new Size(194, 174);
+            lblManufacturerCount.TabIndex = 1;
+            lblManufacturerCount.Text = "0";
+            lblManufacturerCount.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // gbContracts
+            // 
+            gbContracts.Controls.Add(lblContractCount);
+            gbContracts.Location = new Point(432, 40);
+            gbContracts.Name = "gbContracts";
+            gbContracts.Size = new Size(200, 200);
+            gbContracts.TabIndex = 6;
+            gbContracts.TabStop = false;
+            gbContracts.Text = "Contracts";
+            // 
+            // lblContractCount
+            // 
+            lblContractCount.Dock = DockStyle.Fill;
+            lblContractCount.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblContractCount.ForeColor = Color.Red;
+            lblContractCount.Location = new Point(3, 23);
+            lblContractCount.Name = "lblContractCount";
+            lblContractCount.Size = new Size(194, 174);
+            lblContractCount.TabIndex = 1;
+            lblContractCount.Text = "0";
+            lblContractCount.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lblAlertList
+            // 
+            lblAlertList.AutoSize = true;
+            lblAlertList.Location = new Point(20, 252);
+            lblAlertList.Name = "lblAlertList";
+            lblAlertList.Size = new Size(47, 20);
+            lblAlertList.TabIndex = 8;
+            lblAlertList.Text = "Alerts";
+            // 
+            // dgvAlerts
+            // 
+            dgvAlerts.AllowUserToAddRows = false;
+            dgvAlerts.AllowUserToDeleteRows = false;
+            dgvAlerts.AllowUserToOrderColumns = true;
+            dgvAlerts.AllowUserToResizeRows = false;
+            dgvAlerts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvAlerts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvAlerts.BackgroundColor = Color.White;
+            dgvAlerts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvAlerts.ContextMenuStrip = cmsDgvRightClick;
+            dgvAlerts.Location = new Point(20, 288);
+            dgvAlerts.MultiSelect = false;
+            dgvAlerts.Name = "dgvAlerts";
+            dgvAlerts.ReadOnly = true;
+            dgvAlerts.RowHeadersVisible = false;
+            dgvAlerts.RowHeadersWidth = 51;
+            dgvAlerts.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            dgvAlerts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvAlerts.ShowCellErrors = false;
+            dgvAlerts.ShowCellToolTips = false;
+            dgvAlerts.ShowEditingIcon = false;
+            dgvAlerts.ShowRowErrors = false;
+            dgvAlerts.Size = new Size(609, 351);
+            dgvAlerts.TabIndex = 19;
+            // 
+            // cmsDgvRightClick
+            // 
+            cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, exportToolStripMenuItem });
+            cmsDgvRightClick.Name = "contextMenuStrip1";
+            cmsDgvRightClick.Size = new Size(188, 58);
+            // 
+            // columnSelectorToolStripMenuItem
+            // 
+            columnSelectorToolStripMenuItem.Name = "columnSelectorToolStripMenuItem";
+            columnSelectorToolStripMenuItem.Size = new Size(187, 24);
+            columnSelectorToolStripMenuItem.Text = "Column Selector";
+            columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(184, 6);
+            // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(187, 24);
+            exportToolStripMenuItem.Text = "Export List";
+            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
+            // 
+            // gbPlatforms
+            // 
+            gbPlatforms.Controls.Add(lblPlatformsCount);
+            gbPlatforms.Location = new Point(844, 40);
+            gbPlatforms.Name = "gbPlatforms";
+            gbPlatforms.Size = new Size(200, 200);
+            gbPlatforms.TabIndex = 6;
+            gbPlatforms.TabStop = false;
+            gbPlatforms.Text = "Platforms";
+            // 
+            // lblPlatformsCount
+            // 
+            lblPlatformsCount.Dock = DockStyle.Fill;
+            lblPlatformsCount.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPlatformsCount.ForeColor = Color.Red;
+            lblPlatformsCount.Location = new Point(3, 23);
+            lblPlatformsCount.Name = "lblPlatformsCount";
+            lblPlatformsCount.Size = new Size(194, 174);
+            lblPlatformsCount.TabIndex = 1;
+            lblPlatformsCount.Text = "0";
+            lblPlatformsCount.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // lnkRefreshDashboard
+            // 
+            lnkRefreshDashboard.AutoSize = true;
+            lnkRefreshDashboard.Location = new Point(1192, 40);
+            lnkRefreshDashboard.Name = "lnkRefreshDashboard";
+            lnkRefreshDashboard.Size = new Size(58, 20);
+            lnkRefreshDashboard.TabIndex = 20;
+            lnkRefreshDashboard.TabStop = true;
+            lnkRefreshDashboard.Text = "Refresh";
+            lnkRefreshDashboard.LinkClicked += lnkRefreshDashboard_LinkClicked;
+            // 
+            // viewContractsToolStripMenuItem
+            // 
+            viewContractsToolStripMenuItem.Name = "viewContractsToolStripMenuItem";
+            viewContractsToolStripMenuItem.Size = new Size(224, 26);
+            viewContractsToolStripMenuItem.Text = "View Contracts";
+            // 
             // FrmMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1262, 673);
+            Controls.Add(lnkRefreshDashboard);
+            Controls.Add(gbPlatforms);
+            Controls.Add(dgvAlerts);
+            Controls.Add(lblAlertList);
+            Controls.Add(gbContracts);
+            Controls.Add(gbManufacturers);
             Controls.Add(gbAssetsCount);
             Controls.Add(gbLicenseCount);
-            Controls.Add(textBox1);
-            Controls.Add(button1);
             Controls.Add(menuStripMain);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
             MinimumSize = new Size(1280, 720);
             Name = "FrmMain";
@@ -187,6 +407,11 @@
             menuStripMain.PerformLayout();
             gbLicenseCount.ResumeLayout(false);
             gbAssetsCount.ResumeLayout(false);
+            gbManufacturers.ResumeLayout(false);
+            gbContracts.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvAlerts).EndInit();
+            cmsDgvRightClick.ResumeLayout(false);
+            gbPlatforms.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -197,8 +422,6 @@
         private ToolStripMenuItem licensesToolStripMenuItem;
         private ToolStripMenuItem addLicenseToolStripMenuItem;
         private ToolStripMenuItem viewLicensesToolStripMenuItem;
-        private Button button1;
-        private TextBox textBox1;
         private ToolStripMenuItem assetsToolStripMenuItem;
         private ToolStripMenuItem addAssetToolStripMenuItem;
         private GroupBox gbLicenseCount;
@@ -207,5 +430,28 @@
         private Label lblAssetCount;
         private ToolStripMenuItem administrationToolStripMenuItem;
         private ToolStripMenuItem actionLogToolStripMenuItem;
+        private ToolStripMenuItem viewAssetsToolStripMenuItem;
+        private GroupBox gbManufacturers;
+        private Label lblManufacturerCount;
+        private ToolStripMenuItem reportsToolStripMenuItem;
+        private ToolStripMenuItem manufacturerManagerToolStripMenuItem;
+        private ToolStripMenuItem platformManagerToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem contractsToolStripMenuItem;
+        private ToolStripMenuItem addContractToolStripMenuItem;
+        private GroupBox gbContracts;
+        private Label lblContractCount;
+        private Label lblAlertList;
+        private DataGridView dgvAlerts;
+        private GroupBox gbPlatforms;
+        private Label lblPlatformsCount;
+        private LinkLabel lnkRefreshDashboard;
+        private ContextMenuStrip cmsDgvRightClick;
+        private ToolStripMenuItem columnSelectorToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem defaultReportsToolStripMenuItem;
+        private ToolStripMenuItem customReportToolStripMenuItem;
+        private ToolStripMenuItem viewContractsToolStripMenuItem;
     }
 }

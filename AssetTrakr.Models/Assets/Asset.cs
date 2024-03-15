@@ -5,11 +5,13 @@ using System.ComponentModel;
 
 namespace AssetTrakr.Models.Assets
 {
-    [PrimaryKey(nameof(Id))]
+    [PrimaryKey(nameof(AssetId))]
+    [Index(nameof(Name), IsUnique = true)]
+    [Index("OperatingSystemId", IsUnique = false)]
     public class Asset : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int AssetId { get; set; }
 
         [Required]
         [MinLength(1)]
@@ -31,12 +33,6 @@ namespace AssetTrakr.Models.Assets
 
         [DisplayName("User Email")]
         public string? RegisteredEmail { get; set; }
-
-        public int? ContractId { get; set; }
-
-        public required int PlatformId { get; set; }
-
-        public required int ManufacturerId { get; set; }
 
         public decimal Price { get; set; }
 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmContractModify));
             tabControlContract = new TabControl();
             tabInformation = new TabPage();
             txtOrderRef = new TextBox();
@@ -42,20 +43,20 @@
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             deleteToolStripMenuItem = new ToolStripMenuItem();
-            tabNotes = new TabPage();
-            txtDescription = new TextBox();
             tabAttachments = new TabPage();
             btnAddAttachment = new Button();
             dgvAttachments = new DataGridView();
+            tabNotes = new TabPage();
+            txtDescription = new TextBox();
             btnAddUpdate = new Button();
             tabControlContract.SuspendLayout();
             tabInformation.SuspendLayout();
             tabPeriods.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPeriods).BeginInit();
             cmsDgvRightClick.SuspendLayout();
-            tabNotes.SuspendLayout();
             tabAttachments.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAttachments).BeginInit();
+            tabNotes.SuspendLayout();
             SuspendLayout();
             // 
             // tabControlContract
@@ -189,26 +190,6 @@
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
-            // tabNotes
-            // 
-            tabNotes.Controls.Add(txtDescription);
-            tabNotes.Location = new Point(4, 29);
-            tabNotes.Name = "tabNotes";
-            tabNotes.Padding = new Padding(3);
-            tabNotes.Size = new Size(712, 393);
-            tabNotes.TabIndex = 1;
-            tabNotes.Text = "Notes";
-            tabNotes.UseVisualStyleBackColor = true;
-            // 
-            // txtDescription
-            // 
-            txtDescription.Dock = DockStyle.Fill;
-            txtDescription.Location = new Point(3, 3);
-            txtDescription.Multiline = true;
-            txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(706, 387);
-            txtDescription.TabIndex = 9;
-            // 
             // tabAttachments
             // 
             tabAttachments.Controls.Add(btnAddAttachment);
@@ -256,6 +237,26 @@
             dgvAttachments.Size = new Size(669, 300);
             dgvAttachments.TabIndex = 14;
             // 
+            // tabNotes
+            // 
+            tabNotes.Controls.Add(txtDescription);
+            tabNotes.Location = new Point(4, 29);
+            tabNotes.Name = "tabNotes";
+            tabNotes.Padding = new Padding(3);
+            tabNotes.Size = new Size(712, 393);
+            tabNotes.TabIndex = 1;
+            tabNotes.Text = "Notes";
+            tabNotes.UseVisualStyleBackColor = true;
+            // 
+            // txtDescription
+            // 
+            txtDescription.Dock = DockStyle.Fill;
+            txtDescription.Location = new Point(3, 3);
+            txtDescription.Multiline = true;
+            txtDescription.Name = "txtDescription";
+            txtDescription.Size = new Size(706, 387);
+            txtDescription.TabIndex = 9;
+            // 
             // btnAddUpdate
             // 
             btnAddUpdate.Location = new Point(642, 452);
@@ -274,6 +275,7 @@
             Controls.Add(btnAddUpdate);
             Controls.Add(tabControlContract);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "FrmContractModify";
             StartPosition = FormStartPosition.CenterParent;
@@ -284,10 +286,10 @@
             tabPeriods.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvPeriods).EndInit();
             cmsDgvRightClick.ResumeLayout(false);
-            tabNotes.ResumeLayout(false);
-            tabNotes.PerformLayout();
             tabAttachments.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvAttachments).EndInit();
+            tabNotes.ResumeLayout(false);
+            tabNotes.PerformLayout();
             ResumeLayout(false);
         }
 

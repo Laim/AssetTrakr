@@ -16,7 +16,7 @@ namespace AssetTrakr.Models
         public required string ActionName { get; set; }
 
         [DisplayName("Category")]
-        public required ActionCategory ActionCategory { get; set; }
+        public required ActionAlertCategory ActionCategory { get; set; }
 
         [DisplayName("Type")]
         public required ActionType ActionType { get; set; }

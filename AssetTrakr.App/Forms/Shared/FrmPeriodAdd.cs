@@ -47,7 +47,7 @@ namespace AssetTrakr.App.Forms.Shared
                 EndDate = DateOnly.FromDateTime(dtSubEnd.Value)
             });
 
-            MessageBox.Show($"Period added successfully", "Period", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Period added successfully", "Period", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

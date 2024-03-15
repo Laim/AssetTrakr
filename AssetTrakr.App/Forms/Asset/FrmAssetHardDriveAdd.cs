@@ -1,23 +1,18 @@
 ﻿using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.Database;
+using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
-using AssetTrakr.Models.Extensions;
 using System.ComponentModel;
-using System.Configuration;
-using System.Data;
 
 namespace AssetTrakr.App.Forms.Asset
 {
     public partial class FrmAssetHardDriveAdd : Form
     {
-        private readonly DatabaseContext _dbContext;
         public BindingList<AssetHardDrive> HardDrives = [];
 
-        public FrmAssetHardDriveAdd(BindingList<AssetHardDrive> Drives)
+        public FrmAssetHardDriveAdd(BindingList<AssetHardDrive> Drives, List<Manufacturer> manufacturers)
         {
             InitializeComponent();
-
-            _dbContext ??= new DatabaseContext();
 
             HardDrives ??= [];
 
@@ -26,28 +21,21 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 HardDrives = Drives;
             }
-        }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            cmbManufacturers.DataSource = _dbContext.Manufacturers.Select(m => m.Name).ToComboList();
+            RefreshManufacturers(manufacturers);
         }
 
         private void lnkAddManufacturer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FrmManufacturerManager frmManufacturerManager = new();
             frmManufacturerManager.ShowDialog();
-
-            cmbManufacturers.DataSource = _dbContext.Manufacturers.Select(m => m.Name).ToComboList();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            var selectedManufacturer = _dbContext.Manufacturers.SingleOrDefault(x => x.Name == cmbManufacturers.Text);
+            Manufacturer? selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
 
-            if(selectedManufacturer == null)
+            if (selectedManufacturer == null)
             {
                 MessageBox.Show($"Manufacturer is required.", "Manufacturer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -55,7 +43,6 @@ namespace AssetTrakr.App.Forms.Asset
 
             HardDrives.Add(new AssetHardDrive
             {
-                ManufacturerId = selectedManufacturer.ManufacturerId,
                 Manufacturer = selectedManufacturer,
                 Name = txtName.Text,
                 SizeInGB = Convert.ToInt32(numSizeBytes.Value)
@@ -63,5 +50,15 @@ namespace AssetTrakr.App.Forms.Asset
 
             MessageBox.Show($"Hard Drive added successfully", "Hard Drive", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+    
+        private void RefreshManufacturers(List<Manufacturer> manufacturers)
+        {
+            // Ideally we'd pull these at run time and not just pass them through from another form
+            // but EF Core change tracking goes well over my head apparently
+            cmbManufacturers.DataSource = manufacturers;
+            cmbManufacturers.DisplayMember = "Name";
+            cmbManufacturers.ValueMember = "ManufacturerId";
+        }
+    
     }
 }

@@ -75,6 +75,7 @@
             lnkAddManufacturer.TabIndex = 42;
             lnkAddManufacturer.TabStop = true;
             lnkAddManufacturer.Text = "Manage";
+            lnkAddManufacturer.Visible = false;
             lnkAddManufacturer.LinkClicked += lnkAddManufacturer_LinkClicked;
             // 
             // cmbManufacturers
@@ -115,7 +116,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(445, 159);
+            ClientSize = new Size(388, 159);
             Controls.Add(btnAdd);
             Controls.Add(numSizeBytes);
             Controls.Add(txtName);

@@ -17,6 +17,270 @@ namespace AssetTrakr.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
+            modelBuilder.Entity("AssetTrakr.Models.ActionLog", b =>
+                {
+                    b.Property<int>("ActionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ActionBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ActionCategory")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ActionName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ActionTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ActionType")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ActionId");
+
+                    b.ToTable("ActionLogEntries");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.Asset", b =>
+                {
+                    b.Property<int>("AssetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("HardwareId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsUnderWarranty")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LicenseKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ManufacturerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OperatingSystemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OrderReference")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PlatformId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("PurchaseDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RegisteredEmail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RegisteredUser")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AssetId");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("HardwareId");
+
+                    b.HasIndex("ManufacturerId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("OperatingSystemId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetAttachment", b =>
+                {
+                    b.Property<int?>("AssetId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AttachmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AssetId", "AttachmentId");
+
+                    b.HasIndex("AttachmentId");
+
+                    b.ToTable("AssetAttachments");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetHardDrive", b =>
+                {
+                    b.Property<int>("HardDriveId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AssetHardwareId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ManufacturerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SerialNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SizeInGB")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("HardDriveId");
+
+                    b.HasIndex("AssetHardwareId");
+
+                    b.HasIndex("ManufacturerId");
+
+                    b.ToTable("AssetHardDrives");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetHardware", b =>
+                {
+                    b.Property<int>("AssetHardwareId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AssetType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BiosSerialNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Processor")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RamSizeInGB")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RamSticks")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AssetHardwareId");
+
+                    b.ToTable("AssetHardware");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetNetworkAdapter", b =>
+                {
+                    b.Property<int>("NetworkAdapterId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AssetHardwareId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MacAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("NetworkAdapterId");
+
+                    b.HasIndex("AssetHardwareId");
+
+                    b.ToTable("AssetNetworkAdapters");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetOperatingSystem", b =>
+                {
+                    b.Property<int>("OperatingSystemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ManufacturerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PlatformId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("OperatingSystemId");
+
+                    b.HasIndex("ManufacturerId");
+
+                    b.HasIndex("PlatformId");
+
+                    b.ToTable("AssetOperatingSystems");
+
+                    b.HasData(
+                        new
+                        {
+                            OperatingSystemId = 1,
+                            ManufacturerId = 1,
+                            Name = "Windows 11",
+                            PlatformId = 1
+                        });
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetPeriod", b =>
+                {
+                    b.Property<int?>("AssetId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PeriodId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AssetId", "PeriodId");
+
+                    b.HasIndex("PeriodId");
+
+                    b.ToTable("AssetPeriods");
+                });
+
             modelBuilder.Entity("AssetTrakr.Models.Attachment", b =>
                 {
                     b.Property<int>("AttachmentId")
@@ -73,9 +337,6 @@ namespace AssetTrakr.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AttachmentIds")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -114,14 +375,41 @@ namespace AssetTrakr.Database.Migrations
                     b.ToTable("Contracts");
                 });
 
+            modelBuilder.Entity("AssetTrakr.Models.ContractAttachment", b =>
+                {
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AttachmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ContractId", "AttachmentId");
+
+                    b.HasIndex("AttachmentId");
+
+                    b.ToTable("ContractAttachments");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.ContractPeriod", b =>
+                {
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PeriodId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ContractId", "PeriodId");
+
+                    b.HasIndex("PeriodId");
+
+                    b.ToTable("ContractPeriods");
+                });
+
             modelBuilder.Entity("AssetTrakr.Models.License", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("AttachmentIds")
-                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ContractId")
                         .HasColumnType("INTEGER");
@@ -162,7 +450,7 @@ namespace AssetTrakr.Database.Migrations
                     b.Property<int>("PlatformId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
                     b.Property<DateOnly>("PurchaseDate")
@@ -195,7 +483,22 @@ namespace AssetTrakr.Database.Migrations
                     b.ToTable("Licenses");
                 });
 
-            modelBuilder.Entity("AssetTrakr.Models.LicensePeriods", b =>
+            modelBuilder.Entity("AssetTrakr.Models.LicenseAttachment", b =>
+                {
+                    b.Property<int?>("LicenseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AttachmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("LicenseId", "AttachmentId");
+
+                    b.HasIndex("AttachmentId");
+
+                    b.ToTable("LicenseAttachments");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.LicensePeriod", b =>
                 {
                     b.Property<int?>("LicenseId")
                         .HasColumnType("INTEGER");
@@ -203,12 +506,7 @@ namespace AssetTrakr.Database.Migrations
                     b.Property<int?>("PeriodId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ContractId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("LicenseId", "PeriodId");
-
-                    b.HasIndex("ContractId");
 
                     b.HasIndex("PeriodId");
 
@@ -263,11 +561,113 @@ namespace AssetTrakr.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Manufacturers");
+
+                    b.HasData(
+                        new
+                        {
+                            ManufacturerId = 1,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9479), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Microsoft",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9552), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://microsoft.com"
+                        },
+                        new
+                        {
+                            ManufacturerId = 2,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9557), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Adobe, Inc",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9559), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://adobe.com"
+                        },
+                        new
+                        {
+                            ManufacturerId = 3,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9560), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "1Password",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9562), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://1password.com"
+                        },
+                        new
+                        {
+                            ManufacturerId = 4,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9563), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Valve",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9564), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://valvesoftware.com"
+                        },
+                        new
+                        {
+                            ManufacturerId = 5,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9565), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Apple",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9566), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://apple.com"
+                        },
+                        new
+                        {
+                            ManufacturerId = 6,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9568), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Citrix",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9569), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://www.citrix.com/"
+                        },
+                        new
+                        {
+                            ManufacturerId = 7,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9571), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Splunk",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9572), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://www.splunk.com/"
+                        },
+                        new
+                        {
+                            ManufacturerId = 8,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9573), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Amazon",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9574), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://amazon.com/"
+                        },
+                        new
+                        {
+                            ManufacturerId = 9,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9575), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Google",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9576), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://google.com/"
+                        },
+                        new
+                        {
+                            ManufacturerId = 10,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9578), new TimeSpan(0, 0, 0, 0, 0)),
+                            Name = "Linux Foundation",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9579), new TimeSpan(0, 0, 0, 0, 0)),
+                            Url = "https://linuxfoundation.org/"
+                        });
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Period", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PeriodId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -291,7 +691,7 @@ namespace AssetTrakr.Database.Migrations
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("PeriodId");
 
                     b.ToTable("Periods");
                 });
@@ -332,6 +732,317 @@ namespace AssetTrakr.Database.Migrations
                         .IsUnique();
 
                     b.ToTable("Platforms");
+
+                    b.HasData(
+                        new
+                        {
+                            PlatformId = 1,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9625), new TimeSpan(0, 0, 0, 0, 0)),
+                            ManufacturerId = 1,
+                            Name = "Windows",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9626), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            PlatformId = 2,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9640), new TimeSpan(0, 0, 0, 0, 0)),
+                            ManufacturerId = 5,
+                            Name = "macOS",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9641), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            PlatformId = 3,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9643), new TimeSpan(0, 0, 0, 0, 0)),
+                            ManufacturerId = 10,
+                            Name = "Linux",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9644), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            PlatformId = 4,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9645), new TimeSpan(0, 0, 0, 0, 0)),
+                            ManufacturerId = 9,
+                            Name = "Chrome OS",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9646), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            PlatformId = 5,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9647), new TimeSpan(0, 0, 0, 0, 0)),
+                            ManufacturerId = 5,
+                            Name = "iOS",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9648), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            PlatformId = 6,
+                            CreatedBy = "SYSTEM",
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9650), new TimeSpan(0, 0, 0, 0, 0)),
+                            ManufacturerId = 9,
+                            Name = "Android",
+                            UpdatedBy = "SYSTEM",
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9651), new TimeSpan(0, 0, 0, 0, 0))
+                        });
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Report", b =>
+                {
+                    b.Property<int>("ReportId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("HasCriteria")
+                        .HasColumnType("INTEGER")
+                        .HasComment("Whether or not the report has criteria that can be used during run time");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ParentType")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasComment("The type of report, i.e Asset, License etc.  Uses ParentType enum in c#.");
+
+                    b.Property<string>("ShortCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasComment("ShortCode used at run time for getting reports since ReportId is never guranteed to be the same");
+
+                    b.HasKey("ReportId");
+
+                    b.ToTable("Reports");
+
+                    b.HasData(
+                        new
+                        {
+                            ReportId = 1,
+                            Description = "All assets without warranty assigned, does not include expired warranty.",
+                            HasCriteria = false,
+                            Name = "Assets without Warranty",
+                            ParentType = "Asset",
+                            ShortCode = "awow"
+                        },
+                        new
+                        {
+                            ReportId = 2,
+                            Description = "Shows all assets in the system of the chosen criteria type.",
+                            HasCriteria = true,
+                            Name = "Assets of Type",
+                            ParentType = "Asset",
+                            ShortCode = "aot"
+                        },
+                        new
+                        {
+                            ReportId = 3,
+                            Description = "Shows assets in the system with storage lower than the chosen threshold criteria.",
+                            HasCriteria = true,
+                            Name = "Assets With Low Storage",
+                            ParentType = "Asset",
+                            ShortCode = "awls"
+                        },
+                        new
+                        {
+                            ReportId = 4,
+                            Description = "Shows all assets in the system with warranty whether active or expired.",
+                            HasCriteria = false,
+                            Name = "Assets with Warranty",
+                            ParentType = "Asset",
+                            ShortCode = "aww"
+                        },
+                        new
+                        {
+                            ReportId = 5,
+                            Description = "Shows all assets in the system with all available fields.",
+                            HasCriteria = false,
+                            Name = "All Assets with All Fields",
+                            ParentType = "Asset",
+                            ShortCode = "aawaf"
+                        },
+                        new
+                        {
+                            ReportId = 6,
+                            Description = "Shows all licenses in the system with all available fields.",
+                            HasCriteria = false,
+                            Name = "All Licenses with All Fields",
+                            ParentType = "License",
+                            ShortCode = "alwaf"
+                        });
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.Asset", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Contract", "Contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId");
+
+                    b.HasOne("AssetTrakr.Models.Assets.AssetHardware", "Hardware")
+                        .WithMany()
+                        .HasForeignKey("HardwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId");
+
+                    b.HasOne("AssetTrakr.Models.Assets.AssetOperatingSystem", "OperatingSystem")
+                        .WithOne("Asset")
+                        .HasForeignKey("AssetTrakr.Models.Assets.Asset", "OperatingSystemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Platform", "Platform")
+                        .WithMany()
+                        .HasForeignKey("PlatformId");
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("Hardware");
+
+                    b.Navigation("Manufacturer");
+
+                    b.Navigation("OperatingSystem");
+
+                    b.Navigation("Platform");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetAttachment", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Assets.Asset", "Asset")
+                        .WithMany("AssetAttachments")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Attachment", "Attachment")
+                        .WithMany("AssetAttachments")
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Attachment");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetHardDrive", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Assets.AssetHardware", "AssetHardware")
+                        .WithMany("HardDrives")
+                        .HasForeignKey("AssetHardwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId");
+
+                    b.Navigation("AssetHardware");
+
+                    b.Navigation("Manufacturer");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetNetworkAdapter", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Assets.AssetHardware", "AssetHardware")
+                        .WithMany("NetworkAdapters")
+                        .HasForeignKey("AssetHardwareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssetHardware");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetOperatingSystem", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Manufacturer", "Manufacturer")
+                        .WithMany()
+                        .HasForeignKey("ManufacturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Platform", "Platform")
+                        .WithMany()
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manufacturer");
+
+                    b.Navigation("Platform");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetPeriod", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Assets.Asset", "Asset")
+                        .WithMany("AssetPeriods")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Period", "Period")
+                        .WithMany("AssetPeriods")
+                        .HasForeignKey("PeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Period");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.ContractAttachment", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Attachment", "Attachment")
+                        .WithMany("ContractAttachments")
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Contract", "Contract")
+                        .WithMany("ContractAttachments")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Attachment");
+
+                    b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.ContractPeriod", b =>
+                {
+                    b.HasOne("AssetTrakr.Models.Contract", "Contract")
+                        .WithMany("ContractPeriods")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AssetTrakr.Models.Period", "Period")
+                        .WithMany("ContractPeriods")
+                        .HasForeignKey("PeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("Period");
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.License", b =>
@@ -359,12 +1070,27 @@ namespace AssetTrakr.Database.Migrations
                     b.Navigation("Platform");
                 });
 
-            modelBuilder.Entity("AssetTrakr.Models.LicensePeriods", b =>
+            modelBuilder.Entity("AssetTrakr.Models.LicenseAttachment", b =>
                 {
-                    b.HasOne("AssetTrakr.Models.Contract", null)
-                        .WithMany("PeriodJuncs")
-                        .HasForeignKey("ContractId");
+                    b.HasOne("AssetTrakr.Models.Attachment", "Attachment")
+                        .WithMany("LicenseAttachments")
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.HasOne("AssetTrakr.Models.License", "License")
+                        .WithMany("LicenseAttachments")
+                        .HasForeignKey("LicenseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Attachment");
+
+                    b.Navigation("License");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.LicensePeriod", b =>
+                {
                     b.HasOne("AssetTrakr.Models.License", "License")
                         .WithMany("LicensePeriods")
                         .HasForeignKey("LicenseId")
@@ -372,7 +1098,7 @@ namespace AssetTrakr.Database.Migrations
                         .IsRequired();
 
                     b.HasOne("AssetTrakr.Models.Period", "Period")
-                        .WithMany("PeriodJuncs")
+                        .WithMany("LicensePeriods")
                         .HasForeignKey("PeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -393,19 +1119,56 @@ namespace AssetTrakr.Database.Migrations
                     b.Navigation("Manufacturer");
                 });
 
+            modelBuilder.Entity("AssetTrakr.Models.Assets.Asset", b =>
+                {
+                    b.Navigation("AssetAttachments");
+
+                    b.Navigation("AssetPeriods");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetHardware", b =>
+                {
+                    b.Navigation("HardDrives");
+
+                    b.Navigation("NetworkAdapters");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Assets.AssetOperatingSystem", b =>
+                {
+                    b.Navigation("Asset")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.Attachment", b =>
+                {
+                    b.Navigation("AssetAttachments");
+
+                    b.Navigation("ContractAttachments");
+
+                    b.Navigation("LicenseAttachments");
+                });
+
             modelBuilder.Entity("AssetTrakr.Models.Contract", b =>
                 {
-                    b.Navigation("PeriodJuncs");
+                    b.Navigation("ContractAttachments");
+
+                    b.Navigation("ContractPeriods");
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.License", b =>
                 {
+                    b.Navigation("LicenseAttachments");
+
                     b.Navigation("LicensePeriods");
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Period", b =>
                 {
-                    b.Navigation("PeriodJuncs");
+                    b.Navigation("AssetPeriods");
+
+                    b.Navigation("ContractPeriods");
+
+                    b.Navigation("LicensePeriods");
                 });
 #pragma warning restore 612, 618
         }

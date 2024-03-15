@@ -1,32 +1,55 @@
 ﻿namespace AssetTrakr.App.Forms.Shared
 {
-    [Obsolete("Use FrmColumnSelector2 instead", true)]
+    [Obsolete("FrmColumnSelector2 is better, this will never be updated.")]
     public partial class FrmColumnSelector : Form
     {
-        public List<string> AvailableColumns;
-        public List<string> SelectedColumns;
+        public List<string> AvailableColumns = [];
+        public List<string> SelectedColumns = [];
 
-        public FrmColumnSelector(List<string> availableColumns, List<string> selectedColumns)
+        public FrmColumnSelector(DataGridView dgv)
         {
             InitializeComponent();
 
-            AvailableColumns ??= availableColumns;
+            if (dgv == null)
+            {
+                throw new ArgumentOutOfRangeException(nameof(dgv), "DataGridView has not been passed to form");
+            }
 
-            SelectedColumns ??= selectedColumns;
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                if (col.Visible)
+                {
+                    SelectedColumns.Add(col.Name);
+                }
+                else
+                {
+                    AvailableColumns.Add(col.Name);
+                }
+            }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            foreach (string column in AvailableColumns)
-            {
-                lbAvailableColumns.Items.Add(column);
-            }
-
             foreach (string column in SelectedColumns)
             {
                 lbSelectedColumns.Items.Add(column);
+            }
+
+            List<string> columnsToHide = ["AssetHardware", "Manufacturer"];
+
+            foreach (string column in AvailableColumns)
+            {
+                if (!column.EndsWith("Id")) // Hide the Id columns, user doesn't need them
+                {
+                    if (columnsToHide.Contains(column))
+                    {
+                        continue;
+                    }
+
+                    lbAvailableColumns.Items.Add(column);
+                }
             }
         }
 

@@ -18,7 +18,7 @@ namespace AssetTrakr.App.Forms.License
         private readonly Models.License? _licenseData;
         private readonly bool _isEditingMode;
 
-        public FrmLicenseModify(int licenseId = 0)
+        public FrmLicenseModify(int licenseId = 0, bool isReadOnly = false)
         {
             InitializeComponent();
 
@@ -43,6 +43,16 @@ namespace AssetTrakr.App.Forms.License
             {
                 _licenseData = license;
                 _isEditingMode = true;
+
+                // Update general form info
+                btnAddUpdate.Text = "Update";
+                Text = $"Modify License - {_licenseData.Name}";
+            }
+
+            if(isReadOnly && _licenseData != null)
+            {
+                SetReadOnly(this);
+                Text = $"Viewing License - {_licenseData.Name}";
             }
         }
 
@@ -254,10 +264,6 @@ namespace AssetTrakr.App.Forms.License
                 return; // just in case lol
             }
 
-            // Update general form info
-            btnAddUpdate.Text = "Update";
-            Text = $"Modify License - {_licenseData.Name}";
-
             txtName.Text = _licenseData.Name;
             dtPurchaseDate.Value = _licenseData.PurchaseDate.ToDateTime(TimeOnly.MinValue);
             numCost.Value = _licenseData.Price;
@@ -364,7 +370,7 @@ namespace AssetTrakr.App.Forms.License
             {
                 _dbContext.Licenses.Add(licenseData);
 
-                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionCategory.LICENSE, txtName.Text);
+                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionAlertCategory.License, txtName.Text);
 
             }
             catch (Exception ex)
@@ -485,7 +491,7 @@ namespace AssetTrakr.App.Forms.License
             {
                 _dbContext.Licenses.Update(_licenseData);
 
-                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionCategory.LICENSE, txtName.Text);
+                ActionLogMethods.Updated(_dbContext, Utils.Enums.ActionAlertCategory.License, txtName.Text);
             }
             catch (Exception ex)
             {
@@ -519,6 +525,46 @@ namespace AssetTrakr.App.Forms.License
             cmbPlatforms.DataSource = _dbContext.Platforms.ToList();
             cmbPlatforms.DisplayMember = "Name";
             cmbPlatforms.ValueMember = "PlatformId";
+        }
+
+        private void SetReadOnly(Control control)
+        {
+            foreach(Control ctrl in control.Controls)
+            {
+                switch (ctrl)
+                {
+                    case TextBox tbx:
+                        tbx.ReadOnly = true;
+                        break;
+
+                    case ComboBox cbx:
+                        cbx.Enabled = false;
+                        break;
+
+                    case Button btn:
+                        btn.Visible = false;
+                        break;
+
+                    case DateTimePicker dtp:
+                        dtp.Enabled = false;
+                        break;
+
+                    case LinkLabel ll:
+                        ll.Visible = false;
+                        break;
+
+                    case CheckBox cbk:
+                        cbk.Visible = false;
+                        break;
+                }
+
+                if (ctrl.HasChildren)
+                {
+                    SetReadOnly(ctrl);
+                }
+            }
+
+            deleteToolStripMenuItem.Enabled = false;
         }
     }
 }

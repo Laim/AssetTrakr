@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPlatformManager));
             lbPlatforms = new ListBox();
             contextMenuStripListbx = new ContextMenuStrip(components);
             deselectToolStripMenuItem = new ToolStripMenuItem();
@@ -172,6 +173,7 @@
             Controls.Add(lblName);
             Controls.Add(lbPlatforms);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MaximumSize = new Size(818, 836);
             MinimizeBox = false;

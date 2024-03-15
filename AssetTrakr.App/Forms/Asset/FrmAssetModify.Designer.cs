@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAssetModify));
             tabControl1 = new TabControl();
             tabInformation = new TabPage();
+            lblType = new Label();
+            cmbAssetType = new ComboBox();
             lnkModifyOS = new LinkLabel();
             lnkAddOS = new LinkLabel();
             cmbOperatingSystems = new ComboBox();
@@ -124,6 +126,8 @@
             // 
             // tabInformation
             // 
+            tabInformation.Controls.Add(lblType);
+            tabInformation.Controls.Add(cmbAssetType);
             tabInformation.Controls.Add(lnkModifyOS);
             tabInformation.Controls.Add(lnkAddOS);
             tabInformation.Controls.Add(cmbOperatingSystems);
@@ -158,6 +162,25 @@
             tabInformation.TabIndex = 0;
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
+            // 
+            // lblType
+            // 
+            lblType.Location = new Point(440, 194);
+            lblType.Name = "lblType";
+            lblType.Size = new Size(65, 20);
+            lblType.TabIndex = 57;
+            lblType.Text = "Type";
+            lblType.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // cmbAssetType
+            // 
+            cmbAssetType.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAssetType.FormattingEnabled = true;
+            cmbAssetType.Items.AddRange(new object[] { "Laptop", "Desktop", "Server", "Mobile", "Tablet", "Monitor", "Peripherals", "Other" });
+            cmbAssetType.Location = new Point(511, 191);
+            cmbAssetType.Name = "cmbAssetType";
+            cmbAssetType.Size = new Size(235, 28);
+            cmbAssetType.TabIndex = 56;
             // 
             // lnkModifyOS
             // 
@@ -883,5 +906,7 @@
         private ToolStripMenuItem deleteToolStripMenuItem;
         private Button btnAddNetworkAdapter;
         private Button btnAddHardDrive;
+        private Label lblType;
+        private ComboBox cmbAssetType;
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AssetTrakr.Models
 {
     [PrimaryKey(nameof(ManufacturerId))]
+    [Index(nameof(Name), IsUnique = true)]
     public class Manufacturer : Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
