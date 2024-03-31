@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Extensions\AssetTrakr.Extensions.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

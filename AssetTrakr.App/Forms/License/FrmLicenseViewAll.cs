@@ -37,6 +37,10 @@ namespace AssetTrakr.App.Forms.License
                 dgvViewAll.DataSource = null;
             }
 
+            dgvViewAll.Visible = true;
+            lblNoLicensesDescription.Visible = false;
+            lblNoLicensesTitle.Visible = false;
+
             var licenses = _dbContext.Licenses
                 .Include(l => l.Manufacturer)
                 .Include(l => l.Contract)
@@ -90,6 +94,13 @@ namespace AssetTrakr.App.Forms.License
             dgvViewAll.Columns["UpdatedDate"].Visible = false;
             dgvViewAll.Columns["UpdatedBy"].Visible = false;
             dgvViewAll.Columns["CreatedBy"].Visible = false;
+
+            if (!licenses.Any())
+            {
+                dgvViewAll.Visible = false;
+                lblNoLicensesDescription.Visible = true;
+                lblNoLicensesTitle.Visible = true;
+            }
         }
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)

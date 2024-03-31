@@ -21,7 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Extensions", "As
 		{32FA774F-9C37-49D4-8811-E25618803CE1} = {32FA774F-9C37-49D4-8811-E25618803CE1}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetTrakr.Update.App", "AssetTrakr.Update.App\AssetTrakr.Update.App.csproj", "{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Update.App", "AssetTrakr.Update.App\AssetTrakr.Update.App.csproj", "{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Alerts", "AssetTrakr.Alerts\AssetTrakr.Alerts.csproj", "{409C53D5-A79A-4137-BE38-389A94533474}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetTrakr.Logging", "AssetTrakr.Logging\AssetTrakr.Logging.csproj", "{9A211211-B323-4A84-9455-A4EC4F05B4BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,14 @@ Global
 		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC3FFAE8-8678-43B1-8B69-176E33D28BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{409C53D5-A79A-4137-BE38-389A94533474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{409C53D5-A79A-4137-BE38-389A94533474}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{409C53D5-A79A-4137-BE38-389A94533474}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{409C53D5-A79A-4137-BE38-389A94533474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A211211-B323-4A84-9455-A4EC4F05B4BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A211211-B323-4A84-9455-A4EC4F05B4BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A211211-B323-4A84-9455-A4EC4F05B4BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A211211-B323-4A84-9455-A4EC4F05B4BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

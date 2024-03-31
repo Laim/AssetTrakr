@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using AssetTrakr.Logging;
+using OfficeOpenXml;
 
 namespace AssetTrakr.Extensions
 {
@@ -54,7 +55,8 @@ namespace AssetTrakr.Extensions
                     package.Save();
                 } catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogManager.Error($"{ex}", nameof(DataGridViewExtensions));
                 }
             }
 

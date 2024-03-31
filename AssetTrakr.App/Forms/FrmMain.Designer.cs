@@ -39,14 +39,20 @@
             viewAssetsToolStripMenuItem = new ToolStripMenuItem();
             contractsToolStripMenuItem = new ToolStripMenuItem();
             addContractToolStripMenuItem = new ToolStripMenuItem();
+            viewContractsToolStripMenuItem = new ToolStripMenuItem();
             reportsToolStripMenuItem = new ToolStripMenuItem();
-            defaultReportsToolStripMenuItem = new ToolStripMenuItem();
-            customReportToolStripMenuItem = new ToolStripMenuItem();
             administrationToolStripMenuItem = new ToolStripMenuItem();
             actionLogToolStripMenuItem = new ToolStripMenuItem();
             manufacturerManagerToolStripMenuItem = new ToolStripMenuItem();
             platformManagerToolStripMenuItem = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
+            systemSettingsToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            reportBugToolStripMenuItem = new ToolStripMenuItem();
+            featureRequestToolStripMenuItem = new ToolStripMenuItem();
+            documentationToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
             gbLicenseCount = new GroupBox();
             lblLicenseCount = new Label();
             gbAssetsCount = new GroupBox();
@@ -64,7 +70,8 @@
             gbPlatforms = new GroupBox();
             lblPlatformsCount = new Label();
             lnkRefreshDashboard = new LinkLabel();
-            viewContractsToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator4 = new ToolStripSeparator();
+            dataToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             gbLicenseCount.SuspendLayout();
             gbAssetsCount.SuspendLayout();
@@ -78,7 +85,7 @@
             // menuStripMain
             // 
             menuStripMain.ImageScalingSize = new Size(20, 20);
-            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, contractsToolStripMenuItem, reportsToolStripMenuItem, administrationToolStripMenuItem, toolStripMenuItem1 });
+            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, contractsToolStripMenuItem, reportsToolStripMenuItem, administrationToolStripMenuItem, helpToolStripMenuItem });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
             menuStripMain.Size = new Size(1262, 28);
@@ -116,14 +123,14 @@
             // addAssetToolStripMenuItem
             // 
             addAssetToolStripMenuItem.Name = "addAssetToolStripMenuItem";
-            addAssetToolStripMenuItem.Size = new Size(224, 26);
+            addAssetToolStripMenuItem.Size = new Size(169, 26);
             addAssetToolStripMenuItem.Text = "Add Asset";
             addAssetToolStripMenuItem.Click += addAssetToolStripMenuItem_Click;
             // 
             // viewAssetsToolStripMenuItem
             // 
             viewAssetsToolStripMenuItem.Name = "viewAssetsToolStripMenuItem";
-            viewAssetsToolStripMenuItem.Size = new Size(224, 26);
+            viewAssetsToolStripMenuItem.Size = new Size(169, 26);
             viewAssetsToolStripMenuItem.Text = "View Assets";
             viewAssetsToolStripMenuItem.Click += viewAssetsToolStripMenuItem_Click;
             // 
@@ -137,33 +144,27 @@
             // addContractToolStripMenuItem
             // 
             addContractToolStripMenuItem.Name = "addContractToolStripMenuItem";
-            addContractToolStripMenuItem.Size = new Size(224, 26);
+            addContractToolStripMenuItem.Size = new Size(190, 26);
             addContractToolStripMenuItem.Text = "Add Contract";
             addContractToolStripMenuItem.Click += addContractToolStripMenuItem_Click;
             // 
+            // viewContractsToolStripMenuItem
+            // 
+            viewContractsToolStripMenuItem.Enabled = false;
+            viewContractsToolStripMenuItem.Name = "viewContractsToolStripMenuItem";
+            viewContractsToolStripMenuItem.Size = new Size(190, 26);
+            viewContractsToolStripMenuItem.Text = "View Contracts";
+            // 
             // reportsToolStripMenuItem
             // 
-            reportsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { defaultReportsToolStripMenuItem, customReportToolStripMenuItem });
             reportsToolStripMenuItem.Name = "reportsToolStripMenuItem";
             reportsToolStripMenuItem.Size = new Size(74, 24);
             reportsToolStripMenuItem.Text = "Reports";
-            // 
-            // defaultReportsToolStripMenuItem
-            // 
-            defaultReportsToolStripMenuItem.Name = "defaultReportsToolStripMenuItem";
-            defaultReportsToolStripMenuItem.Size = new Size(224, 26);
-            defaultReportsToolStripMenuItem.Text = "Default Reports";
-            defaultReportsToolStripMenuItem.Click += defaultReportsToolStripMenuItem_Click;
-            // 
-            // customReportToolStripMenuItem
-            // 
-            customReportToolStripMenuItem.Name = "customReportToolStripMenuItem";
-            customReportToolStripMenuItem.Size = new Size(224, 26);
-            customReportToolStripMenuItem.Text = "Custom Report";
+            reportsToolStripMenuItem.Click += reportsToolStripMenuItem_Click;
             // 
             // administrationToolStripMenuItem
             // 
-            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem, manufacturerManagerToolStripMenuItem, platformManagerToolStripMenuItem });
+            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem, manufacturerManagerToolStripMenuItem, platformManagerToolStripMenuItem, toolStripSeparator3, systemSettingsToolStripMenuItem });
             administrationToolStripMenuItem.Name = "administrationToolStripMenuItem";
             administrationToolStripMenuItem.Size = new Size(121, 24);
             administrationToolStripMenuItem.Text = "Administration";
@@ -189,10 +190,57 @@
             platformManagerToolStripMenuItem.Text = "Platform Manager";
             platformManagerToolStripMenuItem.Click += platformManagerToolStripMenuItem_Click;
             // 
-            // toolStripMenuItem1
+            // toolStripSeparator3
             // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(14, 24);
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(240, 6);
+            // 
+            // systemSettingsToolStripMenuItem
+            // 
+            systemSettingsToolStripMenuItem.Name = "systemSettingsToolStripMenuItem";
+            systemSettingsToolStripMenuItem.Size = new Size(243, 26);
+            systemSettingsToolStripMenuItem.Text = "System Settings";
+            systemSettingsToolStripMenuItem.Click += systemSettingsToolStripMenuItem_Click;
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { reportBugToolStripMenuItem, featureRequestToolStripMenuItem, documentationToolStripMenuItem, toolStripSeparator2, aboutToolStripMenuItem, toolStripSeparator4, dataToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(55, 24);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // reportBugToolStripMenuItem
+            // 
+            reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
+            reportBugToolStripMenuItem.Size = new Size(224, 26);
+            reportBugToolStripMenuItem.Text = "Report Bug";
+            reportBugToolStripMenuItem.Click += reportBugToolStripMenuItem_Click;
+            // 
+            // featureRequestToolStripMenuItem
+            // 
+            featureRequestToolStripMenuItem.Name = "featureRequestToolStripMenuItem";
+            featureRequestToolStripMenuItem.Size = new Size(224, 26);
+            featureRequestToolStripMenuItem.Text = "Feature Request";
+            featureRequestToolStripMenuItem.Click += featureRequestToolStripMenuItem_Click;
+            // 
+            // documentationToolStripMenuItem
+            // 
+            documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
+            documentationToolStripMenuItem.Size = new Size(224, 26);
+            documentationToolStripMenuItem.Text = "Documentation";
+            documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(221, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(224, 26);
+            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // gbLicenseCount
             // 
@@ -376,11 +424,17 @@
             lnkRefreshDashboard.Text = "Refresh";
             lnkRefreshDashboard.LinkClicked += lnkRefreshDashboard_LinkClicked;
             // 
-            // viewContractsToolStripMenuItem
+            // toolStripSeparator4
             // 
-            viewContractsToolStripMenuItem.Name = "viewContractsToolStripMenuItem";
-            viewContractsToolStripMenuItem.Size = new Size(224, 26);
-            viewContractsToolStripMenuItem.Text = "View Contracts";
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(221, 6);
+            // 
+            // dataToolStripMenuItem
+            // 
+            dataToolStripMenuItem.Name = "dataToolStripMenuItem";
+            dataToolStripMenuItem.Size = new Size(224, 26);
+            dataToolStripMenuItem.Text = "Data";
+            dataToolStripMenuItem.Click += dataToolStripMenuItem_Click;
             // 
             // FrmMain
             // 
@@ -436,7 +490,6 @@
         private ToolStripMenuItem reportsToolStripMenuItem;
         private ToolStripMenuItem manufacturerManagerToolStripMenuItem;
         private ToolStripMenuItem platformManagerToolStripMenuItem;
-        private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem contractsToolStripMenuItem;
         private ToolStripMenuItem addContractToolStripMenuItem;
         private GroupBox gbContracts;
@@ -450,8 +503,16 @@
         private ToolStripMenuItem columnSelectorToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem exportToolStripMenuItem;
-        private ToolStripMenuItem defaultReportsToolStripMenuItem;
-        private ToolStripMenuItem customReportToolStripMenuItem;
         private ToolStripMenuItem viewContractsToolStripMenuItem;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem reportBugToolStripMenuItem;
+        private ToolStripMenuItem featureRequestToolStripMenuItem;
+        private ToolStripMenuItem documentationToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem systemSettingsToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem dataToolStripMenuItem;
     }
 }

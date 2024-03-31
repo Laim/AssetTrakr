@@ -43,7 +43,7 @@ namespace AssetTrakr.App.Helpers
         /// <param name="actionName">
         /// The name of the entity
         /// </param>
-        public static void Updated(DatabaseContext dbContext, ActionAlertCategory category, string actionName, string actionedBy = "")
+        public static void Updated(DatabaseContext dbContext, ActionAlertCategory category, string actionName, string actionedBy = "", string changes = "Not Logged")
         {
 
             if(actionedBy == string.Empty)
@@ -57,6 +57,7 @@ namespace AssetTrakr.App.Helpers
                 ActionType = ActionType.UPDATED,
                 ActionName = actionName,
                 ActionBy = actionedBy,
+                Changes = changes
             });
         }
 

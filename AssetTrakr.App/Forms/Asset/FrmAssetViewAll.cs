@@ -38,6 +38,10 @@ namespace AssetTrakr.App.Forms.Asset
                 dgvViewAll.DataSource = null;
             }
 
+            dgvViewAll.Visible = true;
+            lblNoAssetsDescription.Visible = false;
+            lblNoAssetsTitle.Visible = false;
+
             var assets = _dbContext.Assets
                 .Include(a => a.Manufacturer)
                 .Include(a => a.Contract)
@@ -98,6 +102,13 @@ namespace AssetTrakr.App.Forms.Asset
             dgvViewAll.Columns["UpdatedDate"].Visible = false;
             dgvViewAll.Columns["UpdatedBy"].Visible = false;
             dgvViewAll.Columns["CreatedBy"].Visible = false;
+
+            if(!assets.Any())
+            {
+                dgvViewAll.Visible = false;
+                lblNoAssetsDescription.Visible = true;
+                lblNoAssetsTitle.Visible = true;
+            }
 
         }
 

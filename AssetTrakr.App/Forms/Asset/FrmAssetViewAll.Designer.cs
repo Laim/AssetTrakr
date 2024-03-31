@@ -37,6 +37,8 @@
             toolStripSeparator2 = new ToolStripSeparator();
             viewToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
+            lblNoAssetsTitle = new Label();
+            lblNoAssetsDescription = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvViewAll).BeginInit();
             cmsDgvRightClick.SuspendLayout();
             SuspendLayout();
@@ -113,11 +115,33 @@
             editToolStripMenuItem.Text = "Edit";
             editToolStripMenuItem.Click += editToolStripMenuItem_Click;
             // 
+            // lblNoAssetsTitle
+            // 
+            lblNoAssetsTitle.AutoSize = true;
+            lblNoAssetsTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNoAssetsTitle.Location = new Point(471, 295);
+            lblNoAssetsTitle.Name = "lblNoAssetsTitle";
+            lblNoAssetsTitle.Size = new Size(156, 41);
+            lblNoAssetsTitle.TabIndex = 20;
+            lblNoAssetsTitle.Text = "No Assets";
+            // 
+            // lblNoAssetsDescription
+            // 
+            lblNoAssetsDescription.AutoSize = true;
+            lblNoAssetsDescription.Location = new Point(286, 346);
+            lblNoAssetsDescription.Name = "lblNoAssetsDescription";
+            lblNoAssetsDescription.Size = new Size(527, 20);
+            lblNoAssetsDescription.TabIndex = 21;
+            lblNoAssetsDescription.Text = "No Assets have been added to the system.  Add some Assets to see them here.";
+            // 
             // FrmAssetViewAll
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(1098, 661);
+            Controls.Add(lblNoAssetsDescription);
+            Controls.Add(lblNoAssetsTitle);
             Controls.Add(dgvViewAll);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "FrmAssetViewAll";
@@ -126,6 +150,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvViewAll).EndInit();
             cmsDgvRightClick.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -138,5 +163,7 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem viewToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
+        private Label lblNoAssetsTitle;
+        private Label lblNoAssetsDescription;
     }
 }

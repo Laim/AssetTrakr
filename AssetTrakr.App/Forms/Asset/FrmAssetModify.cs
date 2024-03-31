@@ -3,6 +3,7 @@ using AssetTrakr.App.Forms.Contract;
 using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
+using AssetTrakr.Logging;
 using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
 using AssetTrakr.Utils.Enums;
@@ -550,7 +551,8 @@ namespace AssetTrakr.App.Forms.Asset
             } 
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message + ex.InnerException, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmAssetModify>($"{ex}");
             }
 
         }
@@ -634,7 +636,8 @@ namespace AssetTrakr.App.Forms.Asset
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + ex.InnerException, "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmAssetModify>($"{ex}");
             }
         }
 

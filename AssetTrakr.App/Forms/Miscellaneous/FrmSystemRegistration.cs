@@ -2,6 +2,8 @@
 using AssetTrakr.Database;
 using AssetTrakr.Utils.Enums;
 using System.Reflection;
+using Serilog;
+using AssetTrakr.Logging;
 
 namespace AssetTrakr.App.Forms.Miscellaneous
 {
@@ -35,15 +37,15 @@ namespace AssetTrakr.App.Forms.Miscellaneous
         private void btnRegister_Click(object sender, EventArgs e)
         {
 
-            _dbContext.SystemInfo.Add(
-                    new Models.SystemInfo
-                    {
-                        FullName = txtFullName.Text ?? "",
-                        ProductVersion = txtProductVersion.Text ?? Application.ProductVersion,
-                        DatabaseCreationDate = Convert.ToDateTime(txtDatabaseCreationDate.Text),
-                        RunDirectory = txtRunDirectory.Text
-                    }
-                );
+            var registrationInfo = new Models.System.SystemInfo
+            {
+                FullName = txtFullName.Text ?? "",
+                ProductVersion = txtProductVersion.Text ?? Application.ProductVersion,
+                DatabaseCreationDate = Convert.ToDateTime(txtDatabaseCreationDate.Text),
+                RunDirectory = txtRunDirectory.Text
+            };
+
+            _dbContext.SystemInfo.Add(registrationInfo);
 
             try
             {
@@ -54,11 +56,14 @@ namespace AssetTrakr.App.Forms.Miscellaneous
 
                 _isRegistered = true;
 
+                LogManager.Information<FrmSystemRegistration>("Application registered");
+
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex}", "Registration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\n See log for more details.", "Registration Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Fatal<FrmSystemRegistration>($"{ex}");
             }
 
         }

@@ -33,11 +33,13 @@
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
+            exportToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
             viewToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
             dgvViewAll = new DataGridView();
-            exportToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator2 = new ToolStripSeparator();
+            lblNoLicensesDescription = new Label();
+            lblNoLicensesTitle = new Label();
             cmsDgvRightClick.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvViewAll).BeginInit();
             SuspendLayout();
@@ -60,6 +62,18 @@
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
             toolStripSeparator1.Size = new Size(184, 6);
+            // 
+            // exportToolStripMenuItem
+            // 
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(187, 24);
+            exportToolStripMenuItem.Text = "Export List";
+            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(184, 6);
             // 
             // viewToolStripMenuItem
             // 
@@ -102,23 +116,35 @@
             dgvViewAll.Size = new Size(1098, 661);
             dgvViewAll.TabIndex = 18;
             // 
-            // exportToolStripMenuItem
+            // lblNoLicensesDescription
             // 
-            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(187, 24);
-            exportToolStripMenuItem.Text = "Export List";
-            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
+            lblNoLicensesDescription.AutoSize = true;
+            lblNoLicensesDescription.BackColor = Color.White;
+            lblNoLicensesDescription.Location = new Point(286, 346);
+            lblNoLicensesDescription.Name = "lblNoLicensesDescription";
+            lblNoLicensesDescription.Size = new Size(553, 20);
+            lblNoLicensesDescription.TabIndex = 23;
+            lblNoLicensesDescription.Text = "No Licenses have been added to the system.  Add some Licenses to see them here.";
             // 
-            // toolStripSeparator2
+            // lblNoLicensesTitle
             // 
-            toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(184, 6);
+            lblNoLicensesTitle.AutoSize = true;
+            lblNoLicensesTitle.BackColor = Color.White;
+            lblNoLicensesTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblNoLicensesTitle.Location = new Point(471, 295);
+            lblNoLicensesTitle.Name = "lblNoLicensesTitle";
+            lblNoLicensesTitle.Size = new Size(182, 41);
+            lblNoLicensesTitle.TabIndex = 22;
+            lblNoLicensesTitle.Text = "No Licenses";
             // 
             // FrmLicenseViewAll
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(1098, 661);
+            Controls.Add(lblNoLicensesDescription);
+            Controls.Add(lblNoLicensesTitle);
             Controls.Add(dgvViewAll);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -129,6 +155,7 @@
             cmsDgvRightClick.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvViewAll).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -140,5 +167,7 @@
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem exportToolStripMenuItem;
+        private Label lblNoLicensesDescription;
+        private Label lblNoLicensesTitle;
     }
 }

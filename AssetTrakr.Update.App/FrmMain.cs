@@ -1,5 +1,5 @@
 using AssetTrakr.Database;
-using AssetTrakr.Models;
+using AssetTrakr.Models.System;
 using AssetTrakr.Utils.Updater;
 
 namespace AssetTrakr.Update.App

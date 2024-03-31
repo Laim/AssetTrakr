@@ -183,6 +183,15 @@ namespace AssetTrakr.Utils.Updater
             DeepCopy(directory, UpdaterSettings.directoryPathBackup);
         }
 
+        /// <summary>
+        /// Unzips the download file to the uncompressed directory <see cref="UpdaterSettings"/>
+        /// </summary>
+        /// <param name="release">
+        /// Downloaded release per <see cref="ReleaseModel"/>
+        /// </param>
+        /// <returns>
+        /// true if successful
+        /// </returns>
         internal async Task<bool> UncompressDownloadedRelease(ReleaseModel release)
         {
             try

@@ -1,7 +1,9 @@
-﻿using AssetTrakr.App.Forms.Attachment;
+﻿using AssetTrakr.App.Forms.Asset;
+using AssetTrakr.App.Forms.Attachment;
 using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
+using AssetTrakr.Logging;
 using AssetTrakr.Models;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
@@ -255,7 +257,8 @@ namespace AssetTrakr.App.Forms.Contract
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + ex.InnerException, "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmContractModify>($"{ex}");
             }
 
         }
@@ -352,7 +355,8 @@ namespace AssetTrakr.App.Forms.Contract
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + ex.InnerException, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmContractModify>($"{ex}");
             }
         }
     }

@@ -1,5 +1,7 @@
-﻿using AssetTrakr.Database;
+﻿using AssetTrakr.App.Forms.Contract;
+using AssetTrakr.Database;
 using AssetTrakr.Extensions;
+using AssetTrakr.Logging;
 using AssetTrakr.Models;
 
 namespace AssetTrakr.App.Forms.Shared
@@ -82,7 +84,8 @@ namespace AssetTrakr.App.Forms.Shared
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmManufacturerManager>($"{ex}");
             }
         }
 
@@ -136,7 +139,8 @@ namespace AssetTrakr.App.Forms.Shared
             } 
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmManufacturerManager>($"{ex}");
             }
         }
 
@@ -190,7 +194,8 @@ namespace AssetTrakr.App.Forms.Shared
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"{ex.Message} See logs for inner exception", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogManager.Error<FrmManufacturerManager>($"{ex}");
                 }
             }
         }

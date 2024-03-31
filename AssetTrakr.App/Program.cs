@@ -1,5 +1,7 @@
 using AssetTrakr.Database;
+using AssetTrakr.Logging;
 using OfficeOpenXml;
+using Serilog;
 
 namespace AssetTrakr.App
 {
@@ -14,6 +16,9 @@ namespace AssetTrakr.App
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            LogManager logManager = new();
+            Log.Information("Initialize...");
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 

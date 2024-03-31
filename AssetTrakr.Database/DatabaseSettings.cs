@@ -27,8 +27,8 @@
 
         /// <summary>
         /// The full path including the database name.  Backups have DateTime.Now() appended AFTER the extension
-        /// C:\ProgramData\Laim\AssetTrakr\Database\{databaseName}-ddmmyyyhhmmss.db
+        /// C:\ProgramData\Laim\AssetTrakr\Database\{databaseName}.db-ddmmyyyhhmmss
         /// </summary>
-        public static string databaseFileBackupPath = Path.Combine(directoryBackupPath, $"{databaseFileName}-{DateTime.Now}");
+        public static string databaseFileBackupPath = Path.Combine(directoryBackupPath, $"{databaseFileName}-{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}");
     }
 }

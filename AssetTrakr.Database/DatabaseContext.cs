@@ -1,9 +1,10 @@
-﻿using AssetTrakr.Models;
+﻿using AssetTrakr.Logging;
+using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
+using AssetTrakr.Models.System;
 using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System.Reflection.Emit;
 
 namespace AssetTrakr.Database
 {
@@ -30,13 +31,13 @@ namespace AssetTrakr.Database
         public DbSet<ActionLog> ActionLogEntries { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<SystemInfo> SystemInfo { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($@"Data Source={DatabaseSettings.databaseFilePath}");
 
             optionsBuilder.EnableSensitiveDataLogging();
-
-            Console.WriteLine("Created DbContext");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -69,6 +70,11 @@ namespace AssetTrakr.Database
             //    .HasIndex("OperatingSystemId")
             //    .IsUnique(false);
 
+            modelBuilder.Entity<SystemSetting>(e =>
+            {
+                e.HasIndex(p => p.Name)
+                    .IsUnique();
+            });
 
             modelBuilder.Entity<Platform>(e =>
             {
@@ -195,83 +201,15 @@ namespace AssetTrakr.Database
                     .HasForeignKey(hd  => hd.AssetHardwareId);
             });
 
-            ReportSeeder(modelBuilder);
+            DefaultDatabaseSeeder defaultDatabaseSeeder = new(modelBuilder);
+            defaultDatabaseSeeder.Seed();
+
 
 #if DEBUG
-            DatabaseSeeder ds = new(modelBuilder);
+            TestDatabaseSeeder ds = new(modelBuilder);
             ds.Seed();
 #endif
 
-        }
-
-        /// <summary>
-        /// This creates the default reports in the system.
-        /// </summary>
-        /// <param name="modelBuilder">
-        /// ModelBuilder from <see cref="OnModelCreating(ModelBuilder)"/>
-        /// </param>
-        private void ReportSeeder(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Report>(e =>
-            {
-                e.HasData
-                (
-                    new Report
-                    {
-                        ReportId = 1,
-                        ShortCode = "awow",
-                        Name = "Assets without Warranty",
-                        HasCriteria = false,
-                        Description = "All assets without warranty assigned, does not include expired warranty.",
-                        ParentType = ParentType.Asset
-                    },
-                    new Report
-                    {
-                        ReportId = 2,
-                        ShortCode = "aot",
-                        Name = "Assets of Type",
-                        HasCriteria = true,
-                        Description = "Shows all assets in the system of the chosen criteria type.",
-                        ParentType = ParentType.Asset
-                     },
-                    new Report
-                    {
-                        ReportId = 3,
-                        ShortCode = "awls",
-                        Name = "Assets With Low Storage",
-                        HasCriteria = true,
-                        Description = "Shows assets in the system with storage lower than the chosen threshold criteria.",
-                        ParentType = ParentType.Asset
-                    },
-                    new Report
-                    {
-                        ReportId = 4,
-                        ShortCode = "aww",
-                        Name = "Assets with Warranty",
-                        HasCriteria = false,
-                        Description = "Shows all assets in the system with warranty whether active or expired.",
-                        ParentType = ParentType.Asset
-                    },
-                    new Report
-                    {
-                        ReportId = 5,
-                        ShortCode = "aawaf",
-                        Name = "All Assets with All Fields",
-                        HasCriteria = false,
-                        Description = "Shows all assets in the system with all available fields.",
-                        ParentType = ParentType.Asset
-                    },
-                    new Report
-                    {
-                        ReportId = 6,
-                        ShortCode = "alwaf",
-                        Name = "All Licenses with All Fields",
-                        HasCriteria = false,
-                        Description = "Shows all licenses in the system with all available fields.",
-                        ParentType = ParentType.License
-                    }
-                );
-            });
         }
 
         // Below Source: https://threewill.com/how-to-auto-generate-created-updated-field-in-ef-core/

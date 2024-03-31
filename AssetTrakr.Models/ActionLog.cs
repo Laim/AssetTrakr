@@ -24,6 +24,8 @@ namespace AssetTrakr.Models
         [DisplayName("Timestamp")]
         public DateTime ActionTime { get; set; } = DateTime.Now;
 
+        public string Changes { get; set; } = "Not Logged";
+
         [DisplayName("Owner")]
         public required string ActionBy { get; set; }
     }

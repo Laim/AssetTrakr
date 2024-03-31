@@ -40,6 +40,10 @@ namespace AssetTrakr.Database.Migrations
                     b.Property<int>("ActionType")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Changes")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ActionId");
 
                     b.ToTable("ActionLogEntries");
@@ -567,100 +571,100 @@ namespace AssetTrakr.Database.Migrations
                         {
                             ManufacturerId = 1,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9479), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(8950), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Microsoft",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9552), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9022), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://microsoft.com"
                         },
                         new
                         {
                             ManufacturerId = 2,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9557), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9029), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Adobe, Inc",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9559), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9030), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://adobe.com"
                         },
                         new
                         {
                             ManufacturerId = 3,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9560), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9032), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "1Password",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9562), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9033), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://1password.com"
                         },
                         new
                         {
                             ManufacturerId = 4,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9563), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9034), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Valve",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9564), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9035), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://valvesoftware.com"
                         },
                         new
                         {
                             ManufacturerId = 5,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9565), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9037), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Apple",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9566), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9038), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://apple.com"
                         },
                         new
                         {
                             ManufacturerId = 6,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9568), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9040), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Citrix",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9569), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9041), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://www.citrix.com/"
                         },
                         new
                         {
                             ManufacturerId = 7,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9571), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9043), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Splunk",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9572), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9044), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://www.splunk.com/"
                         },
                         new
                         {
                             ManufacturerId = 8,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9573), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9045), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Amazon",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9574), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9046), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://amazon.com/"
                         },
                         new
                         {
                             ManufacturerId = 9,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9575), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9047), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Google",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9576), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9048), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://google.com/"
                         },
                         new
                         {
                             ManufacturerId = 10,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9578), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9050), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "Linux Foundation",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9579), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9051), new TimeSpan(0, 0, 0, 0, 0)),
                             Url = "https://linuxfoundation.org/"
                         });
                 });
@@ -738,61 +742,61 @@ namespace AssetTrakr.Database.Migrations
                         {
                             PlatformId = 1,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9625), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9100), new TimeSpan(0, 0, 0, 0, 0)),
                             ManufacturerId = 1,
                             Name = "Windows",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9626), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9102), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             PlatformId = 2,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9640), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9108), new TimeSpan(0, 0, 0, 0, 0)),
                             ManufacturerId = 5,
                             Name = "macOS",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9641), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9109), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             PlatformId = 3,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9643), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9110), new TimeSpan(0, 0, 0, 0, 0)),
                             ManufacturerId = 10,
                             Name = "Linux",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9644), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9111), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             PlatformId = 4,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9645), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9113), new TimeSpan(0, 0, 0, 0, 0)),
                             ManufacturerId = 9,
                             Name = "Chrome OS",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9646), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9114), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             PlatformId = 5,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9647), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9115), new TimeSpan(0, 0, 0, 0, 0)),
                             ManufacturerId = 5,
                             Name = "iOS",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9648), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9116), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             PlatformId = 6,
                             CreatedBy = "SYSTEM",
-                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9650), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9118), new TimeSpan(0, 0, 0, 0, 0)),
                             ManufacturerId = 9,
                             Name = "Android",
                             UpdatedBy = "SYSTEM",
-                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 8, 19, 6, 31, 615, DateTimeKind.Unspecified).AddTicks(9651), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedDate = new DateTimeOffset(new DateTime(2024, 3, 24, 23, 35, 5, 291, DateTimeKind.Unspecified).AddTicks(9119), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 
@@ -882,6 +886,184 @@ namespace AssetTrakr.Database.Migrations
                             Name = "All Licenses with All Fields",
                             ParentType = "License",
                             ShortCode = "alwaf"
+                        });
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.System.SystemInfo", b =>
+                {
+                    b.Property<int>("SysId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DatabaseCreationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductVersion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RunDirectory")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SysId");
+
+                    b.ToTable("SystemInfo");
+                });
+
+            modelBuilder.Entity("AssetTrakr.Models.System.SystemSetting", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("DefaultEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DefaultSettingValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SettingParentType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SettingValue")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("SystemSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "AlertThreshold",
+                            Category = 1,
+                            DefaultEnabled = true,
+                            DefaultSettingValue = "30",
+                            Description = "How many days before something expires to notify the user. (0 if disabled)",
+                            Enabled = true,
+                            SettingParentType = "Alerts",
+                            SettingValue = "30"
+                        },
+                        new
+                        {
+                            Name = "CheckForUpdates",
+                            Category = 1,
+                            DefaultEnabled = true,
+                            DefaultSettingValue = "stable",
+                            Description = "Automatically check for Updates",
+                            Enabled = true,
+                            SettingParentType = "Updates",
+                            SettingValue = "stable"
+                        },
+                        new
+                        {
+                            Name = "AutomaticBackups",
+                            Category = 1,
+                            DefaultEnabled = true,
+                            DefaultSettingValue = "3",
+                            Description = "Backup the database on application start.  Value dictacts amount of backups to keep.",
+                            Enabled = true,
+                            SettingParentType = "Database",
+                            SettingValue = "3"
+                        },
+                        new
+                        {
+                            Name = "NoAssetsAdded",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Assets"
+                        },
+                        new
+                        {
+                            Name = "AssetsWithoutWarranty",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Assets"
+                        },
+                        new
+                        {
+                            Name = "AssetsWithExpiredWarranty",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Assets"
+                        },
+                        new
+                        {
+                            Name = "AssetsWithWarrantyExpiringSoon",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Assets"
+                        },
+                        new
+                        {
+                            Name = "AssetsWithoutAttachments",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Assets"
+                        },
+                        new
+                        {
+                            Name = "NoLicensesAdded",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Licenses"
+                        },
+                        new
+                        {
+                            Name = "LicensesWithExpiredSubscriptions",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Licenses"
+                        },
+                        new
+                        {
+                            Name = "LicensesWithSubscriptionsExpiringSoon",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Licenses"
+                        },
+                        new
+                        {
+                            Name = "LicensesWithoutAttachments",
+                            Category = 0,
+                            DefaultEnabled = true,
+                            Description = "Alert",
+                            Enabled = true,
+                            SettingParentType = "Licenses"
                         });
                 });
 

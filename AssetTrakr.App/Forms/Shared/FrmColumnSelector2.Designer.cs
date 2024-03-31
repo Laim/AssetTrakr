@@ -33,11 +33,13 @@
             // 
             // chkLbColumns
             // 
+            chkLbColumns.CheckOnClick = true;
             chkLbColumns.FormattingEnabled = true;
             chkLbColumns.Location = new Point(20, 20);
             chkLbColumns.Name = "chkLbColumns";
             chkLbColumns.Size = new Size(240, 356);
             chkLbColumns.TabIndex = 0;
+            chkLbColumns.ThreeDCheckBoxes = true;
             // 
             // FrmColumnSelector2
             // 

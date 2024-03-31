@@ -12,6 +12,9 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
     <ApplicationIcon>icons8-database-70.ico</ApplicationIcon>
+    <Description>AssetTrakr.  Track Assets, Licenses, and Contracts for free.</Description>
+    <Copyright>Laim McKenzie</Copyright>
+    <Title>AssetTrakr</Title>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,8 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AssetTrakr.Alerts\AssetTrakr.Alerts.csproj" />
     <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
     <ProjectReference Include="..\AssetTrakr.Extensions\AssetTrakr.Extensions.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
     <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
     <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
   </ItemGroup>

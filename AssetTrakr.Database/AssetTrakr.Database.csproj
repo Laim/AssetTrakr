@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
     <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
   </ItemGroup>
 

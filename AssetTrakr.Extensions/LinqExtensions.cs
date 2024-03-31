@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using AssetTrakr.Models;
+using AssetTrakr.Models.System;
 
 namespace AssetTrakr.Extensions
 {
@@ -16,66 +16,36 @@ namespace AssetTrakr.Extensions
             return new BindingList<T>(source.ToList());
         }
 
+
         /// <summary>
-        /// Gets the required data from the SELECT, formats it as an attachment and then outputs it as a BindingList{T}
+        /// Checks if the system setting is enabled
         /// </summary>
-        /// <param name="attachments"></param>
+        /// <param name="source">
+        /// source DbSet
+        /// </param>
+        /// <param name="settingName">
+        /// Setting you are looking for
+        /// </param>
         /// <returns>
-        /// <see cref="BindingList{Attachment}"/>
+        /// true if enabled, else false
         /// </returns>
-        public static BindingList<Attachment> ToModelAttachment(this IQueryable<Attachment> attachments)
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="source"/> is missing
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown if settingName is <see cref="string.IsNullOrWhiteSpace(string?)"/>
+        /// </exception>
+        public static bool WhereEnabled(this IQueryable<SystemSetting> source, string settingName)
         {
-            ArgumentNullException.ThrowIfNull(attachments);
+            ArgumentNullException.ThrowIfNull(nameof(source));
 
-            var mappedList = attachments.Select(x => new Attachment
+            if (string.IsNullOrWhiteSpace(settingName))
             {
-                AttachmentId = x.AttachmentId,
-                Name = x.Name,
-                Description = x.Description,
-                Type = x.Type,
-            }).ToList();
+                throw new ArgumentException("Setting name cannot be null or empty.", nameof(settingName));
+            }
 
-            return new BindingList<Attachment>(mappedList);
-        }
-
-        /// <summary>
-        /// Gets the required data from the SELECT, formats it as an attachment and then outputs it as a BindingList{T}
-        /// </summary>
-        /// <param name="attachments"></param>
-        /// <returns>
-        /// <see cref="BindingList{SubscriptionPeriod}"/>
-        /// </returns>
-        public static BindingList<Period> ToModelSubscriptionPeriod(this IQueryable<Period> subscriptionPeriods)
-        {
-            ArgumentNullException.ThrowIfNull(subscriptionPeriods);
-
-            var mappedList = subscriptionPeriods.Select(x => new Period
-            {
-                PeriodId = x.PeriodId,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-
-            }).ToList();
-
-            return new BindingList<Period>(mappedList);
-        }
-
-        /// <summary>
-        /// Converts a List{string} to List{string} with a blank entry at index 0
-        /// </summary>
-        /// <typeparam name="T">Type, such as <see cref="Attachment"/></typeparam>
-        /// <param name="source">Source data from LINQ</param>
-        /// <returns><see cref="List{string}"/> with blank value at index 0</returns>
-        public static List<string> ToComboList(this IEnumerable<string> source)
-        {
-            List<string> list =
-                [
-                    "",
-                    .. from i in source
-                       select i,
-                ];
-
-            return list.ToList();
+            // Use Any to check if any elements match the predicate
+            return source.Any(ss => ss.Name == settingName && ss.Enabled);
         }
     }
 }
