@@ -16,8 +16,6 @@ namespace AssetTrakr.Alerts
         internal DateOnly _thresholdDate;
         internal List<SystemSetting> _alertPreferences;
 
-        private bool disposed = false;
-
         public AlertGenerator()
         {
             _dbContext ??= new();
@@ -45,6 +43,7 @@ namespace AssetTrakr.Alerts
         {
             AssetAlerts();
             LicenseAlerts();
+            ContractAlerts();
 
             return _alerts;
         }
@@ -221,9 +220,62 @@ namespace AssetTrakr.Alerts
 
         }
 
+        /// <summary>
+        /// Generate the alerts for Contracts
+        /// </summary>
         internal void ContractAlerts()
         {
-            throw new NotImplementedException();
+            var contracts = _dbContext.Contracts
+                .Include(c => c.ContractPeriods)
+                    .ThenInclude(cp => cp.Period);
+
+            if(_alertPreferences.WhereEnabled(nameof(SystemSettings.NoContractsAdded))) 
+            {
+                if (!contracts.Any())
+                {
+                    _alerts.Add(new Alert
+                    {
+                        Category = ActionAlertCategory.Contract,
+                        Description = "No contracts added",
+                        Severity = Severity.High
+                    });
+                }
+            }
+
+            if(_alertPreferences.WhereEnabled(nameof(SystemSettings.ContractsWithoutAttachments))) 
+            {
+                if (contracts.Any(l => l.ContractAttachments.Count == 0))
+                {
+                    int count = contracts.Count(l => l.ContractAttachments.Count == 0);
+                    string text = (count < 2) ? "contract" : "contracts";
+
+                    _alerts.Add(new Alert
+                    {
+                        Category = ActionAlertCategory.Contract,
+                        Description = $"{count} {text} without attachments",
+                        Severity = Severity.Medium
+                    });
+                }
+            }
+
+            if(_alertPreferences.WhereEnabled(nameof(SystemSettings.ContractsExpiringSoon))) 
+            {
+                var contractsWithExpiringWarranties = contracts
+                    .Where(a => a.ContractPeriods.Any(ap => ap.Period.EndDate >= _currentDate && ap.Period.EndDate <= _thresholdDate));
+
+                if (contractsWithExpiringWarranties.Any())
+                {
+                    int count = contractsWithExpiringWarranties.Count();
+                    string text = (count == 1) ? "contract has" : "contracts have";
+
+                    _alerts.Add(new Alert
+                    {
+                        Category = ActionAlertCategory.License,
+                        Description = $"{count} {text} expiring within the next {_thresholdValue} days",
+                        Severity = Severity.High
+                    });
+                }
+            }
         }
 
         internal bool SystemAlerts()

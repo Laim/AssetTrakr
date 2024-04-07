@@ -32,7 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmContractModify));
             tabControlContract = new TabControl();
             tabInformation = new TabPage();
+            cmbPaymentFrequency = new ComboBox();
+            lblPaymentFrequency = new Label();
+            lblPurchaseCost = new Label();
             txtOrderRef = new TextBox();
+            numCost = new NumericUpDown();
             lblOrderRef = new Label();
             txtName = new TextBox();
             lblName = new Label();
@@ -51,6 +55,7 @@
             btnAddUpdate = new Button();
             tabControlContract.SuspendLayout();
             tabInformation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numCost).BeginInit();
             tabPeriods.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvPeriods).BeginInit();
             cmsDgvRightClick.SuspendLayout();
@@ -73,7 +78,11 @@
             // 
             // tabInformation
             // 
+            tabInformation.Controls.Add(cmbPaymentFrequency);
+            tabInformation.Controls.Add(lblPaymentFrequency);
+            tabInformation.Controls.Add(lblPurchaseCost);
             tabInformation.Controls.Add(txtOrderRef);
+            tabInformation.Controls.Add(numCost);
             tabInformation.Controls.Add(lblOrderRef);
             tabInformation.Controls.Add(txtName);
             tabInformation.Controls.Add(lblName);
@@ -85,12 +94,48 @@
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
             // 
+            // cmbPaymentFrequency
+            // 
+            cmbPaymentFrequency.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbPaymentFrequency.FormattingEnabled = true;
+            cmbPaymentFrequency.Location = new Point(130, 156);
+            cmbPaymentFrequency.Name = "cmbPaymentFrequency";
+            cmbPaymentFrequency.Size = new Size(235, 28);
+            cmbPaymentFrequency.TabIndex = 40;
+            // 
+            // lblPaymentFrequency
+            // 
+            lblPaymentFrequency.Location = new Point(21, 159);
+            lblPaymentFrequency.Name = "lblPaymentFrequency";
+            lblPaymentFrequency.Size = new Size(103, 20);
+            lblPaymentFrequency.TabIndex = 38;
+            lblPaymentFrequency.Text = "Pay Frequency";
+            lblPaymentFrequency.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblPurchaseCost
+            // 
+            lblPurchaseCost.Location = new Point(21, 112);
+            lblPurchaseCost.Name = "lblPurchaseCost";
+            lblPurchaseCost.Size = new Size(103, 20);
+            lblPurchaseCost.TabIndex = 37;
+            lblPurchaseCost.Text = "Price";
+            lblPurchaseCost.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // txtOrderRef
             // 
             txtOrderRef.Location = new Point(130, 64);
             txtOrderRef.Name = "txtOrderRef";
             txtOrderRef.Size = new Size(235, 27);
             txtOrderRef.TabIndex = 15;
+            // 
+            // numCost
+            // 
+            numCost.DecimalPlaces = 2;
+            numCost.Location = new Point(130, 110);
+            numCost.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
+            numCost.Name = "numCost";
+            numCost.Size = new Size(235, 27);
+            numCost.TabIndex = 36;
             // 
             // lblOrderRef
             // 
@@ -283,6 +328,7 @@
             tabControlContract.ResumeLayout(false);
             tabInformation.ResumeLayout(false);
             tabInformation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numCost).EndInit();
             tabPeriods.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvPeriods).EndInit();
             cmsDgvRightClick.ResumeLayout(false);
@@ -314,5 +360,9 @@
         private DataGridView dgvAttachments;
         private Button btnAddSubPeriod;
         private Button btnAddAttachment;
+        private Label lblPurchaseCost;
+        private NumericUpDown numCost;
+        private Label lblPaymentFrequency;
+        private ComboBox cmbPaymentFrequency;
     }
 }

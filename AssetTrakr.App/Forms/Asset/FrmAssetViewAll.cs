@@ -68,6 +68,9 @@ namespace AssetTrakr.App.Forms.Asset
                     a.Price,
                     a.RegisteredUser,
                     a.RegisteredEmail,
+                    WarrantyPeriodsFormatted = string.Join($",{Environment.NewLine}", a.AssetPeriods
+                            .Where(ap => ap != null && ap.Period != null)
+                            .Select(ap => ap.Period.StartDate.ToString("d") + " - " + ap.Period.EndDate.ToString("d"))),
                     a.CreatedBy,
                     a.CreatedDate,
                     a.UpdatedBy,
@@ -85,6 +88,7 @@ namespace AssetTrakr.App.Forms.Asset
             dgvViewAll.Columns["OrderReference"].HeaderText = "Order Reference";
             dgvViewAll.Columns["RegisteredUser"].HeaderText = "User";
             dgvViewAll.Columns["RegisteredEmail"].HeaderText = "Email";
+            dgvViewAll.Columns["WarrantyPeriodsFormatted"].HeaderText = "Warranty";
 
             // Hide Columns
             dgvViewAll.Columns["AssetId"].Visible = false;

@@ -65,6 +65,15 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 LoadAssetData();
             }
+
+            // this is dumb as shit.
+            // every time i changed the link labels TabStop to false
+            // visual studio reverted it back to true? piece of garbage
+            lnkAddContract.TabStop = false;
+            lnkAddManufacturer.TabStop = false;
+            lnkAddPlatform.TabStop = false;
+            lnkManageOS.TabStop = false;
+            lnkModifyContract.TabStop = false;
         }
 
         /// <summary>
@@ -108,7 +117,7 @@ namespace AssetTrakr.App.Forms.Asset
             // Load in Network Adapters
             if (_assetData.Hardware.NetworkAdapters.Count > 0)
             {
-                foreach(var adapter in _assetData.Hardware.NetworkAdapters)
+                foreach (var adapter in _assetData.Hardware.NetworkAdapters)
                 {
                     _networkAdapters.Add(adapter);
                 }
@@ -119,8 +128,8 @@ namespace AssetTrakr.App.Forms.Asset
             // Load in Hard Drives
             if (_assetData.Hardware.HardDrives.Count > 0)
             {
-                foreach(var drive in _assetData.Hardware.HardDrives)
-                { 
+                foreach (var drive in _assetData.Hardware.HardDrives)
+                {
                     _hardDrives.Add(drive);
                 }
 
@@ -269,7 +278,7 @@ namespace AssetTrakr.App.Forms.Asset
                 return;
             }
 
-            if (cmb.SelectedIndex == 0)
+            if (cmb.SelectedIndex == -1)
             {
                 lnkModifyContract.Visible = false;
                 return;
@@ -280,36 +289,18 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void lnkModifyContract_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmContractModify frmContractModify = new(cmbContracts.SelectedItem?.ToString() ?? "");
+            FrmContractModify frmContractModify = new(Convert.ToInt32(cmbContracts.SelectedValue));
             frmContractModify.ShowDialog();
 
             PopulateComboBoxes();
         }
 
-        private void cmbOperatingSystems_SelectedIndexChanged(object sender, EventArgs e)
+        private void lnkManageOS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (sender is not ComboBox cmb)
-            {
-                return;
-            }
+            FrmOperatingSystemManager FrmOperatingSystemManager = new();
+            FrmOperatingSystemManager.ShowDialog();
 
-            if (cmb.SelectedIndex == 0)
-            {
-                lnkModifyOS.Visible = false;
-                return;
-            }
-
-            lnkModifyOS.Visible = true;
-        }
-
-        private void lnkAddOS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            MessageBox.Show("Not implemented"); // TODO: Implement
-        }
-
-        private void lnkModifyOS_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            MessageBox.Show("Not implemented"); // TODO: Implement
+            PopulateComboBoxes();
         }
 
         private void lnkAddManufacturer_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -361,6 +352,7 @@ namespace AssetTrakr.App.Forms.Asset
                 return;
             }
 
+
             if (selectedOS == null)
             {
                 MessageBox.Show($"Operating System is a required field", "Operating System", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -380,7 +372,7 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Close();
-            } 
+            }
             else
             {
                 MessageBox.Show($"Something has gone wrong during save of {txtName.Text}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -421,11 +413,11 @@ namespace AssetTrakr.App.Forms.Asset
 
             // network adapaters -- existing
             var existingAdapters = _dbContext.AssetNetworkAdapters.Where(na => na.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
-            foreach(var existing in existingAdapters)
+            foreach (var existing in existingAdapters)
             {
                 bool isAdapterInUpdatedList = _networkAdapters.Any(adapter => adapter.NetworkAdapterId == existing.NetworkAdapterId);
 
-                if(!isAdapterInUpdatedList)
+                if (!isAdapterInUpdatedList)
                 {
                     _dbContext.AssetNetworkAdapters.Remove(existing);
                 }
@@ -433,11 +425,11 @@ namespace AssetTrakr.App.Forms.Asset
 
             // hard drives -- existing
             var existingDrives = _dbContext.AssetHardDrives.Where(hd => hd.AssetHardwareId == _assetData.Hardware.AssetHardwareId).ToList();
-            foreach(var existing in existingDrives)
+            foreach (var existing in existingDrives)
             {
                 bool isDriveInUpdatedList = _hardDrives.Any(drive => drive.HardDriveId == existing.HardDriveId);
 
-                if(!isDriveInUpdatedList)
+                if (!isDriveInUpdatedList)
                 {
                     _dbContext.AssetHardDrives.Remove(existing);
                 }
@@ -457,11 +449,11 @@ namespace AssetTrakr.App.Forms.Asset
 
             // attachments -- existing
             var existingAttachments = _dbContext.AssetAttachments.Where(aa => aa.AssetId == _assetData.AssetId).ToList();
-            foreach(var existing in existingAttachments)
+            foreach (var existing in existingAttachments)
             {
                 bool isAttachmentInUpdatedList = _attachments.Any(attach => attach.AttachmentId == existing.AttachmentId);
 
-                if(!isAttachmentInUpdatedList)
+                if (!isAttachmentInUpdatedList)
                 {
                     _dbContext.Attachments.Remove(existing.Attachment);
                 }
@@ -472,7 +464,7 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 bool isAdapaterAssociated = _assetData.Hardware.NetworkAdapters.Any(na => na.NetworkAdapterId == adapter.NetworkAdapterId);
 
-                if(!isAdapaterAssociated)
+                if (!isAdapaterAssociated)
                 {
                     AssetNetworkAdapter networkAdapter = new()
                     {
@@ -486,7 +478,7 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // hard drives -- new
-            foreach(var drive in _hardDrives)
+            foreach (var drive in _hardDrives)
             {
                 bool isDriveAssociated = _assetData.Hardware.HardDrives.Any(hd => hd.HardDriveId == drive.HardDriveId);
 
@@ -494,10 +486,10 @@ namespace AssetTrakr.App.Forms.Asset
                 {
                     AssetHardDrive hardDrive = new()
                     {
-                        Name = drive.Name, 
+                        Name = drive.Name,
                         Manufacturer = drive.Manufacturer,
                         SerialNumber = drive.SerialNumber,
-                        SizeInGB = drive.SizeInGB                        
+                        SizeInGB = drive.SizeInGB
                     };
 
                     _assetData.Hardware.HardDrives.Add(hardDrive);
@@ -505,11 +497,11 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // attachments -- new
-            foreach(var attachment in _attachments)
+            foreach (var attachment in _attachments)
             {
                 bool isAttachmentAssociated = _assetData.AssetAttachments.Any(aa => aa.AttachmentId == attachment.AttachmentId);
 
-                if(!isAttachmentAssociated)
+                if (!isAttachmentAssociated)
                 {
                     AssetAttachment assetAttachment = new()
                     {
@@ -525,11 +517,11 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             // warranty -- new
-            foreach(var warrantyPeriod in _warrantyPeriods)
+            foreach (var warrantyPeriod in _warrantyPeriods)
             {
                 bool isWarrantyAssociated = _assetData.AssetPeriods.Any(aw => aw.PeriodId == warrantyPeriod.PeriodId);
 
-                if(!isWarrantyAssociated)
+                if (!isWarrantyAssociated)
                 {
                     AssetPeriod assetPeriod = new()
                     {
@@ -548,8 +540,8 @@ namespace AssetTrakr.App.Forms.Asset
                 _dbContext.Assets.Update(_assetData);
 
                 ActionLogMethods.Updated(_dbContext, ActionAlertCategory.Asset, txtName.Text);
-            } 
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 LogManager.Error<FrmAssetModify>($"{ex}");
@@ -681,6 +673,11 @@ namespace AssetTrakr.App.Forms.Asset
             cmbContracts.DataSource = _dbContext.Contracts.ToList();
             cmbContracts.DisplayMember = "Name";
             cmbContracts.ValueMember = "ContractId";
+
+            if (_assetData == null)
+            {
+                cmbContracts.SelectedIndex = -1;
+            }
 
             // Load the Platform Data into the ComboBox
             cmbPlatforms.DataSource = _dbContext.Platforms.ToList();

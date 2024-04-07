@@ -41,6 +41,8 @@
             btnAddAttachment = new Button();
             tabControl1 = new TabControl();
             tabInformation = new TabPage();
+            lblPaymentFrequency = new Label();
+            cmbPaymentFrequency = new ComboBox();
             lnkModifyContract = new LinkLabel();
             lnkAddContract = new LinkLabel();
             lblContract = new Label();
@@ -75,6 +77,9 @@
             dgvAttachments = new DataGridView();
             tabDescription = new TabPage();
             txtDescription = new TextBox();
+            notifyIcon1 = new NotifyIcon(components);
+            lblVendor = new Label();
+            txtVendor = new TextBox();
             ((System.ComponentModel.ISupportInitialize)numCount).BeginInit();
             tabControl1.SuspendLayout();
             tabInformation.SuspendLayout();
@@ -106,7 +111,7 @@
             // 
             // lblCount
             // 
-            lblCount.Location = new Point(21, 155);
+            lblCount.Location = new Point(21, 199);
             lblCount.Name = "lblCount";
             lblCount.Size = new Size(103, 20);
             lblCount.TabIndex = 2;
@@ -115,12 +120,12 @@
             // 
             // numCount
             // 
-            numCount.Location = new Point(130, 153);
+            numCount.Location = new Point(130, 194);
             numCount.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numCount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numCount.Name = "numCount";
             numCount.Size = new Size(235, 27);
-            numCount.TabIndex = 3;
+            numCount.TabIndex = 5;
             numCount.ThousandsSeparator = true;
             numCount.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
@@ -139,7 +144,7 @@
             dtPurchaseDate.MinDate = new DateTime(1975, 1, 1, 0, 0, 0, 0);
             dtPurchaseDate.Name = "dtPurchaseDate";
             dtPurchaseDate.Size = new Size(235, 27);
-            dtPurchaseDate.TabIndex = 5;
+            dtPurchaseDate.TabIndex = 2;
             // 
             // cbIsSubscription
             // 
@@ -157,7 +162,7 @@
             btnAddUpdate.Location = new Point(877, 592);
             btnAddUpdate.Name = "btnAddUpdate";
             btnAddUpdate.Size = new Size(94, 29);
-            btnAddUpdate.TabIndex = 11;
+            btnAddUpdate.TabIndex = 15;
             btnAddUpdate.Text = "Save";
             btnAddUpdate.UseVisualStyleBackColor = true;
             btnAddUpdate.Click += btnAddUpdate_Click;
@@ -186,6 +191,10 @@
             // 
             // tabInformation
             // 
+            tabInformation.Controls.Add(txtVendor);
+            tabInformation.Controls.Add(lblVendor);
+            tabInformation.Controls.Add(lblPaymentFrequency);
+            tabInformation.Controls.Add(cmbPaymentFrequency);
             tabInformation.Controls.Add(lnkModifyContract);
             tabInformation.Controls.Add(lnkAddContract);
             tabInformation.Controls.Add(lblContract);
@@ -218,6 +227,25 @@
             tabInformation.TabIndex = 0;
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
+            // 
+            // lblPaymentFrequency
+            // 
+            lblPaymentFrequency.Location = new Point(21, 155);
+            lblPaymentFrequency.Name = "lblPaymentFrequency";
+            lblPaymentFrequency.Size = new Size(103, 20);
+            lblPaymentFrequency.TabIndex = 27;
+            lblPaymentFrequency.Text = "Pay Frequency";
+            lblPaymentFrequency.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // cmbPaymentFrequency
+            // 
+            cmbPaymentFrequency.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbPaymentFrequency.FormattingEnabled = true;
+            cmbPaymentFrequency.Location = new Point(130, 152);
+            cmbPaymentFrequency.Name = "cmbPaymentFrequency";
+            cmbPaymentFrequency.Size = new Size(235, 28);
+            cmbPaymentFrequency.TabIndex = 4;
+            cmbPaymentFrequency.SelectedIndexChanged += cmbPaymentFrequency_SelectedIndexChanged;
             // 
             // lnkModifyContract
             // 
@@ -258,13 +286,13 @@
             cmbContracts.Location = new Point(511, 152);
             cmbContracts.Name = "cmbContracts";
             cmbContracts.Size = new Size(235, 28);
-            cmbContracts.TabIndex = 22;
+            cmbContracts.TabIndex = 11;
             cmbContracts.SelectedIndexChanged += cmbContracts_SelectedIndexChanged;
             // 
             // lnkAddPlatform
             // 
             lnkAddPlatform.AutoSize = true;
-            lnkAddPlatform.Location = new Point(371, 239);
+            lnkAddPlatform.Location = new Point(371, 280);
             lnkAddPlatform.Name = "lnkAddPlatform";
             lnkAddPlatform.Size = new Size(63, 20);
             lnkAddPlatform.TabIndex = 21;
@@ -274,7 +302,7 @@
             // 
             // lblPlatform
             // 
-            lblPlatform.Location = new Point(21, 239);
+            lblPlatform.Location = new Point(21, 280);
             lblPlatform.Name = "lblPlatform";
             lblPlatform.Size = new Size(103, 20);
             lblPlatform.TabIndex = 20;
@@ -285,10 +313,10 @@
             // 
             cmbPlatforms.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPlatforms.FormattingEnabled = true;
-            cmbPlatforms.Location = new Point(130, 236);
+            cmbPlatforms.Location = new Point(130, 277);
             cmbPlatforms.Name = "cmbPlatforms";
             cmbPlatforms.Size = new Size(235, 28);
-            cmbPlatforms.TabIndex = 19;
+            cmbPlatforms.TabIndex = 7;
             // 
             // lblVersion
             // 
@@ -304,14 +332,14 @@
             txtVersion.Location = new Point(511, 110);
             txtVersion.Name = "txtVersion";
             txtVersion.Size = new Size(235, 27);
-            txtVersion.TabIndex = 17;
+            txtVersion.TabIndex = 10;
             // 
             // txtLicenseKey
             // 
             txtLicenseKey.Location = new Point(511, 24);
             txtLicenseKey.Name = "txtLicenseKey";
             txtLicenseKey.Size = new Size(235, 27);
-            txtLicenseKey.TabIndex = 16;
+            txtLicenseKey.TabIndex = 8;
             // 
             // lblLicenseKey
             // 
@@ -325,7 +353,7 @@
             // lnkAddManufacturer
             // 
             lnkAddManufacturer.AutoSize = true;
-            lnkAddManufacturer.Location = new Point(371, 199);
+            lnkAddManufacturer.Location = new Point(371, 240);
             lnkAddManufacturer.Name = "lnkAddManufacturer";
             lnkAddManufacturer.Size = new Size(63, 20);
             lnkAddManufacturer.TabIndex = 15;
@@ -351,7 +379,7 @@
             txtInfoContactEmail.Location = new Point(597, 27);
             txtInfoContactEmail.Name = "txtInfoContactEmail";
             txtInfoContactEmail.Size = new Size(274, 27);
-            txtInfoContactEmail.TabIndex = 3;
+            txtInfoContactEmail.TabIndex = 14;
             // 
             // lblInfoContactEmail
             // 
@@ -367,7 +395,7 @@
             txtInfoContactName.Location = new Point(139, 26);
             txtInfoContactName.Name = "txtInfoContactName";
             txtInfoContactName.Size = new Size(274, 27);
-            txtInfoContactName.TabIndex = 1;
+            txtInfoContactName.TabIndex = 13;
             // 
             // lblInfoContactName
             // 
@@ -383,7 +411,7 @@
             txtOrderRef.Location = new Point(511, 67);
             txtOrderRef.Name = "txtOrderRef";
             txtOrderRef.Size = new Size(235, 27);
-            txtOrderRef.TabIndex = 13;
+            txtOrderRef.TabIndex = 9;
             // 
             // lblOrderRef
             // 
@@ -405,24 +433,25 @@
             // 
             // numCost
             // 
+            numCost.DecimalPlaces = 2;
             numCost.Location = new Point(130, 110);
             numCost.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numCost.Name = "numCost";
             numCost.Size = new Size(235, 27);
-            numCost.TabIndex = 10;
+            numCost.TabIndex = 3;
             // 
             // cmbManufacturers
             // 
             cmbManufacturers.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbManufacturers.FormattingEnabled = true;
-            cmbManufacturers.Location = new Point(130, 196);
+            cmbManufacturers.Location = new Point(130, 237);
             cmbManufacturers.Name = "cmbManufacturers";
             cmbManufacturers.Size = new Size(235, 28);
-            cmbManufacturers.TabIndex = 9;
+            cmbManufacturers.TabIndex = 6;
             // 
             // lblManufacturer
             // 
-            lblManufacturer.Location = new Point(21, 199);
+            lblManufacturer.Location = new Point(21, 240);
             lblManufacturer.Name = "lblManufacturer";
             lblManufacturer.Size = new Size(103, 20);
             lblManufacturer.TabIndex = 8;
@@ -561,6 +590,27 @@
             txtDescription.Size = new Size(941, 531);
             txtDescription.TabIndex = 8;
             // 
+            // notifyIcon1
+            // 
+            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.Visible = true;
+            // 
+            // lblVendor
+            // 
+            lblVendor.Location = new Point(402, 199);
+            lblVendor.Name = "lblVendor";
+            lblVendor.Size = new Size(103, 20);
+            lblVendor.TabIndex = 28;
+            lblVendor.Text = "Vendor";
+            lblVendor.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtVendor
+            // 
+            txtVendor.Location = new Point(511, 194);
+            txtVendor.Name = "txtVendor";
+            txtVendor.Size = new Size(235, 27);
+            txtVendor.TabIndex = 12;
+            // 
             // FrmLicenseModify
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -640,5 +690,10 @@
         private ComboBox cmbContracts;
         private LinkLabel lnkAddContract;
         private LinkLabel lnkModifyContract;
+        private Label lblPaymentFrequency;
+        private ComboBox cmbPaymentFrequency;
+        private NotifyIcon notifyIcon1;
+        private TextBox txtVendor;
+        private Label lblVendor;
     }
 }

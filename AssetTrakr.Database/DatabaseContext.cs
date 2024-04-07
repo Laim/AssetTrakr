@@ -55,9 +55,17 @@ namespace AssetTrakr.Database
                 .Property(ah => ah.AssetType)
                 .HasConversion(new EnumToStringConverter<AssetType>());
 
+            modelBuilder.Entity<Contract>()
+                .Property(c => c.PaymentFrequency)
+                .HasConversion(new EnumToStringConverter<PaymentFrequency>());
+
             modelBuilder.Entity<Report>()
                 .Property(r => r.ParentType)
                 .HasConversion(new EnumToStringConverter<ParentType>());
+
+            modelBuilder.Entity<License>()
+                .Property(l => l.PaymentFrequency)
+                .HasConversion(new EnumToStringConverter<PaymentFrequency>());
 
             // unique stuff
             //modelBuilder.Entity<Manufacturer>()

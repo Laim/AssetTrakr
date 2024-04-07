@@ -34,8 +34,7 @@
             tabInformation = new TabPage();
             lblType = new Label();
             cmbAssetType = new ComboBox();
-            lnkModifyOS = new LinkLabel();
-            lnkAddOS = new LinkLabel();
+            lnkManageOS = new LinkLabel();
             cmbOperatingSystems = new ComboBox();
             txtOrderRef = new TextBox();
             lblOrderRef = new Label();
@@ -128,8 +127,7 @@
             // 
             tabInformation.Controls.Add(lblType);
             tabInformation.Controls.Add(cmbAssetType);
-            tabInformation.Controls.Add(lnkModifyOS);
-            tabInformation.Controls.Add(lnkAddOS);
+            tabInformation.Controls.Add(lnkManageOS);
             tabInformation.Controls.Add(cmbOperatingSystems);
             tabInformation.Controls.Add(txtOrderRef);
             tabInformation.Controls.Add(lblOrderRef);
@@ -180,30 +178,18 @@
             cmbAssetType.Location = new Point(511, 191);
             cmbAssetType.Name = "cmbAssetType";
             cmbAssetType.Size = new Size(235, 28);
-            cmbAssetType.TabIndex = 56;
+            cmbAssetType.TabIndex = 11;
             // 
-            // lnkModifyOS
+            // lnkManageOS
             // 
-            lnkModifyOS.AutoSize = true;
-            lnkModifyOS.Location = new Point(795, 113);
-            lnkModifyOS.Name = "lnkModifyOS";
-            lnkModifyOS.Size = new Size(56, 20);
-            lnkModifyOS.TabIndex = 55;
-            lnkModifyOS.TabStop = true;
-            lnkModifyOS.Text = "Modify";
-            lnkModifyOS.Visible = false;
-            lnkModifyOS.LinkClicked += lnkModifyOS_LinkClicked;
-            // 
-            // lnkAddOS
-            // 
-            lnkAddOS.AutoSize = true;
-            lnkAddOS.Location = new Point(752, 113);
-            lnkAddOS.Name = "lnkAddOS";
-            lnkAddOS.Size = new Size(37, 20);
-            lnkAddOS.TabIndex = 54;
-            lnkAddOS.TabStop = true;
-            lnkAddOS.Text = "Add";
-            lnkAddOS.LinkClicked += lnkAddOS_LinkClicked;
+            lnkManageOS.AutoSize = true;
+            lnkManageOS.Location = new Point(752, 113);
+            lnkManageOS.Name = "lnkManageOS";
+            lnkManageOS.Size = new Size(63, 20);
+            lnkManageOS.TabIndex = 22;
+            lnkManageOS.TabStop = true;
+            lnkManageOS.Text = "Manage";
+            lnkManageOS.LinkClicked += lnkManageOS_LinkClicked;
             // 
             // cmbOperatingSystems
             // 
@@ -212,15 +198,14 @@
             cmbOperatingSystems.Location = new Point(511, 110);
             cmbOperatingSystems.Name = "cmbOperatingSystems";
             cmbOperatingSystems.Size = new Size(235, 28);
-            cmbOperatingSystems.TabIndex = 53;
-            cmbOperatingSystems.SelectedIndexChanged += cmbOperatingSystems_SelectedIndexChanged;
+            cmbOperatingSystems.TabIndex = 9;
             // 
             // txtOrderRef
             // 
             txtOrderRef.Location = new Point(511, 67);
             txtOrderRef.Name = "txtOrderRef";
             txtOrderRef.Size = new Size(235, 27);
-            txtOrderRef.TabIndex = 52;
+            txtOrderRef.TabIndex = 8;
             // 
             // lblOrderRef
             // 
@@ -237,7 +222,7 @@
             lnkModifyContract.Location = new Point(795, 155);
             lnkModifyContract.Name = "lnkModifyContract";
             lnkModifyContract.Size = new Size(56, 20);
-            lnkModifyContract.TabIndex = 50;
+            lnkModifyContract.TabIndex = 24;
             lnkModifyContract.TabStop = true;
             lnkModifyContract.Text = "Modify";
             lnkModifyContract.Visible = false;
@@ -249,7 +234,7 @@
             lnkAddContract.Location = new Point(752, 155);
             lnkAddContract.Name = "lnkAddContract";
             lnkAddContract.Size = new Size(37, 20);
-            lnkAddContract.TabIndex = 49;
+            lnkAddContract.TabIndex = 23;
             lnkAddContract.TabStop = true;
             lnkAddContract.Text = "Add";
             lnkAddContract.LinkClicked += lnkAddContract_LinkClicked;
@@ -270,7 +255,7 @@
             cmbContracts.Location = new Point(511, 152);
             cmbContracts.Name = "cmbContracts";
             cmbContracts.Size = new Size(235, 28);
-            cmbContracts.TabIndex = 47;
+            cmbContracts.TabIndex = 10;
             cmbContracts.SelectedIndexChanged += cmbContracts_SelectedIndexChanged;
             // 
             // lnkAddPlatform
@@ -279,7 +264,7 @@
             lnkAddPlatform.Location = new Point(371, 239);
             lnkAddPlatform.Name = "lnkAddPlatform";
             lnkAddPlatform.Size = new Size(63, 20);
-            lnkAddPlatform.TabIndex = 46;
+            lnkAddPlatform.TabIndex = 21;
             lnkAddPlatform.TabStop = true;
             lnkAddPlatform.Text = "Manage";
             lnkAddPlatform.LinkClicked += lnkAddPlatform_LinkClicked;
@@ -300,7 +285,7 @@
             cmbPlatforms.Location = new Point(130, 236);
             cmbPlatforms.Name = "cmbPlatforms";
             cmbPlatforms.Size = new Size(235, 28);
-            cmbPlatforms.TabIndex = 44;
+            cmbPlatforms.TabIndex = 6;
             // 
             // lblOperatingSystem
             // 
@@ -316,7 +301,7 @@
             txtModel.Location = new Point(130, 153);
             txtModel.Name = "txtModel";
             txtModel.Size = new Size(235, 27);
-            txtModel.TabIndex = 41;
+            txtModel.TabIndex = 4;
             // 
             // lblModel
             // 
@@ -333,7 +318,7 @@
             lnkAddManufacturer.Location = new Point(371, 199);
             lnkAddManufacturer.Name = "lnkAddManufacturer";
             lnkAddManufacturer.Size = new Size(63, 20);
-            lnkAddManufacturer.TabIndex = 40;
+            lnkAddManufacturer.TabIndex = 20;
             lnkAddManufacturer.TabStop = true;
             lnkAddManufacturer.Text = "Manage";
             lnkAddManufacturer.LinkClicked += lnkAddManufacturer_LinkClicked;
@@ -356,7 +341,7 @@
             txtInfoContactEmail.Location = new Point(597, 27);
             txtInfoContactEmail.Name = "txtInfoContactEmail";
             txtInfoContactEmail.Size = new Size(274, 27);
-            txtInfoContactEmail.TabIndex = 3;
+            txtInfoContactEmail.TabIndex = 13;
             // 
             // lblInfoContactEmail
             // 
@@ -372,7 +357,7 @@
             txtInfoContactName.Location = new Point(139, 26);
             txtInfoContactName.Name = "txtInfoContactName";
             txtInfoContactName.Size = new Size(274, 27);
-            txtInfoContactName.TabIndex = 1;
+            txtInfoContactName.TabIndex = 12;
             // 
             // lblInfoContactName
             // 
@@ -388,7 +373,7 @@
             txtLicenseKey.Location = new Point(511, 27);
             txtLicenseKey.Name = "txtLicenseKey";
             txtLicenseKey.Size = new Size(235, 27);
-            txtLicenseKey.TabIndex = 37;
+            txtLicenseKey.TabIndex = 7;
             // 
             // lblLicenseKey
             // 
@@ -410,11 +395,12 @@
             // 
             // numCost
             // 
+            numCost.DecimalPlaces = 2;
             numCost.Location = new Point(130, 110);
             numCost.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numCost.Name = "numCost";
             numCost.Size = new Size(235, 27);
-            numCost.TabIndex = 34;
+            numCost.TabIndex = 3;
             // 
             // cmbManufacturers
             // 
@@ -423,7 +409,7 @@
             cmbManufacturers.Location = new Point(130, 196);
             cmbManufacturers.Name = "cmbManufacturers";
             cmbManufacturers.Size = new Size(235, 28);
-            cmbManufacturers.TabIndex = 33;
+            cmbManufacturers.TabIndex = 5;
             // 
             // lblManufacturer
             // 
@@ -439,7 +425,7 @@
             txtName.Location = new Point(130, 24);
             txtName.Name = "txtName";
             txtName.Size = new Size(235, 27);
-            txtName.TabIndex = 27;
+            txtName.TabIndex = 1;
             // 
             // lblName
             // 
@@ -465,7 +451,7 @@
             dtPurchaseDate.MinDate = new DateTime(1975, 1, 1, 0, 0, 0, 0);
             dtPurchaseDate.Name = "dtPurchaseDate";
             dtPurchaseDate.Size = new Size(235, 27);
-            dtPurchaseDate.TabIndex = 31;
+            dtPurchaseDate.TabIndex = 2;
             // 
             // tabHardware
             // 
@@ -496,7 +482,7 @@
             btnAddHardDrive.Location = new Point(814, 328);
             btnAddHardDrive.Name = "btnAddHardDrive";
             btnAddHardDrive.Size = new Size(109, 29);
-            btnAddHardDrive.TabIndex = 24;
+            btnAddHardDrive.TabIndex = 6;
             btnAddHardDrive.Text = "Add Drive";
             btnAddHardDrive.UseVisualStyleBackColor = true;
             btnAddHardDrive.Click += btnAddHardDrive_Click;
@@ -506,7 +492,7 @@
             btnAddNetworkAdapter.Location = new Point(814, 146);
             btnAddNetworkAdapter.Name = "btnAddNetworkAdapter";
             btnAddNetworkAdapter.Size = new Size(109, 29);
-            btnAddNetworkAdapter.TabIndex = 23;
+            btnAddNetworkAdapter.TabIndex = 5;
             btnAddNetworkAdapter.Text = "Add Adapter";
             btnAddNetworkAdapter.UseVisualStyleBackColor = true;
             btnAddNetworkAdapter.Click += btnAddNetworkAdapter_Click;
@@ -544,6 +530,7 @@
             dgvHardDrives.ShowRowErrors = false;
             dgvHardDrives.Size = new Size(902, 140);
             dgvHardDrives.TabIndex = 21;
+            dgvHardDrives.TabStop = false;
             // 
             // cmsDgvRightClick
             // 
@@ -604,13 +591,14 @@
             dgvNetworkAdapters.ShowRowErrors = false;
             dgvNetworkAdapters.Size = new Size(902, 140);
             dgvNetworkAdapters.TabIndex = 19;
+            dgvNetworkAdapters.TabStop = false;
             // 
             // txtBiosSerialNumber
             // 
             txtBiosSerialNumber.Location = new Point(539, 24);
             txtBiosSerialNumber.Name = "txtBiosSerialNumber";
             txtBiosSerialNumber.Size = new Size(235, 27);
-            txtBiosSerialNumber.TabIndex = 18;
+            txtBiosSerialNumber.TabIndex = 4;
             // 
             // lblBiosSerialNumber
             // 
@@ -636,7 +624,7 @@
             numRamSticks.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numRamSticks.Name = "numRamSticks";
             numRamSticks.Size = new Size(235, 27);
-            numRamSticks.TabIndex = 14;
+            numRamSticks.TabIndex = 3;
             // 
             // lblRamSizeInGB
             // 
@@ -653,14 +641,14 @@
             numRamSizeInGB.Maximum = new decimal(new int[] { -727379969, 232, 0, 0 });
             numRamSizeInGB.Name = "numRamSizeInGB";
             numRamSizeInGB.Size = new Size(235, 27);
-            numRamSizeInGB.TabIndex = 12;
+            numRamSizeInGB.TabIndex = 2;
             // 
             // txtProcessor
             // 
             txtProcessor.Location = new Point(130, 24);
             txtProcessor.Name = "txtProcessor";
             txtProcessor.Size = new Size(235, 27);
-            txtProcessor.TabIndex = 3;
+            txtProcessor.TabIndex = 1;
             // 
             // lblProcessor
             // 
@@ -689,7 +677,7 @@
             btnAddWarranty.Location = new Point(787, 20);
             btnAddWarranty.Name = "btnAddWarranty";
             btnAddWarranty.Size = new Size(138, 29);
-            btnAddWarranty.TabIndex = 18;
+            btnAddWarranty.TabIndex = 2;
             btnAddWarranty.Text = "Add Warranty";
             btnAddWarranty.UseVisualStyleBackColor = true;
             btnAddWarranty.Click += btnAddWarranty_Click;
@@ -718,6 +706,7 @@
             dgvWarrantyPeriods.ShowRowErrors = false;
             dgvWarrantyPeriods.Size = new Size(905, 450);
             dgvWarrantyPeriods.TabIndex = 17;
+            dgvWarrantyPeriods.TabStop = false;
             // 
             // cbHasWarranty
             // 
@@ -725,7 +714,7 @@
             cbHasWarranty.Location = new Point(20, 20);
             cbHasWarranty.Name = "cbHasWarranty";
             cbHasWarranty.Size = new Size(119, 24);
-            cbHasWarranty.TabIndex = 11;
+            cbHasWarranty.TabIndex = 1;
             cbHasWarranty.Text = "Has Warranty";
             cbHasWarranty.UseVisualStyleBackColor = true;
             cbHasWarranty.CheckedChanged += cbHasWarranty_CheckedChanged;
@@ -765,13 +754,14 @@
             dgvAttachments.ShowRowErrors = false;
             dgvAttachments.Size = new Size(905, 450);
             dgvAttachments.TabIndex = 14;
+            dgvAttachments.TabStop = false;
             // 
             // btnAddAttachment
             // 
             btnAddAttachment.Location = new Point(787, 20);
             btnAddAttachment.Name = "btnAddAttachment";
             btnAddAttachment.Size = new Size(138, 29);
-            btnAddAttachment.TabIndex = 13;
+            btnAddAttachment.TabIndex = 1;
             btnAddAttachment.Text = "Add Attachment";
             btnAddAttachment.UseVisualStyleBackColor = true;
             btnAddAttachment.Click += btnAddAttachment_Click;
@@ -793,14 +783,14 @@
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
             txtDescription.Size = new Size(947, 537);
-            txtDescription.TabIndex = 10;
+            txtDescription.TabIndex = 1;
             // 
             // btnAddUpdate
             // 
             btnAddUpdate.Location = new Point(877, 592);
             btnAddUpdate.Name = "btnAddUpdate";
             btnAddUpdate.Size = new Size(94, 29);
-            btnAddUpdate.TabIndex = 12;
+            btnAddUpdate.TabIndex = 14;
             btnAddUpdate.Text = "Save";
             btnAddUpdate.UseVisualStyleBackColor = true;
             btnAddUpdate.Click += btnAddUpdate_Click;
@@ -898,8 +888,7 @@
         private Label lblOrderRef;
         private Label lblOperatingSystem;
         private ComboBox cmbOperatingSystems;
-        private LinkLabel lnkAddOS;
-        private LinkLabel lnkModifyOS;
+        private LinkLabel lnkManageOS;
         private ContextMenuStrip cmsDgvRightClick;
         private ToolStripMenuItem columnSelectorToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;

@@ -8,10 +8,18 @@
         /// </summary>
         public static string directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Laim", "AssetTrakr", "Database");
 
+#if DEBUG
+
+        /// <summary>
+        /// The name of the actual database
+        /// </summary>
+        public static string databaseFileName = "AssetTrakr_DevDb.db";
+#else
         /// <summary>
         /// The name of the actual database
         /// </summary>
         public static string databaseFileName = "AssetTrakr.db";
+#endif
 
         /// <summary>
         /// The full path including the database name

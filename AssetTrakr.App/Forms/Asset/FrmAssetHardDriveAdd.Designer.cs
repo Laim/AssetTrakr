@@ -36,6 +36,8 @@
             txtName = new TextBox();
             numSizeBytes = new NumericUpDown();
             btnAdd = new Button();
+            txtSerialNumber = new TextBox();
+            lblSerialNumber = new Label();
             ((System.ComponentModel.ISupportInitialize)numSizeBytes).BeginInit();
             SuspendLayout();
             // 
@@ -59,7 +61,7 @@
             // 
             // lblManufacturer
             // 
-            lblManufacturer.Location = new Point(20, 86);
+            lblManufacturer.Location = new Point(20, 119);
             lblManufacturer.Name = "lblManufacturer";
             lblManufacturer.Size = new Size(106, 20);
             lblManufacturer.TabIndex = 2;
@@ -69,7 +71,7 @@
             // lnkAddManufacturer
             // 
             lnkAddManufacturer.AutoSize = true;
-            lnkAddManufacturer.Location = new Point(363, 86);
+            lnkAddManufacturer.Location = new Point(363, 119);
             lnkAddManufacturer.Name = "lnkAddManufacturer";
             lnkAddManufacturer.Size = new Size(63, 20);
             lnkAddManufacturer.TabIndex = 42;
@@ -82,7 +84,7 @@
             // 
             cmbManufacturers.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbManufacturers.FormattingEnabled = true;
-            cmbManufacturers.Location = new Point(132, 83);
+            cmbManufacturers.Location = new Point(132, 116);
             cmbManufacturers.Name = "cmbManufacturers";
             cmbManufacturers.Size = new Size(225, 28);
             cmbManufacturers.TabIndex = 41;
@@ -104,7 +106,7 @@
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(263, 118);
+            btnAdd.Location = new Point(263, 150);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(94, 29);
             btnAdd.TabIndex = 45;
@@ -112,11 +114,29 @@
             btnAdd.UseVisualStyleBackColor = true;
             btnAdd.Click += btnAdd_Click;
             // 
+            // txtSerialNumber
+            // 
+            txtSerialNumber.Location = new Point(132, 83);
+            txtSerialNumber.Name = "txtSerialNumber";
+            txtSerialNumber.Size = new Size(225, 27);
+            txtSerialNumber.TabIndex = 46;
+            // 
+            // lblSerialNumber
+            // 
+            lblSerialNumber.Location = new Point(20, 86);
+            lblSerialNumber.Name = "lblSerialNumber";
+            lblSerialNumber.Size = new Size(106, 20);
+            lblSerialNumber.TabIndex = 47;
+            lblSerialNumber.Text = "Serial Number";
+            lblSerialNumber.TextAlign = ContentAlignment.MiddleRight;
+            // 
             // FrmAssetHardDriveAdd
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(388, 159);
+            ClientSize = new Size(388, 189);
+            Controls.Add(lblSerialNumber);
+            Controls.Add(txtSerialNumber);
             Controls.Add(btnAdd);
             Controls.Add(numSizeBytes);
             Controls.Add(txtName);
@@ -146,5 +166,7 @@
         private TextBox txtName;
         private NumericUpDown numSizeBytes;
         private Button btnAdd;
+        private TextBox txtSerialNumber;
+        private Label lblSerialNumber;
     }
 }

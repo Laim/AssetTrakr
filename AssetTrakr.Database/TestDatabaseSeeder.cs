@@ -114,8 +114,7 @@ namespace AssetTrakr.Database
                 {
                     OperatingSystemId = id,
                     Name = tuple.Item1,
-                    ManufacturerId = tuple.Item2,
-                    PlatformId = tuple.Item3
+                    ManufacturerId = tuple.Item2
                 };
 
                 operatingSystems.Add(os);

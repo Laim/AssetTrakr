@@ -14,14 +14,12 @@ namespace AssetTrakr.Models.Assets
         [MaxLength(150)]
         public required string Name { get; set; }
 
-        public required int ManufacturerId { get; set; }
-        public required int PlatformId { get; set; }
+        public string? Notes { get; set; }
+
+        public int ManufacturerId { get; set; }
 
         [ForeignKey("ManufacturerId")] // Define ForeignKey attribute to represent the relationship
         public Manufacturer? Manufacturer { get; set; } // Direct navigation property to Manufacturer entity
-
-        [ForeignKey("PlatformId")] // Define ForeignKey attribute to represent the relationship
-        public Platform? Platform { get; set; } // Direct navigation property to Platform entity
 
         public Asset Asset { get; set; }
     }

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using AssetTrakr.Logging;
+using AssetTrakr.Utils.Enums;
 
 namespace AssetTrakr.App.Forms.License
 {
@@ -18,12 +19,15 @@ namespace AssetTrakr.App.Forms.License
         private BindingList<Period> _subscriptionPeriods = [];
         private readonly Models.License? _licenseData;
         private readonly bool _isEditingMode;
+        private readonly bool _isReadOnly;
 
         public FrmLicenseModify(int licenseId = 0, bool isReadOnly = false)
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
+
+            _isReadOnly = isReadOnly;
 
             if (licenseId <= 0)
             {
@@ -50,9 +54,9 @@ namespace AssetTrakr.App.Forms.License
                 Text = $"Modify License - {_licenseData.Name}";
             }
 
-            if(isReadOnly && _licenseData != null)
+            if (isReadOnly && _licenseData != null)
             {
-                SetReadOnly(this);
+                Helpers.Utils.SetReadOnly(this, deleteToolStripMenuItem);
                 Text = $"Viewing License - {_licenseData.Name}";
             }
         }
@@ -220,7 +224,7 @@ namespace AssetTrakr.App.Forms.License
                 return;
             }
 
-            if (cmb.SelectedIndex == 0)
+            if (cmb.SelectedIndex == -1 || _isReadOnly)
             {
                 lnkModifyContract.Visible = false;
                 return;
@@ -231,7 +235,7 @@ namespace AssetTrakr.App.Forms.License
 
         private void lnkModifyContract_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FrmContractModify frmContractModify = new(cmbContracts.SelectedItem?.ToString() ?? "");
+            FrmContractModify frmContractModify = new(Convert.ToInt32(cmbContracts.SelectedValue));
             frmContractModify.ShowDialog();
 
             PopulateComboBoxes();
@@ -280,6 +284,8 @@ namespace AssetTrakr.App.Forms.License
             txtInfoContactName.Text = _licenseData.RegisteredUser;
             txtInfoContactEmail.Text = _licenseData.RegisteredEmail;
             txtDescription.Text = _licenseData.Description;
+            cmbPaymentFrequency.SelectedIndex = (int)_licenseData.PaymentFrequency;
+            txtVendor.Text = _licenseData.Vendor;
 
             // Load in Subscription Periods
             if (_licenseData.IsSubscription && _licenseData.LicensePeriods.Count > 0)
@@ -343,7 +349,9 @@ namespace AssetTrakr.App.Forms.License
                 PlatformId = platform.PlatformId,
                 ContractId = contractId ?? null,
                 RegisteredEmail = txtInfoContactEmail.Text,
-                RegisteredUser = txtInfoContactName.Text
+                RegisteredUser = txtInfoContactName.Text,
+                PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex,
+                Vendor = txtVendor.Text
             };
 
             foreach (var period in _subscriptionPeriods)
@@ -424,6 +432,8 @@ namespace AssetTrakr.App.Forms.License
             _licenseData.RegisteredUser = txtInfoContactName.Text;
             _licenseData.RegisteredEmail = txtInfoContactEmail.Text;
             _licenseData.Platform = platform;
+            _licenseData.PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex;
+            _licenseData.Vendor = txtVendor.Text;
 
             // Remove Subscription and Attachment associations that are no longer present
             var existingPeriods = _dbContext.LicensePeriods.Where(lp => lp.LicenseId == _licenseData.Id).ToList();
@@ -508,7 +518,7 @@ namespace AssetTrakr.App.Forms.License
 
             _dbContext.Dispose();
         }
-    
+
         /// <summary>
         /// Populates the relevant ComboBoxes
         /// </summary>
@@ -524,50 +534,44 @@ namespace AssetTrakr.App.Forms.License
             cmbContracts.DisplayMember = "Name";
             cmbContracts.ValueMember = "ContractId";
 
+            if (_licenseData == null)
+            {
+                cmbContracts.SelectedIndex = -1;
+            }
+
             // Load the Platform Data into the ComboBox
             cmbPlatforms.DataSource = _dbContext.Platforms.ToList();
             cmbPlatforms.DisplayMember = "Name";
             cmbPlatforms.ValueMember = "PlatformId";
+
+            // Load the Payment Freq data
+            cmbPaymentFrequency.DataSource = Enum.GetValues(typeof(PaymentFrequency));
         }
 
-        private void SetReadOnly(Control control)
+        private void cmbPaymentFrequency_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach(Control ctrl in control.Controls)
+            if(cmbPaymentFrequency.SelectedItem is not PaymentFrequency item)
             {
-                switch (ctrl)
-                {
-                    case TextBox tbx:
-                        tbx.ReadOnly = true;
-                        break;
-
-                    case ComboBox cbx:
-                        cbx.Enabled = false;
-                        break;
-
-                    case Button btn:
-                        btn.Visible = false;
-                        break;
-
-                    case DateTimePicker dtp:
-                        dtp.Enabled = false;
-                        break;
-
-                    case LinkLabel ll:
-                        ll.Visible = false;
-                        break;
-
-                    case CheckBox cbk:
-                        cbk.Visible = false;
-                        break;
-                }
-
-                if (ctrl.HasChildren)
-                {
-                    SetReadOnly(ctrl);
-                }
+                return;
             }
 
-            deleteToolStripMenuItem.Enabled = false;
+            if(item == PaymentFrequency.Once)
+            {
+                return;
+            }
+            
+            if(!cbIsSubscription.Checked)
+            {
+                ToolTip subscriptionHint = new()
+                {
+                    IsBalloon = true,
+                    ToolTipTitle = "Subscription",
+                    ToolTipIcon = ToolTipIcon.Info
+                };
+
+                subscriptionHint.Show("Make sure to include your subscription period!", cmbPaymentFrequency, 0, -100, 5000);
+
+            }
         }
     }
 }

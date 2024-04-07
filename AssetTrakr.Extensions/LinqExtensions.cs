@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
+using AssetTrakr.Logging;
 using AssetTrakr.Models.System;
+using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 
 namespace AssetTrakr.Extensions
 {
@@ -46,6 +49,29 @@ namespace AssetTrakr.Extensions
 
             // Use Any to check if any elements match the predicate
             return source.Any(ss => ss.Name == settingName && ss.Enabled);
+        }
+    
+        public static bool Export<T>(this IEnumerable<T> source, string exportName)
+        {
+            try
+            {
+                using (ExcelPackage ep = new ExcelPackage(new FileInfo($"C:\\Temp\\{exportName}-{Guid.NewGuid()}.xlsx")))
+                {
+                    var worksheet = ep.Workbook.Worksheets.Add("Export");
+
+                    worksheet.Cells.LoadFromCollection(source.ToList(), true, OfficeOpenXml.Table.TableStyles.Dark1);
+
+                    ep.Save();
+                }
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                LogManager.Fatal($"{ex}");
+                return false;
+            }
         }
     }
 }

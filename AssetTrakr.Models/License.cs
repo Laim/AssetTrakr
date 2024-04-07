@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using AssetTrakr.Utils.Enums;
 
 namespace AssetTrakr.Models
 {
@@ -38,6 +39,8 @@ namespace AssetTrakr.Models
         /// </summary>
         public bool IsSubscriptionContract { get; set; } = false;
 
+        public PaymentFrequency PaymentFrequency { get; set; } = PaymentFrequency.Once;
+
         public int? ContractId { get; set; } = 0;
 
         public required int ManufacturerId { get; set; }
@@ -51,6 +54,8 @@ namespace AssetTrakr.Models
 
         [DisplayName("Order Reference")]
         public string? OrderReference { get; set; }
+
+        public string? Vendor { get; set; }
 
         public string? Version { get; set; }
 

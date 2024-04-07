@@ -18,7 +18,11 @@ namespace AssetTrakr.App
             ApplicationConfiguration.Initialize();
 
             LogManager logManager = new();
-            Log.Information("Initialize...");
+            LogManager.Information("Initialize...");
+
+#if DEBUG
+            LogManager.Information("APPLICATION IS IN DEBUG MODE");
+#endif
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 

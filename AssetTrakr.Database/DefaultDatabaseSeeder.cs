@@ -26,6 +26,7 @@ namespace AssetTrakr.Database
             AssetAlerts();
             LicenseAlerts();
             Reports();
+            ContractAlerts();
 
             LogManager.Information<DefaultDatabaseSeeder>($"Seeding of [{nameof(DefaultDatabaseSeeder)}] complete.");
 
@@ -95,6 +96,15 @@ namespace AssetTrakr.Database
                         HasCriteria = false,
                         Description = "Shows all licenses in the system with all available fields.",
                         ParentType = ParentType.License
+                    },
+                    new Report
+                    {
+                        ReportId = 7,
+                        ShortCode = "costAnal",
+                        Name = "Cost Analysis",
+                        HasCriteria = false,
+                        Description = "Shows Cost of all Entities in the System",
+                        ParentType = ParentType.Other
                     }
                 );
             });
@@ -121,17 +131,18 @@ namespace AssetTrakr.Database
                         SettingValue = "30",
                         DefaultSettingValue = "30"
                     },
-                    new SystemSetting
-                    {
-                        Name = nameof(Utils.Enums.SystemSettings.CheckForUpdates),
-                        Category = SystemSettingsCategory.Application,
-                        Description = "Automatically check for Updates",
-                        SettingValue = "stable",
-                        DefaultSettingValue = "stable",
-                        DefaultEnabled = true,
-                        Enabled = true,
-                        SettingParentType = "Updates",
-                    },
+                    // TODO: Re-add this so CheckForUpdates can be used by the end user when Updates is added
+                    //new SystemSetting
+                    //{
+                    //    Name = nameof(Utils.Enums.SystemSettings.CheckForUpdates),
+                    //    Category = SystemSettingsCategory.Application,
+                    //    Description = "Automatically check for Updates",
+                    //    SettingValue = "stable",
+                    //    DefaultSettingValue = "stable",
+                    //    DefaultEnabled = true,
+                    //    Enabled = true,
+                    //    SettingParentType = "Updates",
+                    //},
                     new SystemSetting
                     {
                         Name = nameof(Utils.Enums.SystemSettings.AutomaticBackups),
@@ -217,7 +228,6 @@ namespace AssetTrakr.Database
 
             LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(LicenseAlerts)}] Data...");
 
-            // Asset Alerts
             _modelBuilder.Entity<SystemSetting>(e =>
             {
                 e.HasData
@@ -255,6 +265,50 @@ namespace AssetTrakr.Database
                         Category = SystemSettingsCategory.Alert,
                         Description = "Alert",
                         SettingParentType = "Licenses",
+                        DefaultEnabled = true,
+                        Enabled = true
+                    }
+
+                );
+            });
+        }
+
+        /// <summary>
+        /// Creates the System Settings for Contract Alerts
+        /// </summary>
+        internal void ContractAlerts()
+        {
+            LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(ContractAlerts)}] Data...");
+
+            // Asset Alerts
+            _modelBuilder.Entity<SystemSetting>(e =>
+            {
+                e.HasData
+                (
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.NoContractsAdded),
+                        Category = SystemSettingsCategory.Alert,
+                        Description = "Alert",
+                        SettingParentType = "Contracts",
+                        DefaultEnabled = true,
+                        Enabled = true
+                    },
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.ContractsExpiringSoon),
+                        Category = SystemSettingsCategory.Alert,
+                        Description = "Alert",
+                        SettingParentType = "Contracts",
+                        DefaultEnabled = true,
+                        Enabled = true
+                    },
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.ContractsWithoutAttachments),
+                        Category = SystemSettingsCategory.Alert,
+                        Description = "Alert",
+                        SettingParentType = "Contracts",
                         DefaultEnabled = true,
                         Enabled = true
                     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AssetTrakr.Utils.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,6 +21,10 @@ namespace AssetTrakr.Models
         [Required]
         [MaxLength(150)]
         public required string OrderRef { get; set; } // UNIQUE
+
+        public decimal Price { get; set; }
+
+        public required PaymentFrequency PaymentFrequency { get; set; }
 
         /// <summary>
         /// Assigned Attachments

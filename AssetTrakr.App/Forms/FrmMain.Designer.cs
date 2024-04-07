@@ -45,6 +45,7 @@
             actionLogToolStripMenuItem = new ToolStripMenuItem();
             manufacturerManagerToolStripMenuItem = new ToolStripMenuItem();
             platformManagerToolStripMenuItem = new ToolStripMenuItem();
+            dataExporterToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             systemSettingsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
@@ -53,6 +54,8 @@
             documentationToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator4 = new ToolStripSeparator();
+            dataToolStripMenuItem = new ToolStripMenuItem();
             gbLicenseCount = new GroupBox();
             lblLicenseCount = new Label();
             gbAssetsCount = new GroupBox();
@@ -70,8 +73,7 @@
             gbPlatforms = new GroupBox();
             lblPlatformsCount = new Label();
             lnkRefreshDashboard = new LinkLabel();
-            toolStripSeparator4 = new ToolStripSeparator();
-            dataToolStripMenuItem = new ToolStripMenuItem();
+            operatingSystemManagerToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             gbLicenseCount.SuspendLayout();
             gbAssetsCount.SuspendLayout();
@@ -150,10 +152,10 @@
             // 
             // viewContractsToolStripMenuItem
             // 
-            viewContractsToolStripMenuItem.Enabled = false;
             viewContractsToolStripMenuItem.Name = "viewContractsToolStripMenuItem";
             viewContractsToolStripMenuItem.Size = new Size(190, 26);
             viewContractsToolStripMenuItem.Text = "View Contracts";
+            viewContractsToolStripMenuItem.Click += viewContractsToolStripMenuItem_Click;
             // 
             // reportsToolStripMenuItem
             // 
@@ -164,7 +166,7 @@
             // 
             // administrationToolStripMenuItem
             // 
-            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem, manufacturerManagerToolStripMenuItem, platformManagerToolStripMenuItem, toolStripSeparator3, systemSettingsToolStripMenuItem });
+            administrationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { actionLogToolStripMenuItem, manufacturerManagerToolStripMenuItem, platformManagerToolStripMenuItem, operatingSystemManagerToolStripMenuItem, dataExporterToolStripMenuItem, toolStripSeparator3, systemSettingsToolStripMenuItem });
             administrationToolStripMenuItem.Name = "administrationToolStripMenuItem";
             administrationToolStripMenuItem.Size = new Size(121, 24);
             administrationToolStripMenuItem.Text = "Administration";
@@ -172,33 +174,41 @@
             // actionLogToolStripMenuItem
             // 
             actionLogToolStripMenuItem.Name = "actionLogToolStripMenuItem";
-            actionLogToolStripMenuItem.Size = new Size(243, 26);
+            actionLogToolStripMenuItem.Size = new Size(273, 26);
             actionLogToolStripMenuItem.Text = "Action Log";
             actionLogToolStripMenuItem.Click += actionLogToolStripMenuItem_Click;
             // 
             // manufacturerManagerToolStripMenuItem
             // 
             manufacturerManagerToolStripMenuItem.Name = "manufacturerManagerToolStripMenuItem";
-            manufacturerManagerToolStripMenuItem.Size = new Size(243, 26);
+            manufacturerManagerToolStripMenuItem.Size = new Size(273, 26);
             manufacturerManagerToolStripMenuItem.Text = "Manufacturer Manager";
             manufacturerManagerToolStripMenuItem.Click += manufacturerManagerToolStripMenuItem_Click;
             // 
             // platformManagerToolStripMenuItem
             // 
             platformManagerToolStripMenuItem.Name = "platformManagerToolStripMenuItem";
-            platformManagerToolStripMenuItem.Size = new Size(243, 26);
+            platformManagerToolStripMenuItem.Size = new Size(273, 26);
             platformManagerToolStripMenuItem.Text = "Platform Manager";
             platformManagerToolStripMenuItem.Click += platformManagerToolStripMenuItem_Click;
+            // 
+            // dataExporterToolStripMenuItem
+            // 
+            dataExporterToolStripMenuItem.Name = "dataExporterToolStripMenuItem";
+            dataExporterToolStripMenuItem.Size = new Size(273, 26);
+            dataExporterToolStripMenuItem.Text = "Data Exporter";
+            dataExporterToolStripMenuItem.Visible = false;
+            dataExporterToolStripMenuItem.Click += dataExporterToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(240, 6);
+            toolStripSeparator3.Size = new Size(270, 6);
             // 
             // systemSettingsToolStripMenuItem
             // 
             systemSettingsToolStripMenuItem.Name = "systemSettingsToolStripMenuItem";
-            systemSettingsToolStripMenuItem.Size = new Size(243, 26);
+            systemSettingsToolStripMenuItem.Size = new Size(273, 26);
             systemSettingsToolStripMenuItem.Text = "System Settings";
             systemSettingsToolStripMenuItem.Click += systemSettingsToolStripMenuItem_Click;
             // 
@@ -212,35 +222,47 @@
             // reportBugToolStripMenuItem
             // 
             reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
-            reportBugToolStripMenuItem.Size = new Size(224, 26);
+            reportBugToolStripMenuItem.Size = new Size(198, 26);
             reportBugToolStripMenuItem.Text = "Report Bug";
             reportBugToolStripMenuItem.Click += reportBugToolStripMenuItem_Click;
             // 
             // featureRequestToolStripMenuItem
             // 
             featureRequestToolStripMenuItem.Name = "featureRequestToolStripMenuItem";
-            featureRequestToolStripMenuItem.Size = new Size(224, 26);
+            featureRequestToolStripMenuItem.Size = new Size(198, 26);
             featureRequestToolStripMenuItem.Text = "Feature Request";
             featureRequestToolStripMenuItem.Click += featureRequestToolStripMenuItem_Click;
             // 
             // documentationToolStripMenuItem
             // 
             documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            documentationToolStripMenuItem.Size = new Size(224, 26);
+            documentationToolStripMenuItem.Size = new Size(198, 26);
             documentationToolStripMenuItem.Text = "Documentation";
             documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(221, 6);
+            toolStripSeparator2.Size = new Size(195, 6);
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(224, 26);
+            aboutToolStripMenuItem.Size = new Size(198, 26);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(195, 6);
+            // 
+            // dataToolStripMenuItem
+            // 
+            dataToolStripMenuItem.Name = "dataToolStripMenuItem";
+            dataToolStripMenuItem.Size = new Size(198, 26);
+            dataToolStripMenuItem.Text = "Data";
+            dataToolStripMenuItem.Click += dataToolStripMenuItem_Click;
             // 
             // gbLicenseCount
             // 
@@ -424,17 +446,12 @@
             lnkRefreshDashboard.Text = "Refresh";
             lnkRefreshDashboard.LinkClicked += lnkRefreshDashboard_LinkClicked;
             // 
-            // toolStripSeparator4
+            // operatingSystemManagerToolStripMenuItem
             // 
-            toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(221, 6);
-            // 
-            // dataToolStripMenuItem
-            // 
-            dataToolStripMenuItem.Name = "dataToolStripMenuItem";
-            dataToolStripMenuItem.Size = new Size(224, 26);
-            dataToolStripMenuItem.Text = "Data";
-            dataToolStripMenuItem.Click += dataToolStripMenuItem_Click;
+            operatingSystemManagerToolStripMenuItem.Name = "operatingSystemManagerToolStripMenuItem";
+            operatingSystemManagerToolStripMenuItem.Size = new Size(273, 26);
+            operatingSystemManagerToolStripMenuItem.Text = "Operating System Manager";
+            operatingSystemManagerToolStripMenuItem.Click += operatingSystemManagerToolStripMenuItem_Click;
             // 
             // FrmMain
             // 
@@ -514,5 +531,7 @@
         private ToolStripMenuItem systemSettingsToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem dataToolStripMenuItem;
+        private ToolStripMenuItem dataExporterToolStripMenuItem;
+        private ToolStripMenuItem operatingSystemManagerToolStripMenuItem;
     }
 }

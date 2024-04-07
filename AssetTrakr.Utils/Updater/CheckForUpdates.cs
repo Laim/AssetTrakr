@@ -133,9 +133,9 @@ namespace AssetTrakr.Utils.Updater
         {
             if (release == null) { return; }
 
+            // TODO: This assumes there is only one file available for download, will need to be changed later probably
             string download = release.assets[0].browser_download_url;
             
-            // TODO: This assumes there is only one file available for download, will need to be changed later probably
             string downloadLocation = Path.Combine(UpdaterSettings.directoryPathDownloads, release.tag_name);
             
             _downloadedFilePath = Path.Combine(downloadLocation, release.assets[0].name);

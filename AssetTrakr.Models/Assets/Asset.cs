@@ -51,7 +51,7 @@ namespace AssetTrakr.Models.Assets
         public List<AssetAttachment> AssetAttachments { get; set; } = [];
 
         [ForeignKey("OperatingSystemId")] // Define ForeignKey attribute to represent the relationship
-        public required AssetOperatingSystem OperatingSystem { get; set; } // Direct navigation property to OperatingSystem entity
+        public AssetOperatingSystem? OperatingSystem { get; set; } // Direct navigation property to OperatingSystem entity
 
         [ForeignKey("HardwareId")] // Define ForeignKey attribute to represent the relationship
         public required AssetHardware Hardware { get; set; } // Direct navigation property to Hardware entity

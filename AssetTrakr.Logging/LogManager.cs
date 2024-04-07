@@ -1,6 +1,9 @@
 ﻿using Serilog;
 namespace AssetTrakr.Logging
 {
+    /// <summary>
+    /// Static Log Manager that utilises Serilog and writes to <see cref="logPath"/>
+    /// </summary>
     public class LogManager
     {
 
@@ -14,9 +17,24 @@ namespace AssetTrakr.Logging
                 .CreateLogger();
         }
 
+
         public static void Information<T>(string message) => Log.ForContext<T>().Information(message);
 
+        /// <summary>
+        /// Should only be used in classes that are static where <see cref="Information{T}(string)"/> is not suitable
+        /// </summary>
+        /// <param name="message">informational message</param>
+        /// <param name="source">class name</param>
+        public static void Information(string message) => Log.Information(message);
+
         public static void Fatal<T>(string message) => Log.ForContext<T>().Fatal(message);
+
+        /// <summary>
+        /// Should only be used in classes that are static where <see cref="Fatal{T}(string)"/> is not suitable
+        /// </summary>
+        /// <param name="message">fatal error message</param>
+        /// <param name="source">class name</param>
+        public static void Fatal(string message) => Log.Fatal(message);
 
         public static void Error<T>(string message) => Log.ForContext<T>().Error(message);
 

@@ -1,5 +1,4 @@
-﻿using AssetTrakr.App.Forms.Contract;
-using AssetTrakr.Database;
+﻿using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using AssetTrakr.Models;
@@ -78,6 +77,7 @@ namespace AssetTrakr.App.Forms.Shared
 
             platform.Name = txtName.Text;
             platform.Manufacturer = selectedManufacturer;
+            platform.Notes = txtNotes.Text;
 
             try
             {
@@ -102,6 +102,7 @@ namespace AssetTrakr.App.Forms.Shared
 
             txtName.Text = string.Empty;
             cmbManufacturers.SelectedIndex = 0;
+            txtNotes.Text = string.Empty;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -129,6 +130,7 @@ namespace AssetTrakr.App.Forms.Shared
             {
                 Name = txtName.Text,
                 Manufacturer = selectedManufacturer,
+                Notes = txtNotes.Text,
             });
 
             try
@@ -159,7 +161,7 @@ namespace AssetTrakr.App.Forms.Shared
                 return;
             }
 
-            // TODO: Remember to add a ghost check here if it relies on Platform values
+            // TODO: Remember to add a ghost check here if it relies on any Entity values
             List<Func<int>> ghostChecks =
             [
                 () => _dbContext.Assets.Count(a => a.Platform == platform),
@@ -197,6 +199,10 @@ namespace AssetTrakr.App.Forms.Shared
                     MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     LogManager.Error<FrmPlatformManager>($"{ex}");
                 }
+            } 
+            else
+            {
+                MessageBox.Show("Deletion Cancelled by User", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

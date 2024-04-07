@@ -17,7 +17,7 @@ namespace AssetTrakr.Update.App
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
-            _checkForUpdates ??= new("https://api.github.com/repos/laim/pi24gui/releases", false);
+            _checkForUpdates ??= new("https://api.github.com/repos/laim/assetrakr/releases", false);
             _currentSystemInfo = _dbContext.SystemInfo.First();
             _currentProductVersion = _currentSystemInfo.ProductVersion;
         }

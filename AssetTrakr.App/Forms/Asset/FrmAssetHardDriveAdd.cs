@@ -33,9 +33,7 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Manufacturer? selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
-
-            if (selectedManufacturer == null)
+            if (cmbManufacturers.SelectedItem is not Manufacturer selectedManufacturer)
             {
                 MessageBox.Show($"Manufacturer is required.", "Manufacturer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -45,7 +43,8 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 Manufacturer = selectedManufacturer,
                 Name = txtName.Text,
-                SizeInGB = Convert.ToInt32(numSizeBytes.Value)
+                SizeInGB = Convert.ToInt32(numSizeBytes.Value),
+                SerialNumber = txtSerialNumber.Text,
             });
 
             MessageBox.Show($"Hard Drive added successfully", "Hard Drive", MessageBoxButtons.OK, MessageBoxIcon.Information);

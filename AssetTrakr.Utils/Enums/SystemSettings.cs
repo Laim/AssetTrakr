@@ -25,6 +25,9 @@
         NoLicensesAdded,
         LicensesWithExpiredSubscriptions,
         LicensesWithSubscriptionsExpiringSoon,
-        LicensesWithoutAttachments
+        LicensesWithoutAttachments,
+        NoContractsAdded,
+        ContractsWithoutAttachments,
+        ContractsExpiringSoon
     }
 }

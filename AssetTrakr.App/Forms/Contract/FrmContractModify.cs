@@ -1,10 +1,10 @@
-﻿using AssetTrakr.App.Forms.Asset;
-using AssetTrakr.App.Forms.Attachment;
+﻿using AssetTrakr.App.Forms.Attachment;
 using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
 using AssetTrakr.Logging;
 using AssetTrakr.Models;
+using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
@@ -15,16 +15,16 @@ namespace AssetTrakr.App.Forms.Contract
         private readonly DatabaseContext _dbContext;
         private BindingList<Models.Attachment> _attachments = [];
         private BindingList<Period> _periods = [];
-        private readonly bool _editingMode = false;
+        private readonly bool _isEditingMode = false;
         private readonly Models.Contract? _contractData;
 
-        public FrmContractModify(string ContractName = "")
+        public FrmContractModify(int contractId = 0, bool isReadOnly = false)
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
 
-            if (ContractName == "" || ContractName.Length <= 0)
+            if (contractId <= 0)
             {
                 return;
             }
@@ -34,12 +34,22 @@ namespace AssetTrakr.App.Forms.Contract
                     .ThenInclude(ca => ca.Attachment)
                 .Include(c => c.ContractPeriods)
                     .ThenInclude(cp => cp.Period)
-                .FirstOrDefault(c => c.Name == ContractName);
+                .FirstOrDefault(c => c.ContractId == contractId);
 
             if (contract != null)
             {
                 _contractData = contract;
-                _editingMode = true;
+                _isEditingMode = true;
+
+                // Update general form info
+                btnAddUpdate.Text = "Update";
+                Text = $"Modify Contract - {_contractData.Name}";
+            }
+
+            if (isReadOnly && _contractData != null)
+            {
+                Helpers.Utils.SetReadOnly(this, deleteToolStripMenuItem);
+                Text = $"Viewing License - {_contractData.Name}";
             }
         }
 
@@ -47,7 +57,9 @@ namespace AssetTrakr.App.Forms.Contract
         {
             base.OnLoad(e);
 
-            if (_editingMode)
+            cmbPaymentFrequency.DataSource = Enum.GetValues(typeof(PaymentFrequency));
+
+            if (_isEditingMode)
             {
                 LoadContractData();
             }
@@ -153,8 +165,12 @@ namespace AssetTrakr.App.Forms.Contract
             txtName.Text = _contractData.Name;
             txtOrderRef.Text = _contractData.OrderRef;
             txtDescription.Text = _contractData.Description;
+            numCost.Value = _contractData.Price;
+            cmbPaymentFrequency.SelectedIndex = (int)_contractData.PaymentFrequency;
 
-            if(_contractData.ContractPeriods.Count > 0)
+            // TODO: This doesn't work
+
+            if (_contractData.ContractPeriods.Count > 0)
             {
                 foreach(var period in  _contractData.ContractPeriods)
                 {
@@ -189,7 +205,7 @@ namespace AssetTrakr.App.Forms.Contract
                 return;
             }
 
-            if(!_editingMode)
+            if(!_isEditingMode)
             {
                 AddContract();
             }
@@ -205,7 +221,6 @@ namespace AssetTrakr.App.Forms.Contract
             }
 
         }
-    
     
         private void AddContract()
         {
@@ -224,7 +239,9 @@ namespace AssetTrakr.App.Forms.Contract
             {
                 Name = txtName.Text,
                 OrderRef = txtOrderRef.Text,
-                Description = txtDescription.Text
+                Description = txtDescription.Text,
+                Price = Convert.ToInt32(numCost.Value),
+                PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex
             };
 
             foreach (var period in _periods)
@@ -284,6 +301,9 @@ namespace AssetTrakr.App.Forms.Contract
             _contractData.Name = txtName.Text;
             _contractData.OrderRef = txtOrderRef.Text;
             _contractData.Description = txtDescription.Text;
+            _contractData.Price = Convert.ToInt32(numCost.Value);
+            _contractData.PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex;
+
 
             // Remove Subscription and Attachment associations that are no longer present
             var existingPeriods = _dbContext.ContractPeriods.Where(cp => cp.ContractId == _contractData.ContractId).ToList();

@@ -10,6 +10,7 @@ using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using AssetTrakr.Utils.Enums;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -32,9 +33,15 @@ namespace AssetTrakr.App.Forms
         {
             base.OnLoad(e);
 
+#if DEBUG
+            Text += " - Debug Build";
+#endif
+
             try
             {
-                _dbContext.Database.EnsureCreated();
+                // EnsureCreated doesn't take Migrations into account, so using .Migrate() instead
+                // DO NOT CHANGE THIS TO .EnsureCreated() AS IT WILL BREAK END USER UPDATES.
+                _dbContext.Database.Migrate();
             }
             catch (Exception ex)
             {
@@ -48,7 +55,7 @@ namespace AssetTrakr.App.Forms
             // backup the database if setting is enabled
             if (_dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.AutomaticBackups)))
             {
-                BackupManager backupManager = new(3);
+                BackupManager backupManager = new(Convert.ToInt32(_dbContext.SystemSettings.FirstOrDefault(ss => ss.Name == nameof(SystemSettings.AutomaticBackups))?.SettingValue));
                 if (!backupManager.Backup())
                 {
                     MessageBox.Show("Backup failed, see log for more details.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -96,7 +103,7 @@ namespace AssetTrakr.App.Forms
                         _dbContext.SaveChanges();
                     }
                 }
-            } 
+            }
             catch (SqliteException sqlEx)
             {
                 MessageBox.Show($"{sqlEx.Message} \r\nSee log for more information.  The application will now close.", "Product Registration", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -199,6 +206,12 @@ namespace AssetTrakr.App.Forms
             FrmAssetViewAll.ShowDialog();
         }
 
+        private void viewContractsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmContractViewAll FrmContractViewAll = new();
+            FrmContractViewAll.ShowDialog();
+        }
+
         private void manufacturerManagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmManufacturerManager frmManufacturerManager = new();
@@ -209,6 +222,12 @@ namespace AssetTrakr.App.Forms
         {
             FrmPlatformManager frmPlatformManager = new();
             frmPlatformManager.ShowDialog();
+        }
+
+        private void operatingSystemManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmOperatingSystemManager FrmOperatingSystemManager = new();
+            FrmOperatingSystemManager.ShowDialog();
         }
 
         private void addContractToolStripMenuItem_Click(object sender, EventArgs e)
@@ -227,6 +246,12 @@ namespace AssetTrakr.App.Forms
         {
             FrmSystemSettings frmSystemSettings = new FrmSystemSettings();
             frmSystemSettings.ShowDialog();
+        }
+
+        private void dataExporterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmDataExporter FrmDataExporter = new();
+            FrmDataExporter.ShowDialog();
         }
 
         #region Help
@@ -278,7 +303,7 @@ namespace AssetTrakr.App.Forms
 
         #endregion
 
-            #endregion
+        #endregion
 
         #region ToolStrip for DataGrids
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -300,7 +325,6 @@ namespace AssetTrakr.App.Forms
             dgvAlerts.Export();
         }
         #endregion
-
 
     }
 }

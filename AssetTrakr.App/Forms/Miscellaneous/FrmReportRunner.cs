@@ -69,6 +69,9 @@ namespace AssetTrakr.App.Forms.Shared
                 case "aww":
                     AssetsWithWarranty(true);
                     break;
+                case "costAnal":
+                    CostReport();
+                    break;
             }
         }
 
@@ -111,9 +114,13 @@ namespace AssetTrakr.App.Forms.Shared
             }
         }
 
+        #region Reports
 
         /// <summary>
-        /// Returns a list of Assets that have Warranty in the system, does not care if expired or active
+        /// Returns a list of Assets that have Warranty in the system, does not care if expired or active or Assets without Warranty
+        /// <para name="hasWarranty">
+        /// true or false
+        /// </para>
         /// </summary>
         private void AssetsWithWarranty(bool hasWarranty)
         {
@@ -217,6 +224,57 @@ namespace AssetTrakr.App.Forms.Shared
             // Hide the columns this way so the user can use the Column Selector
             dgvReportOutput.Columns["AssetId"].Visible = false;
         }
+        
+        /// <summary>
+        /// Shows a report on costs spend 
+        /// </summary>
+        private void CostReport()
+        {
+            // ideal layout
+            // entityType | paymentFreq | cost
+            // ie:
+            // Contracts | Monthly | 199.34
+            // Contracts | Yearly  | 3,493.23
+            // Licenses  | Once    | 2,500
+            // Licenses  | Monthly | 19.99
+
+            var contractQuery = _dbContext.Contracts
+                .ToList() // Fetch the data to perform aggregation in-memory
+                .GroupBy(c => c.PaymentFrequency)
+                .Select(g => new
+                {
+                    Entity = "Contracts",
+                    PaymentFrequency = g.Key,
+                    TotalCost = g.Sum(c => c.Price)
+                });
+
+            var licenseQuery = _dbContext.Licenses
+                .ToList() // Fetch the data to perform aggregation in-memory
+                .GroupBy(l => l.PaymentFrequency)
+                .Select(g => new
+                {
+                    Entity = "Licenses",
+                    PaymentFrequency = g.Key,
+                    TotalCost = g.Sum(l => l.Price)
+                });
+
+            var reportData = contractQuery.Concat(licenseQuery);
+
+            DataTable dataTable = new();
+            dataTable.Columns.Add("Entity");
+            dataTable.Columns.Add("Payment Frequency");
+            dataTable.Columns.Add("Total Cost", typeof(decimal));
+
+            foreach(var item in reportData)
+            {
+                dataTable.Rows.Add(item.Entity, item.PaymentFrequency, item.TotalCost);
+            }
+
+            dgvReportOutput.DataSource = dataTable;
+
+        }
+
+        #endregion
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
