@@ -96,14 +96,14 @@ namespace AssetTrakr.App.Helpers
             dgv.DataSource = null;
             dgv.DataSource = driveList
                 .Select(d => new
-                {
-                    d.AssetHardwareId,
-                    d.HardDriveId,
-                    d.Name,
-                    Manufacturer = d.Manufacturer?.Name ?? "",
-                    Size = $"{d.SizeInGB} GB",
-                    Serial_Number = d.SerialNumber
-                }).ToBindingList();
+                 {
+                     d.AssetHardwareId,
+                     d.HardDriveId,
+                     d.Name,
+                     Manufacturer = d.Manufacturer?.Name ?? "",
+                     Size = $"{d.SizeInGB} GB",
+                     Serial_Number = d.SerialNumber
+                 }).ToBindingList();
 
             // Anonymous Types ignore the DisplayName attribute in models
             // Need to do this to get the nice format

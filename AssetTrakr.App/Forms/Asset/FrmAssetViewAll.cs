@@ -107,7 +107,7 @@ namespace AssetTrakr.App.Forms.Asset
             dgvViewAll.Columns["UpdatedBy"].Visible = false;
             dgvViewAll.Columns["CreatedBy"].Visible = false;
 
-            if(!assets.Any())
+            if (!assets.Any())
             {
                 dgvViewAll.Visible = false;
                 lblNoAssetsDescription.Visible = true;
@@ -151,6 +151,20 @@ namespace AssetTrakr.App.Forms.Asset
                 FrmAssetModify FrmAssetModify = new((int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value);
                 FrmAssetModify.ShowDialog();
                 LoadData(true);
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            {
+                var assetId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value;
+
+                if(_dbContext.Assets.Where(a => a.AssetId == assetId).ExecuteDelete() > 0)
+                {
+                    LoadData(true);
+                }
+
             }
         }
     }

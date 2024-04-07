@@ -9,6 +9,7 @@ using AssetTrakr.Models.Assets;
 using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace AssetTrakr.App.Forms.Asset
 {
@@ -52,6 +53,16 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 _assetData = asset;
                 _isEditingMode = true;
+
+                // Update general form info
+                btnAddUpdate.Text = "Update";
+                Text = $"Modify Asset - {_assetData.Name}";
+            }
+
+            if (isReadOnly && _assetData != null)
+            {
+                Helpers.Utils.SetReadOnly(this, deleteToolStripMenuItem);
+                Text = $"Viewing Asset - {_assetData.Name}";
             }
         }
 
@@ -223,24 +234,31 @@ namespace AssetTrakr.App.Forms.Asset
             if (dataItem is Models.Attachment attachment)
             {
                 _attachments.Remove(attachment);
+                return;
             }
 
             // If warranty datagrid
             if (dataItem is Period warranty)
             {
                 _warrantyPeriods.Remove(warranty);
+                return;
             }
 
             // If network adapaters datagrid
             if (dataItem is AssetNetworkAdapter networkAdapter)
             {
                 _networkAdapters.Remove(networkAdapter);
+                return;
             }
 
             // If hard drives datagrid
-            if (dataItem is AssetHardDrive hardDrive)
+            // we do this differently because the return item is not of type AssetHardDrive
+            // see DataGridViewMethods.UpdateDriveDataGrid(..)
+            if (dgv.Name == nameof(dgvHardDrives))
             {
-                _hardDrives.Remove(hardDrive);
+                var drive = dgv.SelectedRows[0].Index;
+                _hardDrives.RemoveAt(drive);
+                DataGridViewMethods.UpdateDriveDataGrid(_hardDrives, dgvHardDrives);
             }
 
             if (dgv.Rows.Count == 0)
@@ -260,6 +278,91 @@ namespace AssetTrakr.App.Forms.Asset
                 {
                     col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
                 }
+            }
+        }
+
+        private void viewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv || dgv.Rows.Count == 0)
+            {
+                return;
+            }
+
+            // this should never actually happen since view is only enabled on cms show if the dgv is dgvAttachments, but alas
+            if (dgv.Name != nameof(dgvAttachments))
+            {
+                return;
+            }
+
+            var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
+
+            if (dataItem is not Models.Attachment attachment)
+            {
+                return;
+            }
+
+            if(attachment.Type == AttachmentType.Url)
+            {
+
+                DialogResult dr = MessageBox.Show($"Do you wish to go to {attachment.Url}?", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (dr == DialogResult.Yes)
+                {
+                    Process.Start(
+                        new ProcessStartInfo($"{attachment.Url}")
+                        {
+                            UseShellExecute = true
+                        }
+                    );
+                }
+                return;
+            }
+
+            if(attachment.Type == AttachmentType.File)
+            {
+                DialogResult dr = MessageBox.Show($"Do you wish to download and open {attachment.Name}{attachment.DataType}?", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if(dr == DialogResult.Yes)
+                {
+                    string filePath = Path.Combine(Path.GetTempPath(), $"{attachment.Name}{attachment.DataType}");
+
+                    try
+                    {
+                        File.WriteAllBytes(filePath, attachment.Data);
+
+                        Process.Start(
+                            new ProcessStartInfo($"{filePath}")
+                            {
+                                UseShellExecute = true
+                            }
+                        );
+
+                    } 
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        LogManager.Error<FrmAssetModify>($"{ex}");
+                    }
+                }
+            }
+
+        }
+
+        private void cmsDgvRightClick_Opening(object sender, CancelEventArgs e)
+        {
+
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            {
+                return;
+            }
+
+            if (dgv.Name == nameof(dgvAttachments))
+            {
+                viewToolStripMenuItem.Visible = true;
+            }
+            else
+            {
+                viewToolStripMenuItem.Visible = false;
             }
         }
 
@@ -555,6 +658,7 @@ namespace AssetTrakr.App.Forms.Asset
             if (_warrantyPeriods.Count == 0)
             {
                 cbHasWarranty.Checked = false;
+                MessageBox.Show("No Warranty Periods added so HasWarranty will be unchecked", "Warranty", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             List<AssetHardDrive> driveList = [];
@@ -692,5 +796,6 @@ namespace AssetTrakr.App.Forms.Asset
             // Load the Asset Types into The ComboBox
             cmbAssetType.DataSource = Enum.GetNames(typeof(AssetType));
         }
+
     }
 }

@@ -212,12 +212,6 @@ namespace AssetTrakr.Database
             DefaultDatabaseSeeder defaultDatabaseSeeder = new(modelBuilder);
             defaultDatabaseSeeder.Seed();
 
-
-#if DEBUG
-            TestDatabaseSeeder ds = new(modelBuilder);
-            ds.Seed();
-#endif
-
         }
 
         // Below Source: https://threewill.com/how-to-auto-generate-created-updated-field-in-ef-core/

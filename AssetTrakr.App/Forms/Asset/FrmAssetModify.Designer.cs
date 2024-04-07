@@ -72,6 +72,7 @@
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
+            viewToolStripMenuItem = new ToolStripMenuItem();
             deleteToolStripMenuItem = new ToolStripMenuItem();
             lblNetworkAdapters = new Label();
             dgvNetworkAdapters = new DataGridView();
@@ -535,9 +536,10 @@
             // cmsDgvRightClick
             // 
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
-            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, viewToolStripMenuItem, deleteToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(188, 58);
+            cmsDgvRightClick.Size = new Size(188, 82);
+            cmsDgvRightClick.Opening += cmsDgvRightClick_Opening;
             // 
             // columnSelectorToolStripMenuItem
             // 
@@ -550,6 +552,14 @@
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
             toolStripSeparator1.Size = new Size(184, 6);
+            // 
+            // viewToolStripMenuItem
+            // 
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(187, 24);
+            viewToolStripMenuItem.Text = "View";
+            viewToolStripMenuItem.Visible = false;
+            viewToolStripMenuItem.Click += viewToolStripMenuItem_Click;
             // 
             // deleteToolStripMenuItem
             // 
@@ -897,5 +907,6 @@
         private Button btnAddHardDrive;
         private Label lblType;
         private ComboBox cmbAssetType;
+        private ToolStripMenuItem viewToolStripMenuItem;
     }
 }

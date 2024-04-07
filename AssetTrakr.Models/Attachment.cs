@@ -22,6 +22,9 @@ namespace AssetTrakr.Models
 
         public byte[]? Data { get; set; }
         
+        /// <summary>
+        /// File Extension
+        /// </summary>
         public string? DataType { get; set; } // jpg, pdf, png etc.
 
         public AttachmentType Type { get; set; }
