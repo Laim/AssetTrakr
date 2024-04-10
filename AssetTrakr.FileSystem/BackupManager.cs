@@ -1,5 +1,4 @@
-﻿using AssetTrakr.App.Forms.Contract;
-using AssetTrakr.Database;
+﻿using AssetTrakr.Database;
 using AssetTrakr.Logging;
 
 namespace AssetTrakr.App.Helpers
@@ -37,6 +36,34 @@ namespace AssetTrakr.App.Helpers
             }
 
             return false;
+
+        }
+
+        /// <summary>
+        /// Backs up the database but ignores the backup limit.  Only to be used by AssetTrakr.App.Setup
+        /// </summary>
+        /// <returns>
+        /// if successful, the location of the backup, else error
+        /// </returns>
+        public string MigrationBackup()
+        {
+            string backupPath = DatabaseSettings.databaseFileBackupPath;
+
+            if(!File.Exists(DatabaseSettings.databaseFilePath))
+            {
+                return $"Database does not exist at {DatabaseSettings.databaseFilePath}";
+            }
+
+            try
+            {
+                File.Copy(DatabaseSettings.databaseFilePath, backupPath);
+                return $"Database backed up to {backupPath}";
+            }
+            catch (Exception ex)
+            {
+                LogManager.Error<BackupManager>($"{ex}");
+                return "Failure, see log for details";
+            }
 
         }
 

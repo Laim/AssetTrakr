@@ -1,5 +1,4 @@
-﻿using AssetTrakr.Logging;
-using AssetTrakr.Models;
+﻿using AssetTrakr.Models;
 using AssetTrakr.Models.System;
 using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -20,15 +19,12 @@ namespace AssetTrakr.Database
   
         public ModelBuilder Seed()
         {
-            LogManager.Information<DefaultDatabaseSeeder>($"Beginning [{nameof(DefaultDatabaseSeeder)}] Seed.");
 
             SystemSettings();
             AssetAlerts();
             LicenseAlerts();
             Reports();
             ContractAlerts();
-
-            LogManager.Information<DefaultDatabaseSeeder>($"Seeding of [{nameof(DefaultDatabaseSeeder)}] complete.");
 
             return _modelBuilder;
         }
@@ -38,7 +34,6 @@ namespace AssetTrakr.Database
         /// </summary>
         internal void Reports()
         {
-            LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(Reports)}] Data...");
             _modelBuilder.Entity<Report>(e =>
             {
                 e.HasData
@@ -115,7 +110,6 @@ namespace AssetTrakr.Database
         /// </summary>
         internal void SystemSettings()
         {
-            LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(SystemSettings)}] Data...");
             _modelBuilder.Entity<SystemSetting>(e =>
             {
                 e.HasData
@@ -163,7 +157,6 @@ namespace AssetTrakr.Database
         /// </summary>
         internal void AssetAlerts()
         {
-            LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(AssetAlerts)}] Data...");
             
             // Asset Alerts
             _modelBuilder.Entity<SystemSetting>(e =>
@@ -226,7 +219,6 @@ namespace AssetTrakr.Database
         internal void LicenseAlerts()
         {
 
-            LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(LicenseAlerts)}] Data...");
 
             _modelBuilder.Entity<SystemSetting>(e =>
             {
@@ -278,7 +270,6 @@ namespace AssetTrakr.Database
         /// </summary>
         internal void ContractAlerts()
         {
-            LogManager.Information<DefaultDatabaseSeeder>($"Seeding [{nameof(ContractAlerts)}] Data...");
 
             // Asset Alerts
             _modelBuilder.Entity<SystemSetting>(e =>

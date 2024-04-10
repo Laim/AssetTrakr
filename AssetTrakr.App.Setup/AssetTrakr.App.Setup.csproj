@@ -5,7 +5,6 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion> <!-- remove .net 8 added guid -->
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
     <FileVersion>$(VersionPrefix)</FileVersion>
@@ -14,44 +13,26 @@
     <ApplicationIcon>icons8-database-70.ico</ApplicationIcon>
     <Description>AssetTrakr.  Track Assets, Licenses, and Contracts for free.</Description>
     <Copyright>Laim McKenzie</Copyright>
-    <Title>AssetTrakr</Title>
+    <Title>AssetTrakr.Setup.App</Title>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>AssetTrakr.App.Setup.Program</StartupObject>
+    <ApplicationIcon>icons8-database-70.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="EPPlus" Version="7.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AssetTrakr.Alerts\AssetTrakr.Alerts.csproj" />
-    <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
-    <ProjectReference Include="..\AssetTrakr.Extensions\AssetTrakr.Extensions.csproj" />
-    <ProjectReference Include="..\AssetTrakr.FileSystem\AssetTrakr.FileSystem.csproj" />
-    <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
-    <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
-    <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
-    <ProjectReference Include="..\AssetTrakr.WinForms\AssetTrakr.WinForms.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\.editorconfig" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="icons8-database-70.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\.editorconfig" />
+    <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
+    <ProjectReference Include="..\AssetTrakr.FileSystem\AssetTrakr.FileSystem.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
+    <ProjectReference Include="..\AssetTrakr.WinForms\AssetTrakr.WinForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Forms\Shared\FrmPlatformManager.cs">
+    <Compile Update="FrmSystemRegistration.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

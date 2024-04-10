@@ -9,6 +9,7 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using AssetTrakr.Logging;
 using AssetTrakr.Utils.Enums;
+using AssetTrakr.WinForms.ActionLog;
 
 namespace AssetTrakr.App.Forms.License
 {
@@ -379,7 +380,7 @@ namespace AssetTrakr.App.Forms.License
             {
                 _dbContext.Licenses.Add(licenseData);
 
-                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionAlertCategory.License, txtName.Text);
+                ActionLogMethods.Added(_dbContext, ActionAlertCategory.License, txtName.Text);
 
             }
             catch (Exception ex)

@@ -1,9 +1,8 @@
 ﻿using AssetTrakr.Database;
-using AssetTrakr.Models;
 using AssetTrakr.Utils.Enums;
 
-namespace AssetTrakr.App.Helpers
-{
+namespace AssetTrakr.WinForms.ActionLog
+{ 
     public class ActionLogMethods
     {
 
@@ -21,7 +20,7 @@ namespace AssetTrakr.App.Helpers
         /// </param>
         public static void Added(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
         {
-            dbContext.ActionLogEntries.Add(new ActionLog
+            dbContext.ActionLogEntries.Add(new Models.ActionLog
             {
                 ActionCategory = category,
                 ActionType = ActionType.ADDED,
@@ -51,7 +50,7 @@ namespace AssetTrakr.App.Helpers
                 actionedBy = Environment.UserName;
             }
 
-            dbContext.ActionLogEntries.Add(new ActionLog
+            dbContext.ActionLogEntries.Add(new Models.ActionLog
             {
                 ActionCategory = category,
                 ActionType = ActionType.UPDATED,
@@ -75,7 +74,7 @@ namespace AssetTrakr.App.Helpers
         /// </param>
         public static void Deleted(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
         {
-            dbContext.ActionLogEntries.Add(new ActionLog
+            dbContext.ActionLogEntries.Add(new Models.ActionLog
             {
                 ActionCategory = category,
                 ActionType = ActionType.DELETED,

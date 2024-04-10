@@ -10,6 +10,7 @@ using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Diagnostics;
+using AssetTrakr.WinForms.ActionLog;
 
 namespace AssetTrakr.App.Forms.Asset
 {

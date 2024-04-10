@@ -9,11 +9,11 @@ namespace AssetTrakr.Logging
 
         internal readonly string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Laim", "AssetTrakr", "Logs");
 
-        public LogManager()
+        public LogManager(string fileName = "app.log")
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information() // Adjust the minimum log level as needed
-                .WriteTo.File(Path.Combine(logPath, "app.log"), rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}") // Log to file with daily rolling
+                .WriteTo.File(Path.Combine(logPath, fileName), rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}") // Log to file with daily rolling
                 .CreateLogger();
         }
 

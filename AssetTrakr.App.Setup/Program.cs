@@ -1,4 +1,7 @@
-namespace AssetTrakr.Update.App
+using AssetTrakr.App.Forms.Miscellaneous;
+using AssetTrakr.Logging;
+
+namespace AssetTrakr.App.Setup
 {
     internal static class Program
     {
@@ -11,7 +14,11 @@ namespace AssetTrakr.Update.App
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FrmMain());
+
+            LogManager logManager = new("setupApp.log");
+            LogManager.Information("Initialize...");
+
+            Application.Run(new FrmDatabaseUpgrade());
         }
     }
 }

@@ -1,16 +1,16 @@
-﻿using AssetTrakr.App.Helpers;
-using AssetTrakr.Database;
+﻿using AssetTrakr.Database;
 using AssetTrakr.Utils.Enums;
 using System.Reflection;
-using Serilog;
+using AssetTrakr.WinForms.ActionLog;
 using AssetTrakr.Logging;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace AssetTrakr.App.Forms.Miscellaneous
 {
     public partial class FrmSystemRegistration : Form
     {
         private DatabaseContext _dbContext;
-        bool _isRegistered = false;
 
         public FrmSystemRegistration()
         {
@@ -19,28 +19,25 @@ namespace AssetTrakr.App.Forms.Miscellaneous
             _dbContext ??= new DatabaseContext();
 
             txtDatabaseCreationDate.Text = DateTime.Now.ToString();
-            txtProductVersion.Text = Application.ProductVersion;
+
+#if DEBUG
+            txtProductVersion.Text = FileVersionInfo.GetVersionInfo(@"C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\bin\Debug\net8.0-windows\win-x64\AssetTrakr.App.exe").ProductVersion;
+#else
+            txtProductVersion.Text = FileVersionInfo.GetVersionInfo(@"AssetTrakr.App.exe").ProductVersion;
+#endif
+
             txtRunDirectory.Text = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        }
-
-        protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            base.OnFormClosed(e);
-
-            if (!_isRegistered)
-            {
-                MessageBox.Show("Application can not be run without registration, application exiting...", "Product Registration", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Application.Exit();
-            }
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
 
+            _dbContext.Database.Migrate();
+
             var registrationInfo = new Models.System.SystemInfo
             {
                 FullName = txtFullName.Text ?? "",
-                ProductVersion = txtProductVersion.Text ?? Application.ProductVersion,
+                ProductVersion = txtProductVersion.Text,
                 DatabaseCreationDate = Convert.ToDateTime(txtDatabaseCreationDate.Text),
                 RunDirectory = txtRunDirectory.Text
             };
@@ -53,8 +50,6 @@ namespace AssetTrakr.App.Forms.Miscellaneous
                 ActionLogMethods.Added(_dbContext, ActionAlertCategory.System, "Product Registration");
 
                 _dbContext.SaveChanges();
-
-                _isRegistered = true;
 
                 LogManager.Information<FrmSystemRegistration>("Application registered");
 

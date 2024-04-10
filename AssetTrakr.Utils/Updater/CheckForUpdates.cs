@@ -4,6 +4,7 @@ using System.IO.Compression;
 
 namespace AssetTrakr.Utils.Updater
 {
+
     public class CheckForUpdates
     {
         internal string _updateUrl = string.Empty;

@@ -5,6 +5,7 @@ using AssetTrakr.Database;
 using AssetTrakr.Logging;
 using AssetTrakr.Models;
 using AssetTrakr.Utils.Enums;
+using AssetTrakr.WinForms.ActionLog;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
@@ -270,7 +271,7 @@ namespace AssetTrakr.App.Forms.Contract
             {
                 _dbContext.Contracts.Add(contractData);
 
-                ActionLogMethods.Added(_dbContext, Utils.Enums.ActionAlertCategory.Contract, txtName.Text);
+                ActionLogMethods.Added(_dbContext, ActionAlertCategory.Contract, txtName.Text);
             }
             catch (Exception ex)
             {

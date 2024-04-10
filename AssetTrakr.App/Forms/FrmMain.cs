@@ -10,9 +10,7 @@ using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using AssetTrakr.Utils.Enums;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 
 namespace AssetTrakr.App.Forms
@@ -39,9 +37,16 @@ namespace AssetTrakr.App.Forms
 
             try
             {
-                // EnsureCreated doesn't take Migrations into account, so using .Migrate() instead
-                // DO NOT CHANGE THIS TO .EnsureCreated() AS IT WILL BREAK END USER UPDATES.
-                _dbContext.Database.Migrate();
+
+                if (!CanConnectDatabase())
+                {
+                    MessageBox.Show("Cannot connect to Database, have you ran AssetTrakr.App.Setup?", "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                    
+                    // Return needed to stop blank db being created before app.exit finishes
+                    return;
+                }
+
             }
             catch (Exception ex)
             {
@@ -68,6 +73,11 @@ namespace AssetTrakr.App.Forms
             aboutToolStripMenuItem.Text = $"About {ProductName}";
         }
 
+        private bool CanConnectDatabase()
+        {
+            return _dbContext.Database.CanConnect();
+        }
+
         /// <summary>
         /// Checks if the application has been registered or not in the local database, and if it already has confirm the database
         /// and application versions are correct
@@ -76,33 +86,23 @@ namespace AssetTrakr.App.Forms
         {
             try
             {
-                // ask user to register if not registered
-                if (!_dbContext.SystemInfo.Select(si => si.DatabaseCreationDate).Any())
+                var systemInformation = _dbContext.SystemInfo.FirstOrDefault();
+
+                if(systemInformation == null)
                 {
-                    FrmSystemRegistration frmSystemRegistration = new();
-                    frmSystemRegistration.ShowDialog();
+                    MessageBox.Show($"Unable to retrieve System Registration, run AssetTrakr.App.Setup!", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogManager.Fatal<FrmMain>("Application has not been registered, exiting out.");
+                    Application.Exit();
+                    return;
                 }
-                else
+
+                if(systemInformation.ProductVersion != Application.ProductVersion)
                 {
-                    // user is already registered, check our product version is the same otherwise update it
-                    var sysInfo = _dbContext.SystemInfo.FirstOrDefault();
-
-                    if (sysInfo == null) { return; }
-
-                    if (sysInfo.ProductVersion == Application.ProductVersion)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        sysInfo.ProductVersion = Application.ProductVersion;
-                        _dbContext.SystemInfo.Update(sysInfo);
-
-                        ActionLogMethods.Updated(_dbContext, ActionAlertCategory.System, "Product Registration", "SYSTEM");
-
-                        _dbContext.SaveChanges();
-                    }
+                    MessageBox.Show("Stored product version does not match installed version, please run AssetTrakr.App.Setup to fix.", "Incompatible", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                    return;
                 }
+
             }
             catch (SqliteException sqlEx)
             {

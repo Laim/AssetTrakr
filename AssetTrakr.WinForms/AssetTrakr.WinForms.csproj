@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
@@ -10,6 +9,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
   </ItemGroup>
 
 </Project>

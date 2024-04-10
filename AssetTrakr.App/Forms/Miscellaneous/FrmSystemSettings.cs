@@ -4,6 +4,7 @@ using AssetTrakr.Database;
 using AssetTrakr.Logging;
 using AssetTrakr.Models.System;
 using AssetTrakr.Utils.Enums;
+using AssetTrakr.WinForms.ActionLog;
 using Microsoft.EntityFrameworkCore;
 
 namespace AssetTrakr.App.Forms.Miscellaneous

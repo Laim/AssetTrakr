@@ -1,0 +1,1 @@
+Anything that depends on using System.Windows.Forms needs to be added to this class library, as the others do not include it.
