@@ -37,7 +37,7 @@ namespace AssetTrakr.App.Forms.Miscellaneous
             {
 
                 _dbContext.ChangeTracker.DetectChanges();
-                ActionLogMethods.Updated(_dbContext, ActionAlertCategory.System, "System Settings", changes: _dbContext.ChangeTracker.DebugView.LongView);
+                ActionLogMethods.Updated(_dbContext, ActionAlertCategory.System, "System Settings");
 
                 if (_dbContext.SaveChanges() > 0)
                 {

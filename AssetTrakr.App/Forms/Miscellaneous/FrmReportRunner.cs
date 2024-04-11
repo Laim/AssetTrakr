@@ -1,12 +1,9 @@
 ﻿using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using AssetTrakr.Models;
-using AssetTrakr.Models.Assets;
 using AssetTrakr.Utils.Enums;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace AssetTrakr.App.Forms.Shared
 {
@@ -29,9 +26,9 @@ namespace AssetTrakr.App.Forms.Shared
         {
             base.OnLoad(e);
 
-            cmbReports.DataSource = reports;
-            cmbReports.DisplayMember = "Name";
-            cmbReports.ValueMember = "ReportId";
+            cmbReports.DataSource = reports.Where(r => r.IsUserVisible).ToList();
+            cmbReports.DisplayMember = nameof(Report.Name);
+            cmbReports.ValueMember = nameof(Report.ReportId);
 
             // threshold criteria
             _thresholdCriteria.Add(30);
@@ -71,6 +68,9 @@ namespace AssetTrakr.App.Forms.Shared
                     break;
                 case "costAnal":
                     CostReport();
+                    break;
+                case "aawaf":
+                    AssetsWithAllFields();
                     break;
             }
         }
@@ -216,15 +216,44 @@ namespace AssetTrakr.App.Forms.Shared
         /// </returns>
         private void AssetsWithStorageThreshold(int storageThreshold)
         {
+
+            var excludedTypes = new[] { AssetType.Monitor, AssetType.Peripherals, AssetType.Other };
+
             dgvReportOutput.DataSource = _dbContext.Assets
                 .Include(a => a.Hardware)
                 .ThenInclude(ah => ah.HardDrives)
-                .Where(a => a.Hardware.HardDrives.All(hd => hd.SizeInGB < storageThreshold)).ToBindingList();
+                .Where(
+                    a => a.Hardware.HardDrives.All(hd => hd.SizeInGB < storageThreshold)
+                    && !excludedTypes.Contains(a.Hardware.AssetType)
+                ).ToBindingList();
 
             // Hide the columns this way so the user can use the Column Selector
-            dgvReportOutput.Columns["AssetId"].Visible = false;
+            dgvReportOutput.Columns[nameof(Models.Assets.Asset.AssetId)].Visible = false;
         }
         
+        /// <summary>
+        /// Returns list of all assets in the system with all fields
+        /// </summary>
+        private void AssetsWithAllFields()
+        {
+            dgvReportOutput.DataSource = _dbContext.Assets
+                .Include(a => a.Manufacturer)
+                .Include(a => a.Contract)
+                    .ThenInclude(ac => ac.ContractPeriods)
+                .Include(a => a.AssetAttachments)
+                .Include(a => a.Platform)
+                .Include(a => a.AssetPeriods)
+                    .ThenInclude(p => p.Period)
+                .Include(ah => ah.Hardware)
+                    .ThenInclude(ah => ah.HardDrives)
+                .Include(ah => ah.Hardware)
+                    .ThenInclude(ah => ah.NetworkAdapters)
+                .ToList();
+
+            // Hide the columns this way so the user can use the Column Selector
+            dgvReportOutput.Columns[nameof(Models.Assets.Asset.AssetId)].Visible = false;
+        }
+
         /// <summary>
         /// Shows a report on costs spend 
         /// </summary>
@@ -258,7 +287,21 @@ namespace AssetTrakr.App.Forms.Shared
                     TotalCost = g.Sum(l => l.Price)
                 });
 
-            var reportData = contractQuery.Concat(licenseQuery);
+            var assetQuery = _dbContext.Assets
+                .ToList() // Fetch the data to perform aggregation in-memory
+                .GroupBy(l => "Once")
+                .Select(g => new
+                {
+                    Entity = "Assets",
+                    PaymentFrequency = g.Key,
+                    TotalCost = g.Sum(l => l.Price)
+                });
+
+            var reportData = contractQuery
+            .Select(q => new PaymentSummary { Entity = q.Entity, PaymentFrequency = q.PaymentFrequency.ToString(), TotalCost = q.TotalCost })
+                .Concat(licenseQuery.Select(q => new PaymentSummary { Entity = q.Entity, PaymentFrequency = q.PaymentFrequency.ToString(), TotalCost = q.TotalCost }))
+                .Concat(assetQuery.Select(q => new PaymentSummary { Entity = q.Entity, PaymentFrequency = q.PaymentFrequency, TotalCost = q.TotalCost }))
+            .ToList();
 
             DataTable dataTable = new();
             dataTable.Columns.Add("Entity");

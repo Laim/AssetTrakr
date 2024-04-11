@@ -5,6 +5,7 @@ using AssetTrakr.Logging;
 using AssetTrakr.Utils.Enums;
 using AssetTrakr.WinForms.ActionLog;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Bson;
 using System.Diagnostics;
 
 namespace AssetTrakr.App.Setup
@@ -39,13 +40,7 @@ namespace AssetTrakr.App.Setup
         {
             base.OnLoad(e);
 
-            if (_dbContext.Database.GetPendingMigrations().Any())
-            {
-                lblNotice.Text = "Migrations are required.  Migrations must be run before running AssetTrakr to ensure that all features within" +
-                    " the application work as expected.\r\n\r\n" +
-                    "Ensure you take a database backup before proceeding, manually or with this tool.\r\n\r\n" +
-                    "Once migrationed, the database cannot be reverted without a backup.";
-            }
+            AreMigrationsRequired();
         }
 
         private void btnData_Click(object sender, EventArgs e)
@@ -78,7 +73,8 @@ namespace AssetTrakr.App.Setup
             try
             {
 
-                if (_dbContext.Database.GetPendingMigrations().Any())
+                LogManager.Information<FrmDatabaseUpgrade>($"Checking if any migrations are required and updating notice via {nameof(AreMigrationsRequired)}");
+                if (AreMigrationsRequired())
                 {
                     if (!File.Exists(DatabaseSettings.databaseFilePath))
                     {
@@ -94,6 +90,12 @@ namespace AssetTrakr.App.Setup
                     LogManager.Information<FrmDatabaseUpgrade>("Migration complete, updating product versions...");
 
                     VersionUpdate();
+                    AreMigrationsRequired();
+
+                    MessageBox.Show("Migrations have completed.", "Migration Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                } else
+                {
+                    MessageBox.Show("No migrations needed, cancelling.", "Migration Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -107,7 +109,8 @@ namespace AssetTrakr.App.Setup
         {
             LogManager.Information<FrmDatabaseUpgrade>("Attempting VersionFix");
 
-            if (!_dbContext.Database.GetPendingMigrations().Any())
+            LogManager.Information<FrmDatabaseUpgrade>($"Checking if any migrations are required {nameof(AreMigrationsRequired)}");
+            if (!AreMigrationsRequired())
             {
                 LogManager.Information<FrmDatabaseUpgrade>("VersionFix valid, running update");
                 if(VersionUpdate())
@@ -135,6 +138,7 @@ namespace AssetTrakr.App.Setup
                 if (sysInfo.ProductVersion == Application.ProductVersion)
                 {
                     LogManager.Information<FrmDatabaseUpgrade>("Product versions match, skipping.");
+                    MessageBox.Show("Product Versions match, no need to run, cancelling.", "Version Fix", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     return false;
                 }
@@ -156,6 +160,21 @@ namespace AssetTrakr.App.Setup
                 LogManager.Fatal<FrmDatabaseUpgrade>($"{ex}");
                 return false;
             }
+        }
+
+        private bool AreMigrationsRequired()
+        {
+            if (_dbContext.Database.GetPendingMigrations().Any())
+            {
+                lblNotice.Text = "Migrations are required.  Migrations must be run before running AssetTrakr to ensure that all features within" +
+                    " the application work as expected.\r\n\r\n" +
+                    "Ensure you take a database backup before proceeding, manually or with this tool.\r\n\r\n" +
+                    "Once migrationed, the database cannot be reverted without a backup.";
+                return true;
+            }
+
+            lblNotice.Text = "No migrations required, database is up to date.";
+            return false;
         }
     }
 }

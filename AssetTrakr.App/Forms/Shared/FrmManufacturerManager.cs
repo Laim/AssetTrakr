@@ -1,5 +1,4 @@
-﻿using AssetTrakr.App.Forms.Contract;
-using AssetTrakr.Database;
+﻿using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using AssetTrakr.Models;
@@ -61,7 +60,7 @@ namespace AssetTrakr.App.Forms.Shared
                 return;
             }
 
-            if(txtName.IsEmpty("Name") || txtUrl.IsEmpty("URL"))
+            if(txtName.IsEmpty("Name"))
             {
                 return;
             }
@@ -106,7 +105,7 @@ namespace AssetTrakr.App.Forms.Shared
         private void btnAdd_Click(object sender, EventArgs e)
         {
 
-            if (txtName.IsEmpty("Name") || txtUrl.IsEmpty("URL"))
+            if (txtName.IsEmpty("Name"))
             {
                 return;
             }

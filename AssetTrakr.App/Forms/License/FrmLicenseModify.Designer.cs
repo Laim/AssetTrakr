@@ -41,6 +41,8 @@
             btnAddAttachment = new Button();
             tabControl1 = new TabControl();
             tabInformation = new TabPage();
+            txtVendor = new TextBox();
+            lblVendor = new Label();
             lblPaymentFrequency = new Label();
             cmbPaymentFrequency = new ComboBox();
             lnkModifyContract = new LinkLabel();
@@ -71,6 +73,7 @@
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
+            viewToolStripMenuItem = new ToolStripMenuItem();
             deleteToolStripMenuItem = new ToolStripMenuItem();
             btnAddSubPeriod = new Button();
             tabAttachments = new TabPage();
@@ -78,8 +81,6 @@
             tabDescription = new TabPage();
             txtDescription = new TextBox();
             notifyIcon1 = new NotifyIcon(components);
-            lblVendor = new Label();
-            txtVendor = new TextBox();
             ((System.ComponentModel.ISupportInitialize)numCount).BeginInit();
             tabControl1.SuspendLayout();
             tabInformation.SuspendLayout();
@@ -227,6 +228,22 @@
             tabInformation.TabIndex = 0;
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
+            // 
+            // txtVendor
+            // 
+            txtVendor.Location = new Point(511, 194);
+            txtVendor.Name = "txtVendor";
+            txtVendor.Size = new Size(235, 27);
+            txtVendor.TabIndex = 12;
+            // 
+            // lblVendor
+            // 
+            lblVendor.Location = new Point(402, 199);
+            lblVendor.Name = "lblVendor";
+            lblVendor.Size = new Size(103, 20);
+            lblVendor.TabIndex = 28;
+            lblVendor.Text = "Vendor";
+            lblVendor.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblPaymentFrequency
             // 
@@ -499,26 +516,34 @@
             // cmsDgvRightClick
             // 
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
-            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, viewToolStripMenuItem, deleteToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(188, 58);
+            cmsDgvRightClick.Size = new Size(211, 110);
+            cmsDgvRightClick.Opening += cmsDgvRightClick_Opening;
             // 
             // columnSelectorToolStripMenuItem
             // 
             columnSelectorToolStripMenuItem.Name = "columnSelectorToolStripMenuItem";
-            columnSelectorToolStripMenuItem.Size = new Size(187, 24);
+            columnSelectorToolStripMenuItem.Size = new Size(210, 24);
             columnSelectorToolStripMenuItem.Text = "Column Selector";
             columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(184, 6);
+            toolStripSeparator1.Size = new Size(207, 6);
+            // 
+            // viewToolStripMenuItem
+            // 
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(210, 24);
+            viewToolStripMenuItem.Text = "View";
+            viewToolStripMenuItem.Click += viewToolStripMenuItem_Click;
             // 
             // deleteToolStripMenuItem
             // 
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(187, 24);
+            deleteToolStripMenuItem.Size = new Size(210, 24);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
@@ -594,22 +619,6 @@
             // 
             notifyIcon1.Text = "notifyIcon1";
             notifyIcon1.Visible = true;
-            // 
-            // lblVendor
-            // 
-            lblVendor.Location = new Point(402, 199);
-            lblVendor.Name = "lblVendor";
-            lblVendor.Size = new Size(103, 20);
-            lblVendor.TabIndex = 28;
-            lblVendor.Text = "Vendor";
-            lblVendor.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtVendor
-            // 
-            txtVendor.Location = new Point(511, 194);
-            txtVendor.Name = "txtVendor";
-            txtVendor.Size = new Size(235, 27);
-            txtVendor.TabIndex = 12;
             // 
             // FrmLicenseModify
             // 
@@ -695,5 +704,6 @@
         private NotifyIcon notifyIcon1;
         private TextBox txtVendor;
         private Label lblVendor;
+        private ToolStripMenuItem viewToolStripMenuItem;
     }
 }

@@ -45,6 +45,7 @@
             dgvPeriods = new DataGridView();
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
+            viewToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             deleteToolStripMenuItem = new ToolStripMenuItem();
             tabAttachments = new TabPage();
@@ -53,6 +54,8 @@
             tabNotes = new TabPage();
             txtDescription = new TextBox();
             btnAddUpdate = new Button();
+            lblAgreementId = new Label();
+            txtAgreementId = new TextBox();
             tabControlContract.SuspendLayout();
             tabInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numCost).BeginInit();
@@ -73,11 +76,13 @@
             tabControlContract.Location = new Point(20, 20);
             tabControlContract.Name = "tabControlContract";
             tabControlContract.SelectedIndex = 0;
-            tabControlContract.Size = new Size(720, 426);
+            tabControlContract.Size = new Size(732, 426);
             tabControlContract.TabIndex = 0;
             // 
             // tabInformation
             // 
+            tabInformation.Controls.Add(txtAgreementId);
+            tabInformation.Controls.Add(lblAgreementId);
             tabInformation.Controls.Add(cmbPaymentFrequency);
             tabInformation.Controls.Add(lblPaymentFrequency);
             tabInformation.Controls.Add(lblPurchaseCost);
@@ -89,7 +94,7 @@
             tabInformation.Location = new Point(4, 29);
             tabInformation.Name = "tabInformation";
             tabInformation.Padding = new Padding(3);
-            tabInformation.Size = new Size(712, 393);
+            tabInformation.Size = new Size(724, 393);
             tabInformation.TabIndex = 0;
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
@@ -123,7 +128,7 @@
             // 
             // txtOrderRef
             // 
-            txtOrderRef.Location = new Point(130, 64);
+            txtOrderRef.Location = new Point(477, 24);
             txtOrderRef.Name = "txtOrderRef";
             txtOrderRef.Size = new Size(235, 27);
             txtOrderRef.TabIndex = 15;
@@ -139,7 +144,7 @@
             // 
             // lblOrderRef
             // 
-            lblOrderRef.Location = new Point(21, 67);
+            lblOrderRef.Location = new Point(371, 27);
             lblOrderRef.Name = "lblOrderRef";
             lblOrderRef.Size = new Size(103, 20);
             lblOrderRef.TabIndex = 14;
@@ -212,9 +217,10 @@
             // cmsDgvRightClick
             // 
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
-            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, viewToolStripMenuItem, toolStripSeparator1, deleteToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(188, 58);
+            cmsDgvRightClick.Size = new Size(188, 82);
+            cmsDgvRightClick.Opening += cmsDgvRightClick_Opening;
             // 
             // columnSelectorToolStripMenuItem
             // 
@@ -222,6 +228,13 @@
             columnSelectorToolStripMenuItem.Size = new Size(187, 24);
             columnSelectorToolStripMenuItem.Text = "Column Selector";
             columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
+            // 
+            // viewToolStripMenuItem
+            // 
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(187, 24);
+            viewToolStripMenuItem.Text = "View";
+            viewToolStripMenuItem.Click += viewToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
@@ -304,7 +317,7 @@
             // 
             // btnAddUpdate
             // 
-            btnAddUpdate.Location = new Point(642, 452);
+            btnAddUpdate.Location = new Point(658, 452);
             btnAddUpdate.Name = "btnAddUpdate";
             btnAddUpdate.Size = new Size(94, 29);
             btnAddUpdate.TabIndex = 12;
@@ -312,11 +325,27 @@
             btnAddUpdate.UseVisualStyleBackColor = true;
             btnAddUpdate.Click += btnAddUpdate_Click;
             // 
+            // lblAgreementId
+            // 
+            lblAgreementId.Location = new Point(21, 67);
+            lblAgreementId.Name = "lblAgreementId";
+            lblAgreementId.Size = new Size(103, 20);
+            lblAgreementId.TabIndex = 41;
+            lblAgreementId.Text = "Agreement ID";
+            lblAgreementId.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // txtAgreementId
+            // 
+            txtAgreementId.Location = new Point(130, 64);
+            txtAgreementId.Name = "txtAgreementId";
+            txtAgreementId.Size = new Size(235, 27);
+            txtAgreementId.TabIndex = 42;
+            // 
             // FrmContractModify
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(764, 491);
+            ClientSize = new Size(772, 491);
             Controls.Add(btnAddUpdate);
             Controls.Add(tabControlContract);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -364,5 +393,8 @@
         private NumericUpDown numCost;
         private Label lblPaymentFrequency;
         private ComboBox cmbPaymentFrequency;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private TextBox txtAgreementId;
+        private Label lblAgreementId;
     }
 }

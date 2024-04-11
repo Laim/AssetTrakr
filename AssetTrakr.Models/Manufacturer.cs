@@ -16,7 +16,6 @@ namespace AssetTrakr.Models
         [MaxLength(150)]
         public required string Name { get; set; }
 
-        [Required]
         [MinLength(1)]
         [MaxLength(150)]
         public required string? Url { get; set; }

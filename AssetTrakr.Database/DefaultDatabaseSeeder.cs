@@ -45,7 +45,8 @@ namespace AssetTrakr.Database
                         Name = "Assets without Warranty",
                         HasCriteria = false,
                         Description = "All assets without warranty assigned, does not include expired warranty.",
-                        ParentType = ParentType.Asset
+                        ParentType = ParentType.Asset,
+                        IsUserVisible = false,
                     },
                     new Report
                     {
@@ -54,7 +55,8 @@ namespace AssetTrakr.Database
                         Name = "Assets of Type",
                         HasCriteria = true,
                         Description = "Shows all assets in the system of the chosen criteria type.",
-                        ParentType = ParentType.Asset
+                        ParentType = ParentType.Asset,
+                        IsUserVisible = true,
                     },
                     new Report
                     {
@@ -63,7 +65,8 @@ namespace AssetTrakr.Database
                         Name = "Assets With Low Storage",
                         HasCriteria = true,
                         Description = "Shows assets in the system with storage lower than the chosen threshold criteria.",
-                        ParentType = ParentType.Asset
+                        ParentType = ParentType.Asset,
+                        IsUserVisible = true,
                     },
                     new Report
                     {
@@ -72,7 +75,8 @@ namespace AssetTrakr.Database
                         Name = "Assets with Warranty",
                         HasCriteria = false,
                         Description = "Shows all assets in the system with warranty whether active or expired.",
-                        ParentType = ParentType.Asset
+                        ParentType = ParentType.Asset,
+                        IsUserVisible = true
                     },
                     new Report
                     {
@@ -81,7 +85,8 @@ namespace AssetTrakr.Database
                         Name = "All Assets with All Fields",
                         HasCriteria = false,
                         Description = "Shows all assets in the system with all available fields.",
-                        ParentType = ParentType.Asset
+                        ParentType = ParentType.Asset,
+                        IsUserVisible = false
                     },
                     new Report
                     {
@@ -90,7 +95,8 @@ namespace AssetTrakr.Database
                         Name = "All Licenses with All Fields",
                         HasCriteria = false,
                         Description = "Shows all licenses in the system with all available fields.",
-                        ParentType = ParentType.License
+                        ParentType = ParentType.License,
+                        IsUserVisible = false
                     },
                     new Report
                     {
@@ -99,7 +105,8 @@ namespace AssetTrakr.Database
                         Name = "Cost Analysis",
                         HasCriteria = false,
                         Description = "Shows Cost of all Entities in the System",
-                        ParentType = ParentType.Other
+                        ParentType = ParentType.Other,
+                        IsUserVisible = true
                     }
                 );
             });

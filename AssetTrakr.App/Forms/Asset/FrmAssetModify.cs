@@ -23,12 +23,15 @@ namespace AssetTrakr.App.Forms.Asset
         private BindingList<AssetHardDrive> _hardDrives = [];
         private readonly Models.Assets.Asset? _assetData;
         private readonly bool _isEditingMode;
+        private readonly bool _isReadOnly;
 
         public FrmAssetModify(int assetId = 0, bool isReadOnly = false)
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
+
+            _isReadOnly = isReadOnly;
 
             if (assetId <= 0)
             {
@@ -50,7 +53,7 @@ namespace AssetTrakr.App.Forms.Asset
                     .ThenInclude(aa => aa.Attachment)
                 .FirstOrDefault(l => l.AssetId == assetId);
 
-            if (asset != null)
+            if (asset != null && !isReadOnly)
             {
                 _assetData = asset;
                 _isEditingMode = true;
@@ -60,8 +63,9 @@ namespace AssetTrakr.App.Forms.Asset
                 Text = $"Modify Asset - {_assetData.Name}";
             }
 
-            if (isReadOnly && _assetData != null)
+            if (isReadOnly && asset != null)
             {
+                _assetData = asset;
                 Helpers.Utils.SetReadOnly(this, deleteToolStripMenuItem);
                 Text = $"Viewing Asset - {_assetData.Name}";
             }
@@ -73,7 +77,7 @@ namespace AssetTrakr.App.Forms.Asset
 
             PopulateComboBoxes();
 
-            if (_isEditingMode)
+            if (_isEditingMode || _isReadOnly)
             {
                 LoadAssetData();
             }
@@ -114,7 +118,7 @@ namespace AssetTrakr.App.Forms.Asset
 
             cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(_assetData.Manufacturer?.Name);
             cmbPlatforms.SelectedIndex = cmbPlatforms.FindStringExact(_assetData.Platform?.Name);
-            cmbContracts.SelectedIndex = cmbContracts.FindStringExact(_assetData.Contract?.Name);
+            cmbContracts.SelectedItem = _assetData.Contract;
             cmbOperatingSystems.SelectedIndex = cmbOperatingSystems.FindStringExact(_assetData.OperatingSystem?.Name);
             cmbAssetType.SelectedIndex = (int)_assetData.Hardware.AssetType;
 
@@ -284,69 +288,8 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv || dgv.Rows.Count == 0)
-            {
-                return;
-            }
-
-            // this should never actually happen since view is only enabled on cms show if the dgv is dgvAttachments, but alas
-            if (dgv.Name != nameof(dgvAttachments))
-            {
-                return;
-            }
-
-            var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
-
-            if (dataItem is not Models.Attachment attachment)
-            {
-                return;
-            }
-
-            if(attachment.Type == AttachmentType.Url)
-            {
-
-                DialogResult dr = MessageBox.Show($"Do you wish to go to {attachment.Url}?", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (dr == DialogResult.Yes)
-                {
-                    Process.Start(
-                        new ProcessStartInfo($"{attachment.Url}")
-                        {
-                            UseShellExecute = true
-                        }
-                    );
-                }
-                return;
-            }
-
-            if(attachment.Type == AttachmentType.File)
-            {
-                DialogResult dr = MessageBox.Show($"Do you wish to download and open {attachment.Name}{attachment.DataType}?", "Notice", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if(dr == DialogResult.Yes)
-                {
-                    string filePath = Path.Combine(Path.GetTempPath(), $"{attachment.Name}{attachment.DataType}");
-
-                    try
-                    {
-                        File.WriteAllBytes(filePath, attachment.Data);
-
-                        Process.Start(
-                            new ProcessStartInfo($"{filePath}")
-                            {
-                                UseShellExecute = true
-                            }
-                        );
-
-                    } 
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        LogManager.Error<FrmAssetModify>($"{ex}");
-                    }
-                }
-            }
-
+            WinForms.Attachments.ViewAttachment viewAttachment = new();
+            viewAttachment.View(cmsDgvRightClick, dgvAttachments);
         }
 
         private void cmsDgvRightClick_Opening(object sender, CancelEventArgs e)
@@ -382,7 +325,7 @@ namespace AssetTrakr.App.Forms.Asset
                 return;
             }
 
-            if (cmb.SelectedIndex == -1)
+            if (cmb.SelectedIndex == -1 || _isReadOnly)
             {
                 lnkModifyContract.Visible = false;
                 return;
@@ -498,7 +441,7 @@ namespace AssetTrakr.App.Forms.Asset
             _assetData.Name = txtName.Text;
             _assetData.Description = txtDescription.Text;
             _assetData.PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value);
-            _assetData.Price = Convert.ToInt32(numCost.Value);
+            _assetData.Price = numCost.Value;
             _assetData.Model = txtModel.Text;
             _assetData.Manufacturer = manufacturer;
             _assetData.Platform = platform;
@@ -687,7 +630,7 @@ namespace AssetTrakr.App.Forms.Asset
                 Platform = platform,
                 Manufacturer = manufacturer,
                 OperatingSystem = os,
-                Price = Convert.ToInt32(numCost.Value),
+                Price = numCost.Value,
                 OrderReference = txtOrderRef.Text,
                 IsUnderWarranty = cbHasWarranty.Checked,
                 Hardware = new AssetHardware
@@ -771,13 +714,13 @@ namespace AssetTrakr.App.Forms.Asset
         {
             // Load Manufacturer Data into the ComboBox
             cmbManufacturers.DataSource = _dbContext.Manufacturers.ToList();
-            cmbManufacturers.DisplayMember = "Name";
-            cmbManufacturers.ValueMember = "ManufacturerId";
+            cmbManufacturers.DisplayMember = nameof(Manufacturer.Name);
+            cmbManufacturers.ValueMember = nameof(Manufacturer.ManufacturerId);
 
             // Load Contract Data into the ComboBox
             cmbContracts.DataSource = _dbContext.Contracts.ToList();
-            cmbContracts.DisplayMember = "Name";
-            cmbContracts.ValueMember = "ContractId";
+            cmbContracts.DisplayMember = nameof(Models.Contract.ComboDisplayName);
+            cmbContracts.ValueMember = nameof(Models.Contract.ContractId);
 
             if (_assetData == null)
             {
@@ -786,13 +729,13 @@ namespace AssetTrakr.App.Forms.Asset
 
             // Load the Platform Data into the ComboBox
             cmbPlatforms.DataSource = _dbContext.Platforms.ToList();
-            cmbPlatforms.DisplayMember = "Name";
-            cmbPlatforms.ValueMember = "PlatformId";
+            cmbPlatforms.DisplayMember = nameof(Platform.Name);
+            cmbPlatforms.ValueMember = nameof(Platform.PlatformId);
 
             // Load the OS Data into the ComboBox
             cmbOperatingSystems.DataSource = _dbContext.AssetOperatingSystems.ToList();
-            cmbOperatingSystems.DisplayMember = "Name";
-            cmbOperatingSystems.ValueMember = "OperatingSystemId";
+            cmbOperatingSystems.DisplayMember = nameof(AssetOperatingSystem.Name);
+            cmbOperatingSystems.ValueMember = nameof(AssetOperatingSystem.OperatingSystemId);
 
             // Load the Asset Types into The ComboBox
             cmbAssetType.DataSource = Enum.GetNames(typeof(AssetType));

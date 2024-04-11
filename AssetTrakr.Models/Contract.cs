@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AssetTrakr.Models
 {
     [PrimaryKey(nameof(ContractId))]
-    [Index(nameof(Name), IsUnique = true)]
+    [Index(nameof(UserAgreementId), IsUnique = true)]
     [Index(nameof(OrderRef), IsUnique = true)]
     public class Contract : Base
     {
@@ -14,13 +14,33 @@ namespace AssetTrakr.Models
         public int ContractId { get; set; }
 
         [Required]
-        [MinLength(1)]
         [MaxLength(150)]
-        public required string Name { get; set; } // UNIQUE
+        public required string Name { get; set; }
 
         [Required]
         [MaxLength(150)]
         public required string OrderRef { get; set; } // UNIQUE
+
+        [Required]
+        public required string UserAgreementId { get; set; } // UNIQUE
+
+        /// <summary>
+        /// This is used on ComboBoxes on the 'DisplayMember' prop.
+        /// </summary>
+        public string ComboDisplayName
+        {
+            get
+            {
+                if (UserAgreementId != null)
+                {
+                    return $"{Name}/{UserAgreementId}";
+                }
+                else
+                {
+                    return $"{Name}";
+                }
+            }
+        }
 
         public decimal Price { get; set; }
 

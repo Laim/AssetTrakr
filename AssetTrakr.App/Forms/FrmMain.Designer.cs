@@ -45,6 +45,7 @@
             actionLogToolStripMenuItem = new ToolStripMenuItem();
             manufacturerManagerToolStripMenuItem = new ToolStripMenuItem();
             platformManagerToolStripMenuItem = new ToolStripMenuItem();
+            operatingSystemManagerToolStripMenuItem = new ToolStripMenuItem();
             dataExporterToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             systemSettingsToolStripMenuItem = new ToolStripMenuItem();
@@ -73,7 +74,6 @@
             gbPlatforms = new GroupBox();
             lblPlatformsCount = new Label();
             lnkRefreshDashboard = new LinkLabel();
-            operatingSystemManagerToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             gbLicenseCount.SuspendLayout();
             gbAssetsCount.SuspendLayout();
@@ -191,6 +191,13 @@
             platformManagerToolStripMenuItem.Size = new Size(273, 26);
             platformManagerToolStripMenuItem.Text = "Platform Manager";
             platformManagerToolStripMenuItem.Click += platformManagerToolStripMenuItem_Click;
+            // 
+            // operatingSystemManagerToolStripMenuItem
+            // 
+            operatingSystemManagerToolStripMenuItem.Name = "operatingSystemManagerToolStripMenuItem";
+            operatingSystemManagerToolStripMenuItem.Size = new Size(273, 26);
+            operatingSystemManagerToolStripMenuItem.Text = "Operating System Manager";
+            operatingSystemManagerToolStripMenuItem.Click += operatingSystemManagerToolStripMenuItem_Click;
             // 
             // dataExporterToolStripMenuItem
             // 
@@ -445,13 +452,6 @@
             lnkRefreshDashboard.TabStop = true;
             lnkRefreshDashboard.Text = "Refresh";
             lnkRefreshDashboard.LinkClicked += lnkRefreshDashboard_LinkClicked;
-            // 
-            // operatingSystemManagerToolStripMenuItem
-            // 
-            operatingSystemManagerToolStripMenuItem.Name = "operatingSystemManagerToolStripMenuItem";
-            operatingSystemManagerToolStripMenuItem.Size = new Size(273, 26);
-            operatingSystemManagerToolStripMenuItem.Text = "Operating System Manager";
-            operatingSystemManagerToolStripMenuItem.Click += operatingSystemManagerToolStripMenuItem_Click;
             // 
             // FrmMain
             // 

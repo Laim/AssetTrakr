@@ -2,6 +2,7 @@
 using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
+using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using AssetTrakr.Models;
 using AssetTrakr.Utils.Enums;
@@ -18,12 +19,15 @@ namespace AssetTrakr.App.Forms.Contract
         private BindingList<Period> _periods = [];
         private readonly bool _isEditingMode = false;
         private readonly Models.Contract? _contractData;
+        private readonly bool _isReadOnly;
 
         public FrmContractModify(int contractId = 0, bool isReadOnly = false)
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
+
+            _isReadOnly = isReadOnly;
 
             if (contractId <= 0)
             {
@@ -37,7 +41,7 @@ namespace AssetTrakr.App.Forms.Contract
                     .ThenInclude(cp => cp.Period)
                 .FirstOrDefault(c => c.ContractId == contractId);
 
-            if (contract != null)
+            if (contract != null && !isReadOnly)
             {
                 _contractData = contract;
                 _isEditingMode = true;
@@ -47,10 +51,11 @@ namespace AssetTrakr.App.Forms.Contract
                 Text = $"Modify Contract - {_contractData.Name}";
             }
 
-            if (isReadOnly && _contractData != null)
+            if (isReadOnly && contract != null)
             {
+                _contractData = contract;
                 Helpers.Utils.SetReadOnly(this, deleteToolStripMenuItem);
-                Text = $"Viewing License - {_contractData.Name}";
+                Text = $"Viewing Contract - {_contractData.Name}";
             }
         }
 
@@ -60,7 +65,7 @@ namespace AssetTrakr.App.Forms.Contract
 
             cmbPaymentFrequency.DataSource = Enum.GetValues(typeof(PaymentFrequency));
 
-            if (_isEditingMode)
+            if (_isEditingMode || _isReadOnly)
             {
                 LoadContractData();
             }
@@ -88,6 +93,23 @@ namespace AssetTrakr.App.Forms.Contract
                 _attachments = frmAttachmentAdd.Attachments;
 
                 DataGridViewMethods.UpdateAttachmentDataGrid(_attachments, dgvAttachments);
+            }
+        }
+
+        private void cmsDgvRightClick_Opening(object sender, CancelEventArgs e)
+        {
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            {
+                return;
+            }
+
+            if (dgv.Name == nameof(dgvAttachments))
+            {
+                viewToolStripMenuItem.Visible = true;
+            }
+            else
+            {
+                viewToolStripMenuItem.Visible = false;
             }
         }
 
@@ -165,15 +187,14 @@ namespace AssetTrakr.App.Forms.Contract
 
             txtName.Text = _contractData.Name;
             txtOrderRef.Text = _contractData.OrderRef;
+            txtAgreementId.Text = _contractData.UserAgreementId;
             txtDescription.Text = _contractData.Description;
             numCost.Value = _contractData.Price;
             cmbPaymentFrequency.SelectedIndex = (int)_contractData.PaymentFrequency;
 
-            // TODO: This doesn't work
-
             if (_contractData.ContractPeriods.Count > 0)
             {
-                foreach(var period in  _contractData.ContractPeriods)
+                foreach (var period in _contractData.ContractPeriods)
                 {
                     _periods.Add(period.Period);
                 }
@@ -181,9 +202,9 @@ namespace AssetTrakr.App.Forms.Contract
                 DataGridViewMethods.UpdatePeriodsDataGrid(_periods, dgvPeriods);
             }
 
-            if(_contractData.ContractAttachments.Count > 0)
+            if (_contractData.ContractAttachments.Count > 0)
             {
-                foreach(var attachment in _contractData.ContractAttachments)
+                foreach (var attachment in _contractData.ContractAttachments)
                 {
                     _attachments.Add(attachment.Attachment);
                 }
@@ -194,19 +215,22 @@ namespace AssetTrakr.App.Forms.Contract
 
         private void btnAddUpdate_Click(object sender, EventArgs e)
         {
-            if (txtName.Text.Length > 150 || txtName.Text.Length == 0)
+            if (txtName.IsRequired("Name", 150))
             {
-                MessageBox.Show("Name is a required field and must be no more than 150 characters.", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (txtOrderRef.Text.Length > 150 || txtOrderRef.Text.Length == 0)
+            if (txtOrderRef.IsRequired("Order Ref", 150))
             {
-                MessageBox.Show("Order Ref is a required field and must be no more than 150 characters.", "Order Ref", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if(!_isEditingMode)
+            if (txtAgreementId.IsRequired("Agreement ID", 150))
+            {
+                return;
+            }
+
+            if (!_isEditingMode)
             {
                 AddContract();
             }
@@ -222,16 +246,16 @@ namespace AssetTrakr.App.Forms.Contract
             }
 
         }
-    
+
         private void AddContract()
         {
             // check if they already exist
             var search = _dbContext.Contracts
-                .FirstOrDefault(x => x.Name == txtName.Text || x.OrderRef == txtOrderRef.Text);
+                .FirstOrDefault(x => x.UserAgreementId == txtAgreementId.Text || x.OrderRef == txtOrderRef.Text);
 
             if (search != null)
             {
-                MessageBox.Show("Name and Order Ref must be UNIQUE", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Agreement ID and Order Ref must be UNIQUE", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
 
             }
@@ -241,8 +265,9 @@ namespace AssetTrakr.App.Forms.Contract
                 Name = txtName.Text,
                 OrderRef = txtOrderRef.Text,
                 Description = txtDescription.Text,
-                Price = Convert.ToInt32(numCost.Value),
-                PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex
+                Price = numCost.Value,
+                PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex,
+                UserAgreementId = txtAgreementId.Text
             };
 
             foreach (var period in _periods)
@@ -283,27 +308,28 @@ namespace AssetTrakr.App.Forms.Contract
 
         private void UpdateContract()
         {
-            if(_contractData == null)
+            if (_contractData == null)
             {
                 return;
             }
 
             var search = _dbContext.Contracts
                 .FirstOrDefault(
-                    x => x.Name == txtName.Text && x.ContractId != _contractData.ContractId 
+                    x => x.UserAgreementId == txtAgreementId.Text && x.ContractId != _contractData.ContractId
                  || x.OrderRef == txtOrderRef.Text && x.ContractId != _contractData.ContractId);
 
-            if(search != null)
+            if (search != null)
             {
-                MessageBox.Show("Name and Order Ref must be UNIQUE", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Agreement Id and Order Ref must be UNIQUE", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             _contractData.Name = txtName.Text;
             _contractData.OrderRef = txtOrderRef.Text;
             _contractData.Description = txtDescription.Text;
-            _contractData.Price = Convert.ToInt32(numCost.Value);
+            _contractData.Price = numCost.Value;
             _contractData.PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex;
+            _contractData.UserAgreementId = txtAgreementId.Text;
 
 
             // Remove Subscription and Attachment associations that are no longer present
@@ -379,6 +405,12 @@ namespace AssetTrakr.App.Forms.Contract
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 LogManager.Error<FrmContractModify>($"{ex}");
             }
+        }
+
+        private void viewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WinForms.Attachments.ViewAttachment viewAttachment = new();
+            viewAttachment.View(cmsDgvRightClick, dgvAttachments);
         }
     }
 }

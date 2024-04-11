@@ -45,7 +45,7 @@ namespace AssetTrakr.App.Forms.License
                         .ThenInclude(la => la.Attachment)
                     .FirstOrDefault(l => l.Id == licenseId);
 
-            if (license != null)
+            if (license != null && !isReadOnly)
             {
                 _licenseData = license;
                 _isEditingMode = true;
@@ -55,8 +55,9 @@ namespace AssetTrakr.App.Forms.License
                 Text = $"Modify License - {_licenseData.Name}";
             }
 
-            if (isReadOnly && _licenseData != null)
+            if (isReadOnly && license != null)
             {
+                _licenseData = license;
                 Helpers.Utils.SetReadOnly(this, deleteToolStripMenuItem);
                 Text = $"Viewing License - {_licenseData.Name}";
             }
@@ -68,7 +69,7 @@ namespace AssetTrakr.App.Forms.License
 
             PopulateComboBoxes();
 
-            if (_isEditingMode)
+            if (_isEditingMode || _isReadOnly)
             {
                 LoadLicenseData();
             }
@@ -196,6 +197,29 @@ namespace AssetTrakr.App.Forms.License
 
         }
 
+        private void cmsDgvRightClick_Opening(object sender, CancelEventArgs e)
+        {
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            {
+                return;
+            }
+
+            if (dgv.Name == nameof(dgvAttachments))
+            {
+                viewToolStripMenuItem.Visible = true;
+            }
+            else
+            {
+                viewToolStripMenuItem.Visible = false;
+            }
+        }
+
+        private void viewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WinForms.Attachments.ViewAttachment viewAttachment = new();
+            viewAttachment.View(cmsDgvRightClick, dgvAttachments);
+        }
+
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (cmsDgvRightClick.SourceControl is DataGridView dgv)
@@ -277,7 +301,7 @@ namespace AssetTrakr.App.Forms.License
 
             cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(_licenseData.Manufacturer?.Name);
             cmbPlatforms.SelectedIndex = cmbPlatforms.FindStringExact(_licenseData.Platform?.Name);
-            cmbContracts.SelectedIndex = cmbContracts.FindStringExact(_licenseData.Contract?.Name);
+            cmbContracts.SelectedItem = _licenseData.Contract;
 
             txtLicenseKey.Text = _licenseData.LicenseKey;
             txtOrderRef.Text = _licenseData.OrderReference;
@@ -343,7 +367,7 @@ namespace AssetTrakr.App.Forms.License
                 IsSubscriptionContract = false, // TODO: Implement
                 PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value),
                 ManufacturerId = manufacturer.ManufacturerId,
-                Price = Convert.ToInt32(numCost.Value),
+                Price = numCost.Value,
                 OrderReference = txtOrderRef.Text,
                 LicenseKey = txtLicenseKey.Text,
                 Version = txtVersion.Text,
@@ -424,7 +448,7 @@ namespace AssetTrakr.App.Forms.License
             _licenseData.IsSubscriptionContract = false; // TODO: Implement
             _licenseData.PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value);
             _licenseData.ManufacturerId = manufacturer.ManufacturerId;
-            _licenseData.Price = Convert.ToInt32(numCost.Value);
+            _licenseData.Price = numCost.Value;
             _licenseData.OrderReference = txtOrderRef.Text;
             _licenseData.LicenseKey = txtLicenseKey.Text;
             _licenseData.Version = txtVersion.Text;
@@ -527,13 +551,13 @@ namespace AssetTrakr.App.Forms.License
         {
             // Load Manufacturer Data into the ComboBox
             cmbManufacturers.DataSource = _dbContext.Manufacturers.ToList();
-            cmbManufacturers.DisplayMember = "Name";
-            cmbManufacturers.ValueMember = "ManufacturerId";
+            cmbManufacturers.DisplayMember = nameof(Manufacturer.Name);
+            cmbManufacturers.ValueMember = nameof(Manufacturer.ManufacturerId);
 
             // Load Contract Data into the ComboBox
             cmbContracts.DataSource = _dbContext.Contracts.ToList();
-            cmbContracts.DisplayMember = "Name";
-            cmbContracts.ValueMember = "ContractId";
+            cmbContracts.DisplayMember = nameof(Models.Contract.ComboDisplayName);
+            cmbContracts.ValueMember = nameof(Models.Contract.ContractId);
 
             if (_licenseData == null)
             {
@@ -542,8 +566,8 @@ namespace AssetTrakr.App.Forms.License
 
             // Load the Platform Data into the ComboBox
             cmbPlatforms.DataSource = _dbContext.Platforms.ToList();
-            cmbPlatforms.DisplayMember = "Name";
-            cmbPlatforms.ValueMember = "PlatformId";
+            cmbPlatforms.DisplayMember = nameof(Platform.Name);
+            cmbPlatforms.ValueMember = nameof(Platform.PlatformId);
 
             // Load the Payment Freq data
             cmbPaymentFrequency.DataSource = Enum.GetValues(typeof(PaymentFrequency));
@@ -551,17 +575,17 @@ namespace AssetTrakr.App.Forms.License
 
         private void cmbPaymentFrequency_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(cmbPaymentFrequency.SelectedItem is not PaymentFrequency item)
+            if (cmbPaymentFrequency.SelectedItem is not PaymentFrequency item)
             {
                 return;
             }
 
-            if(item == PaymentFrequency.Once)
+            if (item == PaymentFrequency.Once)
             {
                 return;
             }
-            
-            if(!cbIsSubscription.Checked)
+
+            if (!cbIsSubscription.Checked)
             {
                 ToolTip subscriptionHint = new()
                 {

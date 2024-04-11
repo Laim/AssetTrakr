@@ -94,7 +94,6 @@
             dgvViewAll.AllowUserToAddRows = false;
             dgvViewAll.AllowUserToDeleteRows = false;
             dgvViewAll.AllowUserToOrderColumns = true;
-            dgvViewAll.AllowUserToResizeColumns = false;
             dgvViewAll.AllowUserToResizeRows = false;
             dgvViewAll.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvViewAll.BackgroundColor = Color.White;

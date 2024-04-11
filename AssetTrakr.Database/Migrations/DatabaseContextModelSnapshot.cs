@@ -40,10 +40,6 @@ namespace AssetTrakr.Database.Migrations
                     b.Property<int>("ActionType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Changes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("ActionId");
 
                     b.ToTable("ActionLogEntries");
@@ -364,12 +360,16 @@ namespace AssetTrakr.Database.Migrations
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("UserAgreementId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ContractId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("OrderRef")
                         .IsUnique();
 
-                    b.HasIndex("OrderRef")
+                    b.HasIndex("UserAgreementId")
                         .IsUnique();
 
                     b.ToTable("Contracts");
@@ -558,7 +558,6 @@ namespace AssetTrakr.Database.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
@@ -656,6 +655,10 @@ namespace AssetTrakr.Database.Migrations
                         .HasColumnType("INTEGER")
                         .HasComment("Whether or not the report has criteria that can be used during run time");
 
+                    b.Property<bool>("IsUserVisible")
+                        .HasColumnType("INTEGER")
+                        .HasComment("Whether or not it will be visible in the Report Runner");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -680,6 +683,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 1,
                             Description = "All assets without warranty assigned, does not include expired warranty.",
                             HasCriteria = false,
+                            IsUserVisible = false,
                             Name = "Assets without Warranty",
                             ParentType = "Asset",
                             ShortCode = "awow"
@@ -689,6 +693,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 2,
                             Description = "Shows all assets in the system of the chosen criteria type.",
                             HasCriteria = true,
+                            IsUserVisible = true,
                             Name = "Assets of Type",
                             ParentType = "Asset",
                             ShortCode = "aot"
@@ -698,6 +703,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 3,
                             Description = "Shows assets in the system with storage lower than the chosen threshold criteria.",
                             HasCriteria = true,
+                            IsUserVisible = true,
                             Name = "Assets With Low Storage",
                             ParentType = "Asset",
                             ShortCode = "awls"
@@ -707,6 +713,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 4,
                             Description = "Shows all assets in the system with warranty whether active or expired.",
                             HasCriteria = false,
+                            IsUserVisible = true,
                             Name = "Assets with Warranty",
                             ParentType = "Asset",
                             ShortCode = "aww"
@@ -716,6 +723,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 5,
                             Description = "Shows all assets in the system with all available fields.",
                             HasCriteria = false,
+                            IsUserVisible = false,
                             Name = "All Assets with All Fields",
                             ParentType = "Asset",
                             ShortCode = "aawaf"
@@ -725,6 +733,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 6,
                             Description = "Shows all licenses in the system with all available fields.",
                             HasCriteria = false,
+                            IsUserVisible = false,
                             Name = "All Licenses with All Fields",
                             ParentType = "License",
                             ShortCode = "alwaf"
@@ -734,6 +743,7 @@ namespace AssetTrakr.Database.Migrations
                             ReportId = 7,
                             Description = "Shows Cost of all Entities in the System",
                             HasCriteria = false,
+                            IsUserVisible = true,
                             Name = "Cost Analysis",
                             ParentType = "Other",
                             ShortCode = "costAnal"

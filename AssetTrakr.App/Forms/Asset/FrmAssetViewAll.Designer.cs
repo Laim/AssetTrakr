@@ -37,9 +37,9 @@
             toolStripSeparator2 = new ToolStripSeparator();
             viewToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
             lblNoAssetsTitle = new Label();
             lblNoAssetsDescription = new Label();
-            deleteToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgvViewAll).BeginInit();
             cmsDgvRightClick.SuspendLayout();
             SuspendLayout();
@@ -49,7 +49,6 @@
             dgvViewAll.AllowUserToAddRows = false;
             dgvViewAll.AllowUserToDeleteRows = false;
             dgvViewAll.AllowUserToOrderColumns = true;
-            dgvViewAll.AllowUserToResizeColumns = false;
             dgvViewAll.AllowUserToResizeRows = false;
             dgvViewAll.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvViewAll.BackgroundColor = Color.White;
@@ -76,45 +75,52 @@
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
             cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, exportToolStripMenuItem, toolStripSeparator2, viewToolStripMenuItem, editToolStripMenuItem, deleteToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(211, 164);
+            cmsDgvRightClick.Size = new Size(188, 136);
             // 
             // columnSelectorToolStripMenuItem
             // 
             columnSelectorToolStripMenuItem.Name = "columnSelectorToolStripMenuItem";
-            columnSelectorToolStripMenuItem.Size = new Size(210, 24);
+            columnSelectorToolStripMenuItem.Size = new Size(187, 24);
             columnSelectorToolStripMenuItem.Text = "Column Selector";
             columnSelectorToolStripMenuItem.Click += columnSelectorToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(207, 6);
+            toolStripSeparator1.Size = new Size(184, 6);
             // 
             // exportToolStripMenuItem
             // 
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(210, 24);
+            exportToolStripMenuItem.Size = new Size(187, 24);
             exportToolStripMenuItem.Text = "Export List";
             exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(207, 6);
+            toolStripSeparator2.Size = new Size(184, 6);
             // 
             // viewToolStripMenuItem
             // 
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(210, 24);
+            viewToolStripMenuItem.Size = new Size(187, 24);
             viewToolStripMenuItem.Text = "View";
             viewToolStripMenuItem.Click += viewToolStripMenuItem_Click;
             // 
             // editToolStripMenuItem
             // 
             editToolStripMenuItem.Name = "editToolStripMenuItem";
-            editToolStripMenuItem.Size = new Size(210, 24);
+            editToolStripMenuItem.Size = new Size(187, 24);
             editToolStripMenuItem.Text = "Edit";
             editToolStripMenuItem.Click += editToolStripMenuItem_Click;
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(187, 24);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // lblNoAssetsTitle
             // 
@@ -134,13 +140,6 @@
             lblNoAssetsDescription.Size = new Size(527, 20);
             lblNoAssetsDescription.TabIndex = 21;
             lblNoAssetsDescription.Text = "No Assets have been added to the system.  Add some Assets to see them here.";
-            // 
-            // deleteToolStripMenuItem
-            // 
-            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(210, 24);
-            deleteToolStripMenuItem.Text = "Delete";
-            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
             // 
             // FrmAssetViewAll
             // 

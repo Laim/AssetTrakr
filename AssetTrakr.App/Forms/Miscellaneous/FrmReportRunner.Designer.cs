@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmReportRunner));
             dgvReportOutput = new DataGridView();
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
@@ -164,9 +165,10 @@
             Controls.Add(lblReportPicker);
             Controls.Add(cmbReports);
             Controls.Add(dgvReportOutput);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmReportRunner";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Report Runner";
+            Text = "Report Runner (Alpha)";
             ((System.ComponentModel.ISupportInitialize)dgvReportOutput).EndInit();
             cmsDgvRightClick.ResumeLayout(false);
             ResumeLayout(false);

@@ -22,5 +22,8 @@ namespace AssetTrakr.Models
 
         [Comment("The type of report, i.e Asset, License etc.  Uses ParentType enum in c#.")]
         public required ParentType ParentType { get; set; }
+
+        [Comment("Whether or not it will be visible in the Report Runner")]
+        public required bool IsUserVisible { get; set; } = false;
     }
 }

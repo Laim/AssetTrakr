@@ -67,16 +67,6 @@ namespace AssetTrakr.Database
                 .Property(l => l.PaymentFrequency)
                 .HasConversion(new EnumToStringConverter<PaymentFrequency>());
 
-            // unique stuff
-            //modelBuilder.Entity<Manufacturer>()
-            //    .HasIndex(m => m.Name).IsUnique();
-
-            //modelBuilder.Entity<Asset>()
-            //    .HasIndex(a => a.Name).IsUnique();
-
-            //modelBuilder.Entity<Asset>()
-            //    .HasIndex("OperatingSystemId")
-            //    .IsUnique(false);
 
             modelBuilder.Entity<SystemSetting>(e =>
             {
