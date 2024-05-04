@@ -117,12 +117,15 @@ namespace AssetTrakr.App.Forms
         /// </summary>
         private void LoadWidgets()
         {
+            LogManager.Information<FrmMain>($"Checking User Settings for IsArchived allowed.");
+            bool includeArchived = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.IncludeArchivedInWidgets));
+
             LogManager.Information<FrmMain>($"Loading Dashboard Widgets");
-            lblLicenseCount.Text = $"{_dbContext.Licenses.Count()}";
-            lblAssetCount.Text = $"{_dbContext.Assets.Count()}";
-            lblManufacturerCount.Text = $"{_dbContext.Manufacturers.Count()}";
-            lblContractCount.Text = $"{_dbContext.Contracts.Count()}";
-            lblPlatformsCount.Text = $"{_dbContext.Platforms.Count()}";
+            lblLicenseCount.Text = $"{_dbContext.Licenses.Where(l => includeArchived || !l.IsArchived).Count()}";
+            lblAssetCount.Text = $"{_dbContext.Assets.Where(a => includeArchived || !a.IsArchived).Count()}";
+            lblManufacturerCount.Text = $"{_dbContext.Manufacturers.Where(m => includeArchived || !m.IsArchived).Count()}";
+            lblContractCount.Text = $"{_dbContext.Contracts.Where(c => includeArchived || !c.IsArchived).Count()}";
+            lblPlatformsCount.Text = $"{_dbContext.Platforms.Where(p => includeArchived || !p.IsArchived).Count()}";
             LogManager.Information<FrmMain>($"Dashboard Widgets Loaded");
 
             // set colors
@@ -308,15 +311,17 @@ namespace AssetTrakr.App.Forms
         #region ToolStrip for DataGrids
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmColumnSelector2 frmColumnSelector = new(dgv);
-                frmColumnSelector.ShowDialog();
+                return;
+            }
 
-                foreach (DataGridViewColumn col in dgv.Columns)
-                {
-                    col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
-                }
+            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            frmColumnSelector.ShowDialog();
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
             }
         }
 

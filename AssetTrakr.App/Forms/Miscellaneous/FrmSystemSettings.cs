@@ -1,6 +1,4 @@
-﻿using AssetTrakr.App.Forms.Contract;
-using AssetTrakr.App.Helpers;
-using AssetTrakr.Database;
+﻿using AssetTrakr.Database;
 using AssetTrakr.Logging;
 using AssetTrakr.Models.System;
 using AssetTrakr.Utils.Enums;
@@ -79,12 +77,14 @@ namespace AssetTrakr.App.Forms.Miscellaneous
 
         private void CategoryColumnHider(SystemSettingsCategory category)
         {
-            if(category == SystemSettingsCategory.Alert)
+            switch (category)
             {
-                // get the name of the column from the datagridview column properties
-                // because its using a datasource the names are diff to usual
-                dgvSystemSettings.Columns["settingValueDataGridViewTextBoxColumn"].Visible = false;
-                return;
+                case SystemSettingsCategory.Alert:
+                case SystemSettingsCategory.User:
+                    // get the name of the column from the datagridview column properties
+                    // because its using a datasource the names are diff to usual
+                    dgvSystemSettings.Columns["settingValueDataGridViewTextBoxColumn"].Visible = false;
+                    return;
             }
             dgvSystemSettings.Columns["settingValueDataGridViewTextBoxColumn"].Visible = true;
         }

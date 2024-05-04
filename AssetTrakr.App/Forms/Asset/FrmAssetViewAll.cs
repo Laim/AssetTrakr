@@ -1,8 +1,12 @@
 ﻿using AssetTrakr.App.Forms.Shared;
-using AssetTrakr.App.Helpers;
+using AssetTrakr.Models.Assets;
 using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using Microsoft.EntityFrameworkCore;
+using AssetTrakr.Logging;
+using AssetTrakr.Utils.Enums;
+using AssetTrakr.WinForms.ActionLog;
+using System.Xml.Linq;
 
 namespace AssetTrakr.App.Forms.Asset
 {
@@ -10,12 +14,15 @@ namespace AssetTrakr.App.Forms.Asset
     {
 
         private readonly DatabaseContext _dbContext;
+        private readonly bool _includeArchived = false;
 
         public FrmAssetViewAll()
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
+
+            _includeArchived = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.IncludeArchivedInViewAll));
         }
 
         protected override void OnLoad(EventArgs e)
@@ -58,7 +65,7 @@ namespace AssetTrakr.App.Forms.Asset
                     Platform = a.Platform.Name ?? "",
                     Contract = a.Contract.Name ?? "",
                     Attachments = a.AssetAttachments.Count,
-                    Warranty = a.IsUnderWarranty,
+                    a.IsUnderWarranty,
                     a.Hardware.RamSizeInGB,
                     a.Hardware.Processor,
                     a.Hardware.BiosSerialNumber,
@@ -74,38 +81,42 @@ namespace AssetTrakr.App.Forms.Asset
                     a.CreatedBy,
                     a.CreatedDate,
                     a.UpdatedBy,
-                    a.UpdatedDate
+                    a.UpdatedDate,
+                    a.IsArchived
                 })
+                .Where(a => _includeArchived || !a.IsArchived)
                 .ToList();
 
             dgvViewAll.DataSource = assets;
 
             // Rename columns since it's an anonymous type and ignores the [DisplayName] attribute in the Asset Model
-            dgvViewAll.Columns["RamSizeInGB"].HeaderText = "RAM (GB)";
-            dgvViewAll.Columns["BiosSerialNumber"].HeaderText = "Bios Serial Number";
-            dgvViewAll.Columns["LicenseKey"].HeaderText = "License Key";
-            dgvViewAll.Columns["OperatingSystem"].HeaderText = "Operating System";
-            dgvViewAll.Columns["OrderReference"].HeaderText = "Order Reference";
-            dgvViewAll.Columns["RegisteredUser"].HeaderText = "User";
-            dgvViewAll.Columns["RegisteredEmail"].HeaderText = "Email";
+            dgvViewAll.Columns[nameof(AssetHardware.RamSizeInGB)].HeaderText = "RAM (GB)";
+            dgvViewAll.Columns[nameof(AssetHardware.BiosSerialNumber)].HeaderText = "Bios Serial Number";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.LicenseKey)].HeaderText = "License Key";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.OperatingSystem)].HeaderText = "Operating System";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.OrderReference)].HeaderText = "Order Reference";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.RegisteredUser)].HeaderText = "User";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.RegisteredEmail)].HeaderText = "Email";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].HeaderText = "Archived";
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.IsUnderWarranty)].HeaderText = "Has Warranty";
             dgvViewAll.Columns["WarrantyPeriodsFormatted"].HeaderText = "Warranty";
 
             // Hide Columns
-            dgvViewAll.Columns["AssetId"].Visible = false;
-            dgvViewAll.Columns["Processor"].Visible = false;
-            dgvViewAll.Columns["RamSizeInGB"].Visible = false;
-            dgvViewAll.Columns["BiosSerialNumber"].Visible = false;
-            dgvViewAll.Columns["LicenseKey"].Visible = false;
-            dgvViewAll.Columns["Contract"].Visible = false;
-            dgvViewAll.Columns["OrderReference"].Visible = false;
-            dgvViewAll.Columns["Price"].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.AssetId)].Visible = false;
+            dgvViewAll.Columns[nameof(AssetHardware.Processor)].Visible = false;
+            dgvViewAll.Columns[nameof(AssetHardware.RamSizeInGB)].Visible = false;
+            dgvViewAll.Columns[nameof(AssetHardware.BiosSerialNumber)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.LicenseKey)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.Contract)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.OrderReference)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.Price)].Visible = false;
             dgvViewAll.Columns["Attachments"].Visible = false;
-            dgvViewAll.Columns["RegisteredUser"].Visible = false;
-            dgvViewAll.Columns["RegisteredEmail"].Visible = false;
-            dgvViewAll.Columns["CreatedDate"].Visible = false;
-            dgvViewAll.Columns["UpdatedDate"].Visible = false;
-            dgvViewAll.Columns["UpdatedBy"].Visible = false;
-            dgvViewAll.Columns["CreatedBy"].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.RegisteredUser)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.RegisteredEmail)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.CreatedDate)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.UpdatedDate)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.UpdatedBy)].Visible = false;
+            dgvViewAll.Columns[nameof(Models.Assets.Asset.CreatedBy)].Visible = false;
 
             if (!assets.Any())
             {
@@ -118,15 +129,17 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmColumnSelector2 frmColumnSelector = new(dgv);
-                frmColumnSelector.ShowDialog();
+                return;
+            }
 
-                foreach (DataGridViewColumn col in dgv.Columns)
-                {
-                    col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
-                }
+            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            frmColumnSelector.ShowDialog();
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
             }
         }
 
@@ -137,35 +150,123 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmAssetModify FrmAssetModify = new((int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value, true);
-                FrmAssetModify.ShowDialog();
+                return;
             }
+
+            FrmAssetModify FrmAssetModify = new((int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value, true);
+            FrmAssetModify.ShowDialog();
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmAssetModify FrmAssetModify = new((int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value);
-                FrmAssetModify.ShowDialog();
-                LoadData(true);
+                return;
             }
+
+            FrmAssetModify FrmAssetModify = new((int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value);
+            FrmAssetModify.ShowDialog();
+            LoadData(true);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                var assetId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value;
+                return;
+            }
 
-                if(_dbContext.Assets.Where(a => a.AssetId == assetId).ExecuteDelete() > 0)
+            string name = (string)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Assets.Asset.Name)].Value;
+            DialogResult dr = MessageBox.Show($"This action cannot be reversed, do you wish to delete {name}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dr == DialogResult.Yes)
+            {
+                var assetId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Assets.Asset.AssetId)].Value;
+
+                try
                 {
-                    LoadData(true);
-                }
+                    if (_dbContext.Assets.Where(a => a.AssetId == assetId).ExecuteDelete() > 0)
+                    {
+                        ActionLogMethods.Deleted(_dbContext, ActionAlertCategory.Asset, name);
 
+                        LoadData(true);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogManager.Error<FrmAssetModify>($"{ex}");
+                }
             }
         }
+
+        private void archiveOrUnarchiveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            {
+                return;
+            }
+            
+            string? tooltipName = archiveOrUnarchiveToolStripMenuItem.Text;
+
+            string name = (string)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Assets.Asset.Name)].Value;
+            DialogResult dr = MessageBox.Show($"Do you wish to {tooltipName} {name}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (dr != DialogResult.Yes) { return; }
+
+            var assetId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Assets.Asset.AssetId)].Value;
+            var asset = _dbContext.Assets.FirstOrDefault(a => a.AssetId == assetId);
+
+            if (asset == null) { return; }
+
+            asset.IsArchived = tooltipName == "Archive";
+
+            try
+            {
+                _dbContext.Assets.Update(asset);
+                _dbContext.SaveChanges();
+
+                if (tooltipName == "Archive")
+                {
+                    ActionLogMethods.Archived(_dbContext, ActionAlertCategory.Asset, name);
+                }
+                else if (tooltipName == "Unarchive")
+                {
+                    ActionLogMethods.Unarchived(_dbContext, ActionAlertCategory.Asset, name);
+                }
+
+                LoadData(true);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmAssetModify>($"{ex}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmAssetModify>($"{ex}");
+            }
+        }
+
+        private void cmsDgvRightClick_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // If the item is already in the archive, change the archive tool item to unarchive and disable editing
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            {
+                return;
+            }
+
+            var assetId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Assets.Asset.AssetId)].Value;
+            var asset = _dbContext.Assets.FirstOrDefault(a => a.AssetId == assetId);
+
+            if (asset == null) { return; }
+
+            editToolStripMenuItem.Enabled = editToolStripMenuItem.Visible = !asset.IsArchived;
+            archiveOrUnarchiveToolStripMenuItem.Text = asset.IsArchived ? "Unarchive" : "Archive";
+        }
+    
     }
 }

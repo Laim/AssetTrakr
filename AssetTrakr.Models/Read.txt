@@ -10,3 +10,5 @@ License depends on
 
  Platform depends on
 	 - Manufacturer
+
+etc

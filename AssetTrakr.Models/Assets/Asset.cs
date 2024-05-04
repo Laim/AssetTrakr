@@ -39,8 +39,11 @@ namespace AssetTrakr.Models.Assets
         [DisplayName("Order Reference")]
         public string? OrderReference { get; set; }
 
-        [DisplayName("Warranty")]
+        [DisplayName("Has Warranty")]
         public bool IsUnderWarranty { get; set; } = false;
+
+        [DisplayName("Archived")]
+        public bool IsArchived { get; set; } = false;
 
         [DisplayName("Warranties")]
         public List<AssetPeriod> AssetPeriods { get; set; } = [];

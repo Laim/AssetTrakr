@@ -104,10 +104,6 @@ namespace AssetTrakr.App.Forms.Asset
                 return;
             }
 
-            // Update general form info
-            btnAddUpdate.Text = "Update";
-            Text = $"Modify Asset - {_assetData.Name}";
-
             txtName.Text = _assetData.Name;
             txtModel.Text = _assetData.Model;
             txtLicenseKey.Text = _assetData.LicenseKey;
@@ -274,15 +270,17 @@ namespace AssetTrakr.App.Forms.Asset
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmColumnSelector2 frmColumnSelector = new(dgv);
-                frmColumnSelector.ShowDialog();
+                return;
+            }
 
-                foreach (DataGridViewColumn col in dgv.Columns)
-                {
-                    col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
-                }
+            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            frmColumnSelector.ShowDialog();
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
             }
         }
 

@@ -37,6 +37,9 @@
             toolStripSeparator2 = new ToolStripSeparator();
             viewToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
+            archiveOrUnarchiveToolStripMenuItem = new ToolStripMenuItem();
             dgvViewAll = new DataGridView();
             lblNoLicensesDescription = new Label();
             lblNoLicensesTitle = new Label();
@@ -47,9 +50,10 @@
             // cmsDgvRightClick
             // 
             cmsDgvRightClick.ImageScalingSize = new Size(20, 20);
-            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, exportToolStripMenuItem, toolStripSeparator2, viewToolStripMenuItem, editToolStripMenuItem });
+            cmsDgvRightClick.Items.AddRange(new ToolStripItem[] { columnSelectorToolStripMenuItem, toolStripSeparator1, exportToolStripMenuItem, toolStripSeparator2, viewToolStripMenuItem, editToolStripMenuItem, toolStripSeparator3, deleteToolStripMenuItem, archiveOrUnarchiveToolStripMenuItem });
             cmsDgvRightClick.Name = "contextMenuStrip1";
-            cmsDgvRightClick.Size = new Size(188, 112);
+            cmsDgvRightClick.Size = new Size(188, 166);
+            cmsDgvRightClick.Opening += cmsDgvRightClick_Opening;
             // 
             // columnSelectorToolStripMenuItem
             // 
@@ -88,6 +92,25 @@
             editToolStripMenuItem.Size = new Size(187, 24);
             editToolStripMenuItem.Text = "Edit";
             editToolStripMenuItem.Click += editToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(184, 6);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(187, 24);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += deleteToolStripMenuItem_Click;
+            // 
+            // archiveOrUnarchiveToolStripMenuItem
+            // 
+            archiveOrUnarchiveToolStripMenuItem.Name = "archiveOrUnarchiveToolStripMenuItem";
+            archiveOrUnarchiveToolStripMenuItem.Size = new Size(187, 24);
+            archiveOrUnarchiveToolStripMenuItem.Text = "Archive";
+            archiveOrUnarchiveToolStripMenuItem.Click += archiveOrUnarchiveToolStripMenuItem_Click;
             // 
             // dgvViewAll
             // 
@@ -168,5 +191,8 @@
         private ToolStripMenuItem exportToolStripMenuItem;
         private Label lblNoLicensesDescription;
         private Label lblNoLicensesTitle;
+        private ToolStripMenuItem deleteToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem archiveOrUnarchiveToolStripMenuItem;
     }
 }

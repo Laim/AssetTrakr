@@ -41,8 +41,10 @@ namespace AssetTrakr.Models
 
         public PaymentFrequency PaymentFrequency { get; set; } = PaymentFrequency.Once;
 
+        // TODO: Deprecate this
         public int? ContractId { get; set; } = 0;
 
+        // TODO: Deprecate this
         public required int ManufacturerId { get; set; }
 
         /// <summary>
@@ -59,7 +61,11 @@ namespace AssetTrakr.Models
 
         public string? Version { get; set; }
 
+        // TODO: Deprecate this
         public int PlatformId { get; set; } = 0;
+
+        [DisplayName("Archived")]
+        public bool IsArchived { get; set; } = false;
 
         [DisplayName("User")]
         public string? RegisteredUser { get; set; }

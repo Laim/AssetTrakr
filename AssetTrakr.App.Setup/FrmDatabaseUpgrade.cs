@@ -147,7 +147,7 @@ namespace AssetTrakr.App.Setup
                     sysInfo.ProductVersion = Application.ProductVersion;
                     _dbContext.SystemInfo.Update(sysInfo);
 
-                    ActionLogMethods.Updated(_dbContext, ActionAlertCategory.System, "Product Upgrade", Environment.UserName);
+                    ActionLogMethods.Updated(_dbContext, ActionAlertCategory.System, "Product Upgrade");
 
                     _dbContext.SaveChanges();
                     LogManager.Information<FrmDatabaseUpgrade>("Product versions matched, changes saved.");
@@ -169,7 +169,7 @@ namespace AssetTrakr.App.Setup
                 lblNotice.Text = "Migrations are required.  Migrations must be run before running AssetTrakr to ensure that all features within" +
                     " the application work as expected.\r\n\r\n" +
                     "Ensure you take a database backup before proceeding, manually or with this tool.\r\n\r\n" +
-                    "Once migrationed, the database cannot be reverted without a backup.";
+                    "Once migrations have completed, the database cannot be reverted without a backup.";
                 return true;
             }
 

@@ -115,58 +115,62 @@ namespace AssetTrakr.App.Forms.Contract
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmColumnSelector2 frmColumnSelector = new(dgv);
-                frmColumnSelector.ShowDialog();
+                return;
+            }
 
-                foreach (DataGridViewColumn col in dgv.Columns)
-                {
-                    col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
-                }
+            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            frmColumnSelector.ShowDialog();
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
             }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                if (dgv.Rows.Count == 0)
-                {
-                    return;
-                }
+                return;
+            }
 
-                if (dgv.Name == nameof(dgvAttachments))
-                {
-                    var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
+            if (dgv.Rows.Count == 0)
+            {
+                return;
+            }
 
-                    if (dataItem is Models.Attachment selectedItem)
-                    {
-                        _attachments.Remove(selectedItem);
-                    }
-                    else
-                    {
-                        throw new Exception("Attachment has not been set or cannot be found");
-                    }
-                }
-                else if (dgv.Name == nameof(dgvPeriods))
-                {
-                    var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
+            if (dgv.Name == nameof(dgvAttachments))
+            {
+                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
 
-                    if (dataItem is Period selectedItem)
-                    {
-                        _periods.Remove(selectedItem);
-                    }
-                    else
-                    {
-                        throw new Exception("Period has not been set or cannot be found");
-                    }
-                }
-
-                if (dgv.Rows.Count == 0)
+                if (dataItem is Models.Attachment selectedItem)
                 {
-                    dgv.DataSource = null;
+                    _attachments.Remove(selectedItem);
                 }
+                else
+                {
+                    throw new Exception("Attachment has not been set or cannot be found");
+                }
+            }
+            else if (dgv.Name == nameof(dgvPeriods))
+            {
+                var dataItem = dgv.Rows[dgv.SelectedRows[0].Index].DataBoundItem;
+
+                if (dataItem is Period selectedItem)
+                {
+                    _periods.Remove(selectedItem);
+                }
+                else
+                {
+                    throw new Exception("Period has not been set or cannot be found");
+                }
+            }
+
+            if (dgv.Rows.Count == 0)
+            {
+                dgv.DataSource = null;
             }
         }
 
@@ -181,9 +185,6 @@ namespace AssetTrakr.App.Forms.Contract
                 Close();
                 return;
             }
-
-            btnAddUpdate.Text = "Update";
-            Text = $"Modify Contract - {_contractData.Name}";
 
             txtName.Text = _contractData.Name;
             txtOrderRef.Text = _contractData.OrderRef;

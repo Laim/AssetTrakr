@@ -2,6 +2,7 @@
 using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using AssetTrakr.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AssetTrakr.App.Forms.Shared
 {
@@ -15,7 +16,6 @@ namespace AssetTrakr.App.Forms.Shared
 
             _dbContext ??= new DatabaseContext();
 
-            RefreshPlatformList();
         }
 
         /// <summary>
@@ -38,9 +38,15 @@ namespace AssetTrakr.App.Forms.Shared
         {
             base.OnLoad(e);
             RefreshPlatformList();
+            PlatformChanged();
         }
 
         private void lbPlatforms_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PlatformChanged();
+        }
+
+        private void PlatformChanged()
         {
             btnAdd.Enabled = lbPlatforms.SelectedIndex < 0;
             btnDelete.Enabled = btnUpdate.Enabled = !btnAdd.Enabled;
@@ -54,7 +60,7 @@ namespace AssetTrakr.App.Forms.Shared
             }
 
             txtName.Text = platform.Name;
-            cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(platform.Manufacturer?.Name);
+            cmbManufacturers.SelectedItem = platform.Manufacturer;
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)

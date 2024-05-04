@@ -1,5 +1,4 @@
-﻿using AssetTrakr.Logging;
-using AssetTrakr.Models;
+﻿using AssetTrakr.Models;
 using AssetTrakr.Models.Assets;
 using AssetTrakr.Models.System;
 using AssetTrakr.Utils.Enums;

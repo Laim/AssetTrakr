@@ -42,7 +42,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasKey("ActionId");
 
-                    b.ToTable("ActionLogEntries");
+                    b.ToTable("ActionLogEntries", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.Asset", b =>
@@ -65,6 +65,9 @@ namespace AssetTrakr.Database.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("HardwareId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsUnderWarranty")
@@ -128,7 +131,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("PlatformId");
 
-                    b.ToTable("Assets");
+                    b.ToTable("Assets", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.AssetAttachment", b =>
@@ -143,7 +146,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("AttachmentId");
 
-                    b.ToTable("AssetAttachments");
+                    b.ToTable("AssetAttachments", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.AssetHardDrive", b =>
@@ -173,7 +176,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("ManufacturerId");
 
-                    b.ToTable("AssetHardDrives");
+                    b.ToTable("AssetHardDrives", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.AssetHardware", b =>
@@ -200,7 +203,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasKey("AssetHardwareId");
 
-                    b.ToTable("AssetHardware");
+                    b.ToTable("AssetHardware", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.AssetNetworkAdapter", b =>
@@ -228,13 +231,16 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("AssetHardwareId");
 
-                    b.ToTable("AssetNetworkAdapters");
+                    b.ToTable("AssetNetworkAdapters", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.AssetOperatingSystem", b =>
                 {
                     b.Property<int>("OperatingSystemId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ManufacturerId")
@@ -252,7 +258,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("ManufacturerId");
 
-                    b.ToTable("AssetOperatingSystems");
+                    b.ToTable("AssetOperatingSystems", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Assets.AssetPeriod", b =>
@@ -267,7 +273,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("AssetPeriods");
+                    b.ToTable("AssetPeriods", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Attachment", b =>
@@ -317,7 +323,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasKey("AttachmentId");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Attachments", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Contract", b =>
@@ -335,6 +341,9 @@ namespace AssetTrakr.Database.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -372,7 +381,7 @@ namespace AssetTrakr.Database.Migrations
                     b.HasIndex("UserAgreementId")
                         .IsUnique();
 
-                    b.ToTable("Contracts");
+                    b.ToTable("Contracts", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.ContractAttachment", b =>
@@ -387,7 +396,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("AttachmentId");
 
-                    b.ToTable("ContractAttachments");
+                    b.ToTable("ContractAttachments", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.ContractPeriod", b =>
@@ -402,7 +411,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("ContractPeriods");
+                    b.ToTable("ContractPeriods", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.License", b =>
@@ -426,6 +435,9 @@ namespace AssetTrakr.Database.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsSubscription")
                         .HasColumnType("INTEGER");
@@ -487,7 +499,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("PlatformId");
 
-                    b.ToTable("Licenses");
+                    b.ToTable("Licenses", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.LicenseAttachment", b =>
@@ -502,7 +514,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("AttachmentId");
 
-                    b.ToTable("LicenseAttachments");
+                    b.ToTable("LicenseAttachments", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.LicensePeriod", b =>
@@ -517,7 +529,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("LicensePeriods");
+                    b.ToTable("LicensePeriods", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Manufacturer", b =>
@@ -532,6 +544,9 @@ namespace AssetTrakr.Database.Migrations
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -566,7 +581,7 @@ namespace AssetTrakr.Database.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Manufacturers");
+                    b.ToTable("Manufacturers", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Period", b =>
@@ -597,7 +612,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasKey("PeriodId");
 
-                    b.ToTable("Periods");
+                    b.ToTable("Periods", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Platform", b =>
@@ -612,6 +627,9 @@ namespace AssetTrakr.Database.Migrations
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ManufacturerId")
                         .HasColumnType("INTEGER");
@@ -638,7 +656,7 @@ namespace AssetTrakr.Database.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Platforms");
+                    b.ToTable("Platforms", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.Report", b =>
@@ -675,7 +693,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasKey("ReportId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("Reports", (string)null);
 
                     b.HasData(
                         new
@@ -773,7 +791,7 @@ namespace AssetTrakr.Database.Migrations
 
                     b.HasKey("SysId");
 
-                    b.ToTable("SystemInfo");
+                    b.ToTable("SystemInfo", (string)null);
                 });
 
             modelBuilder.Entity("AssetTrakr.Models.System.SystemSetting", b =>
@@ -809,7 +827,7 @@ namespace AssetTrakr.Database.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("SystemSettings");
+                    b.ToTable("SystemSettings", (string)null);
 
                     b.HasData(
                         new
@@ -833,6 +851,33 @@ namespace AssetTrakr.Database.Migrations
                             Enabled = true,
                             SettingParentType = "Database",
                             SettingValue = "3"
+                        },
+                        new
+                        {
+                            Name = "IncludeArchivedInAlerts",
+                            Category = 2,
+                            DefaultEnabled = true,
+                            Description = "Includes Archived Entities in Alerts",
+                            Enabled = true,
+                            SettingParentType = "Archive"
+                        },
+                        new
+                        {
+                            Name = "IncludeArchivedInWidgets",
+                            Category = 2,
+                            DefaultEnabled = true,
+                            Description = "Includes Archived Entities in Widgets",
+                            Enabled = true,
+                            SettingParentType = "Archive"
+                        },
+                        new
+                        {
+                            Name = "IncludeArchivedInViewAll",
+                            Category = 2,
+                            DefaultEnabled = true,
+                            Description = "Includes Archived Entities in View All pages",
+                            Enabled = true,
+                            SettingParentType = "Archive"
                         },
                         new
                         {

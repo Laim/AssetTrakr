@@ -42,20 +42,14 @@ namespace AssetTrakr.WinForms.ActionLog
         /// <param name="actionName">
         /// The name of the entity
         /// </param>
-        public static void Updated(DatabaseContext dbContext, ActionAlertCategory category, string actionName, string actionedBy = "")
+        public static void Updated(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
         {
-
-            if(actionedBy == string.Empty)
-            {
-                actionedBy = Environment.UserName;
-            }
-
             dbContext.ActionLogEntries.Add(new Models.ActionLog
             {
                 ActionCategory = category,
                 ActionType = ActionType.UPDATED,
                 ActionName = actionName,
-                ActionBy = actionedBy,
+                ActionBy = Environment.UserName,
             });
         }
 
@@ -82,9 +76,27 @@ namespace AssetTrakr.WinForms.ActionLog
             });
         }
 
-        public static void Archived()
+        public static void Archived(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
         {
-            throw new NotImplementedException();
+            dbContext.ActionLogEntries.Add(new Models.ActionLog
+            {
+                ActionCategory = category,
+                ActionType = ActionType.ARCHIVED,
+                ActionName = actionName,
+                ActionBy = Environment.UserName,
+            });
         }
+
+        public static void Unarchived(DatabaseContext dbContext, ActionAlertCategory category, string actionName)
+        {
+            dbContext.ActionLogEntries.Add(new Models.ActionLog
+            {
+                ActionCategory = category,
+                ActionType = ActionType.UNARCHIVED,
+                ActionName = actionName,
+                ActionBy = Environment.UserName,
+            });
+        }
+
     }
 }

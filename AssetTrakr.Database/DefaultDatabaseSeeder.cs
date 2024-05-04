@@ -21,6 +21,7 @@ namespace AssetTrakr.Database
         {
 
             SystemSettings();
+            UserSettings();
             AssetAlerts();
             LicenseAlerts();
             Reports();
@@ -154,6 +155,52 @@ namespace AssetTrakr.Database
                         DefaultEnabled = true,
                         DefaultSettingValue = "3",
                         SettingParentType = "Database"
+                    }
+                );
+            });
+        }
+
+        /// <summary>
+        /// Creates the System Settings for User Preferences
+        /// </summary>
+        internal void UserSettings()
+        {
+            _modelBuilder.Entity<SystemSetting>(e =>
+            {
+                e.HasData
+                (
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.IncludeArchivedInAlerts),
+                        Category = SystemSettingsCategory.User,
+                        Description = "Includes Archived Entities in Alerts",
+                        SettingValue = null,
+                        Enabled = true,
+                        DefaultEnabled = true,
+                        DefaultSettingValue = null,
+                        SettingParentType = "Archive"
+                    },
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.IncludeArchivedInWidgets),
+                        Category = SystemSettingsCategory.User,
+                        Description = "Includes Archived Entities in Widgets",
+                        SettingValue = null,
+                        Enabled = true,
+                        DefaultEnabled = true,
+                        DefaultSettingValue = null,
+                        SettingParentType = "Archive"
+                    },
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.IncludeArchivedInViewAll),
+                        Category = SystemSettingsCategory.User,
+                        Description = "Includes Archived Entities in View All pages",
+                        SettingValue = null,
+                        Enabled = true,
+                        DefaultEnabled = true,
+                        DefaultSettingValue = null,
+                        SettingParentType = "Archive"
                     }
                 );
             });

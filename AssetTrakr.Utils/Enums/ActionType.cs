@@ -5,6 +5,7 @@
         ADDED,
         DELETED,
         ARCHIVED,
+        UNARCHIVED,
         UPDATED,
     }
 }

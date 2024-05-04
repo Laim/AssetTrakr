@@ -41,9 +41,12 @@ namespace AssetTrakr.Alerts
         /// </returns>
         public List<Alert> GetAlerts()
         {
-            AssetAlerts();
-            LicenseAlerts();
-            ContractAlerts();
+
+            bool includeArchived = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.IncludeArchivedInAlerts));
+
+            AssetAlerts(includeArchived);
+            LicenseAlerts(includeArchived);
+            ContractAlerts(includeArchived);
 
             return _alerts;
         }
@@ -51,12 +54,13 @@ namespace AssetTrakr.Alerts
         /// <summary>
         /// Generates the Alerts for Assets 
         /// </summary>
-        internal void AssetAlerts()
+        internal void AssetAlerts(bool includeArchived)
         {
             var assets = _dbContext.Assets
                 .Include(a => a.AssetPeriods)
                     .ThenInclude(ap => ap.Period)
-                .Include(a => a.AssetAttachments);
+                .Include(a => a.AssetAttachments)
+                .Where(a => includeArchived || !a.IsArchived);
 
             if (_alertPreferences.WhereEnabled(nameof(SystemSettings.NoAssetsAdded)))
             {
@@ -145,11 +149,13 @@ namespace AssetTrakr.Alerts
         /// <summary>
         /// Generates the alerts for Licenses
         /// </summary>
-        internal void LicenseAlerts()
+        internal void LicenseAlerts(bool includeArchived)
         {
             var licenses = _dbContext.Licenses
                 .Include(l => l.LicensePeriods)
-                    .ThenInclude(lp => lp.Period);
+                    .ThenInclude(lp => lp.Period)
+                .Where(l => includeArchived || !l.IsArchived);
+
 
             if (_alertPreferences.WhereEnabled(nameof(SystemSettings.NoLicensesAdded)))
             {
@@ -223,13 +229,14 @@ namespace AssetTrakr.Alerts
         /// <summary>
         /// Generate the alerts for Contracts
         /// </summary>
-        internal void ContractAlerts()
+        internal void ContractAlerts(bool includeArchived)
         {
             var contracts = _dbContext.Contracts
                 .Include(c => c.ContractPeriods)
-                    .ThenInclude(cp => cp.Period);
+                    .ThenInclude(cp => cp.Period)
+                .Where(c => includeArchived || !c.IsArchived);
 
-            if(_alertPreferences.WhereEnabled(nameof(SystemSettings.NoContractsAdded))) 
+            if (_alertPreferences.WhereEnabled(nameof(SystemSettings.NoContractsAdded))) 
             {
                 if (!contracts.Any())
                 {
@@ -266,7 +273,10 @@ namespace AssetTrakr.Alerts
                 if (contractsWithExpiringWarranties.Any())
                 {
                     int count = contractsWithExpiringWarranties.Count();
-                    string text = (count == 1) ? "contract has" : "contracts have";
+                    string text = (count == 1) ? "contract is" : "contracts are";
+
+                    // 1 contract is expiring within the next x days
+                    // 2 contracts are expiring within the next x days
 
                     _alerts.Add(new Alert
                     {

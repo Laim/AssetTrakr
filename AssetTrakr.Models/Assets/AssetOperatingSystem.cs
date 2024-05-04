@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace AssetTrakr.Models.Assets
 {
@@ -16,10 +17,11 @@ namespace AssetTrakr.Models.Assets
 
         public string? Notes { get; set; }
 
-        public int ManufacturerId { get; set; }
+        [DisplayName("Archived")]
+        public bool IsArchived { get; set; } = false;
 
         [ForeignKey("ManufacturerId")] // Define ForeignKey attribute to represent the relationship
-        public Manufacturer? Manufacturer { get; set; } // Direct navigation property to Manufacturer entity
+        public required Manufacturer Manufacturer { get; set; } // Direct navigation property to Manufacturer entity
 
         public Asset Asset { get; set; }
     }

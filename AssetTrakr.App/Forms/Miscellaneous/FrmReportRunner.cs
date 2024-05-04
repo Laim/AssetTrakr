@@ -10,16 +10,15 @@ namespace AssetTrakr.App.Forms.Shared
     public partial class FrmReportRunner : Form
     {
         private DatabaseContext _dbContext;
-        private List<int> _thresholdCriteria = [];
-        private List<Report> reports;
+        private readonly List<int> _thresholdCriteria = [];
+        private readonly List<Report> reports;
 
         public FrmReportRunner()
         {
             InitializeComponent();
 
             _dbContext ??= new DatabaseContext();
-            reports ??= _dbContext.Reports.ToList();
-
+            reports ??= _dbContext.Reports.ToList();    
         }
 
         protected override void OnLoad(EventArgs e)
@@ -321,15 +320,17 @@ namespace AssetTrakr.App.Forms.Shared
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmColumnSelector2 frmColumnSelector = new(dgv);
-                frmColumnSelector.ShowDialog();
+                return;
+            }
 
-                foreach (DataGridViewColumn col in dgv.Columns)
-                {
-                    col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
-                }
+            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            frmColumnSelector.ShowDialog();
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
             }
         }
 

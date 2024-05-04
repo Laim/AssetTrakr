@@ -1,5 +1,6 @@
 ﻿using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -45,6 +46,9 @@ namespace AssetTrakr.Models
         public decimal Price { get; set; }
 
         public required PaymentFrequency PaymentFrequency { get; set; }
+
+        [DisplayName("Archived")]
+        public bool IsArchived { get; set; } = false;
 
         /// <summary>
         /// Assigned Attachments

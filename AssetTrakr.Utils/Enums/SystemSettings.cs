@@ -28,6 +28,9 @@
         LicensesWithoutAttachments,
         NoContractsAdded,
         ContractsWithoutAttachments,
-        ContractsExpiringSoon
+        ContractsExpiringSoon,
+        IncludeArchivedInAlerts,
+        IncludeArchivedInViewAll,
+        IncludeArchivedInWidgets
     }
 }

@@ -222,15 +222,17 @@ namespace AssetTrakr.App.Forms.License
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
             {
-                FrmColumnSelector2 frmColumnSelector = new(dgv);
-                frmColumnSelector.ShowDialog();
+                return;
+            }
 
-                foreach (DataGridViewColumn col in dgv.Columns)
-                {
-                    col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
-                }
+            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            frmColumnSelector.ShowDialog();
+
+            foreach (DataGridViewColumn col in dgv.Columns)
+            {
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
             }
         }
 
@@ -448,14 +450,15 @@ namespace AssetTrakr.App.Forms.License
             _licenseData.IsSubscriptionContract = false; // TODO: Implement
             _licenseData.PurchaseDate = DateOnly.FromDateTime(dtPurchaseDate.Value);
             _licenseData.ManufacturerId = manufacturer.ManufacturerId;
+            _licenseData.Manufacturer = manufacturer;
             _licenseData.Price = numCost.Value;
             _licenseData.OrderReference = txtOrderRef.Text;
             _licenseData.LicenseKey = txtLicenseKey.Text;
             _licenseData.Version = txtVersion.Text;
-            _licenseData.PlatformId = platform.PlatformId;
             _licenseData.ContractId = contractId ?? null;
             _licenseData.RegisteredUser = txtInfoContactName.Text;
             _licenseData.RegisteredEmail = txtInfoContactEmail.Text;
+            _licenseData.PlatformId = platform.PlatformId;
             _licenseData.Platform = platform;
             _licenseData.PaymentFrequency = (PaymentFrequency)cmbPaymentFrequency.SelectedIndex;
             _licenseData.Vendor = txtVendor.Text;

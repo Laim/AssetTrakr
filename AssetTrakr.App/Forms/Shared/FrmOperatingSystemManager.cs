@@ -24,6 +24,7 @@ namespace AssetTrakr.App.Forms.Shared
         {
             base.OnLoad(e);
             RefreshOperatingSystems();
+            OperatingSystemChanged();
         }
 
         /// <summary>
@@ -42,6 +43,11 @@ namespace AssetTrakr.App.Forms.Shared
 
         private void lbOperatingSystems_SelectedIndexChanged(object sender, EventArgs e)
         {
+            OperatingSystemChanged();
+        }
+
+        private void OperatingSystemChanged()
+        {
             btnAdd.Enabled = lbOperatingSystems.SelectedIndex < 0;
             btnDelete.Enabled = btnUpdate.Enabled = !btnAdd.Enabled;
 
@@ -55,7 +61,7 @@ namespace AssetTrakr.App.Forms.Shared
 
             txtName.Text = operatingSystem.Name;
             txtNotes.Text = operatingSystem.Notes;
-            cmbManufacturers.SelectedIndex = cmbManufacturers.FindStringExact(operatingSystem.Manufacturer?.Name);
+            cmbManufacturers.SelectedItem = operatingSystem.Manufacturer;
         }
 
         private void deselectToolStripMenuItem_Click(object sender, EventArgs e)
