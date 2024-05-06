@@ -10,4 +10,4 @@ Download the latest release and run **AssetTrakr.App.Migrator**.  This will run 
 # Build from Source
 **Please note that building from source may prevent you from using the official releases and I cannot guarantee that migrations from official releases will work**
 
-See [/wiki/Builld-from-Source](Build from Source) on the Wiki.
+See [Build from Source](/wiki/Builld-from-Source) on the Wiki.
