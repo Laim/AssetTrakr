@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using AssetTrakr.Database;
+using AssetTrakr.Logging;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace AssetTrakr.App.Forms.Miscellaneous
 {
@@ -8,11 +11,10 @@ namespace AssetTrakr.App.Forms.Miscellaneous
         {
             InitializeComponent();
             Text = $"About {AssemblyTitle}";
-            labelProductName.Text = AssemblyProduct;
-            labelVersion.Text = $"v{AssemblyVersion}";
-            labelCopyright.Text = AssemblyCopyright;
-            labelCompanyName.Text = AssemblyCompany;
-            textBoxDescription.Text = AssemblyDescription;
+            lblProductName.Text = $"Product: {AssemblyProduct}";
+            lblVersionValue.Text = $"Version: v{AssemblyVersion}";
+            lblCopyrightValue.Text = $"Copyright (c) {AssemblyCopyright}";
+            lblDescriptionValue.Text = $"AssetTrakr is a License, Contract and Asset Tracker for home use built using EF Core and .NET 8.";
         }
 
         #region Assembly Attribute Accessors
@@ -94,5 +96,27 @@ namespace AssetTrakr.App.Forms.Miscellaneous
             }
         }
         #endregion
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnLicenses_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(
+                    new ProcessStartInfo($"Licenses.txt")
+                    {
+                        UseShellExecute = true
+                    }
+                );
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Licenses Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogManager.Error<FrmAbout>($"{ex}");
+            }
+        }
     }
 }
