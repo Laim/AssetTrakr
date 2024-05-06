@@ -15,10 +15,11 @@
     <Description>AssetTrakr.  Track Assets, Licenses, and Contracts for free.</Description>
     <Copyright>Laim McKenzie</Copyright>
     <Title>AssetTrakr</Title>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="7.0.9" />
+    <PackageReference Include="EPPlus" Version="7.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>

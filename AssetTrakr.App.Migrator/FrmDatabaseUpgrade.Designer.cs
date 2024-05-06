@@ -1,4 +1,4 @@
-﻿namespace AssetTrakr.App.Setup
+﻿namespace AssetTrakr.App.Migrator
 {
     partial class FrmDatabaseUpgrade
     {

@@ -15,7 +15,7 @@
     <Copyright>Laim McKenzie</Copyright>
     <Title>AssetTrakr.Setup.App</Title>
     <ImplicitUsings>enable</ImplicitUsings>
-    <StartupObject>AssetTrakr.App.Setup.Program</StartupObject>
+    <StartupObject>AssetTrakr.App.Migrator.Program</StartupObject>
     <ApplicationIcon>icons8-database-70.ico</ApplicationIcon>
   </PropertyGroup>
 

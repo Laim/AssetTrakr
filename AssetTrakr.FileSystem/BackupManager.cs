@@ -40,7 +40,7 @@ namespace AssetTrakr.App.Helpers
         }
 
         /// <summary>
-        /// Backs up the database but ignores the backup limit.  Only to be used by AssetTrakr.App.Setup
+        /// Backs up the database but ignores the backup limit.  Only to be used by AssetTrakr.App.Migrator
         /// </summary>
         /// <returns>
         /// if successful, the location of the backup, else error

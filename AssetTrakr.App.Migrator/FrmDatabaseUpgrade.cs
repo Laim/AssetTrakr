@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Bson;
 using System.Diagnostics;
 
-namespace AssetTrakr.App.Setup
+namespace AssetTrakr.App.Migrator
 {
     public partial class FrmDatabaseUpgrade : Form
     {

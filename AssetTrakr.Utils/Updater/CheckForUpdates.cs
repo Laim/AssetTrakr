@@ -4,7 +4,7 @@ using System.IO.Compression;
 
 namespace AssetTrakr.Utils.Updater
 {
-
+    [Obsolete("This is not currently used - 06/May/24")]
     public class CheckForUpdates
     {
         internal string _updateUrl = string.Empty;
