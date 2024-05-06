@@ -24,14 +24,13 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
- - OS: [e.g. iOS]
-- Application Version: [eg 1.0]
-- Database Version: [eg 1.0]
+- OS: [e.g. Windows 10 LTS]
+- AssetTrakr Version: [eg 1.0]
+- Migrator Version: [eg 1.0]
 
 **Product(Remove as required):**
-- AssetTrakr
-- AssetTrakr.Update.App
-- Efbundle
+- AssetTrakr.App
+- AssetTrakr.App.Migrator
 
 **Additional context**
 Add any other context about the problem here.
