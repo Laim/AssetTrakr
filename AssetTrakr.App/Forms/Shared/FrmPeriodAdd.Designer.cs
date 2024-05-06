@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmPeriodAdd));
             dtSubEnd = new DateTimePicker();
             lblSubEndDate = new Label();
             dtSubStart = new DateTimePicker();
@@ -90,6 +91,7 @@
             Controls.Add(dtSubStart);
             Controls.Add(lblSubStartDate);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmPeriodAdd";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add New Period";

@@ -28,137 +28,131 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAbout));
-            tableLayoutPanel = new TableLayoutPanel();
-            logoPictureBox = new PictureBox();
-            labelProductName = new Label();
-            labelVersion = new Label();
-            labelCopyright = new Label();
-            labelCompanyName = new Label();
-            textBoxDescription = new TextBox();
-            okButton = new Button();
-            tableLayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)logoPictureBox).BeginInit();
+            pictureBox1 = new PictureBox();
+            lblProductName = new Label();
+            lblVersion = new Label();
+            lblVersionValue = new Label();
+            lblCopyright = new Label();
+            lblCopyrightValue = new Label();
+            lblDescription = new Label();
+            lblDescriptionValue = new Label();
+            btnOK = new Button();
+            btnLicenses = new Button();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
-            // tableLayoutPanel
+            // pictureBox1
             // 
-            tableLayoutPanel.ColumnCount = 2;
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
-            tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 67F));
-            tableLayoutPanel.Controls.Add(logoPictureBox, 0, 0);
-            tableLayoutPanel.Controls.Add(labelProductName, 1, 0);
-            tableLayoutPanel.Controls.Add(labelVersion, 1, 1);
-            tableLayoutPanel.Controls.Add(labelCopyright, 1, 2);
-            tableLayoutPanel.Controls.Add(labelCompanyName, 1, 3);
-            tableLayoutPanel.Controls.Add(textBoxDescription, 1, 4);
-            tableLayoutPanel.Controls.Add(okButton, 1, 5);
-            tableLayoutPanel.Dock = DockStyle.Fill;
-            tableLayoutPanel.Location = new Point(12, 14);
-            tableLayoutPanel.Margin = new Padding(4, 5, 4, 5);
-            tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.RowCount = 6;
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            tableLayoutPanel.Size = new Size(556, 407);
-            tableLayoutPanel.TabIndex = 0;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(15, 14);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(175, 397);
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
             // 
-            // logoPictureBox
+            // lblProductName
             // 
-            logoPictureBox.Dock = DockStyle.Fill;
-            logoPictureBox.Image = (Image)resources.GetObject("logoPictureBox.Image");
-            logoPictureBox.Location = new Point(4, 5);
-            logoPictureBox.Margin = new Padding(4, 5, 4, 5);
-            logoPictureBox.Name = "logoPictureBox";
-            tableLayoutPanel.SetRowSpan(logoPictureBox, 6);
-            logoPictureBox.Size = new Size(175, 397);
-            logoPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            logoPictureBox.TabIndex = 12;
-            logoPictureBox.TabStop = false;
+            lblProductName.AutoSize = true;
+            lblProductName.Font = new Font("Segoe UI", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblProductName.Location = new Point(196, 14);
+            lblProductName.Name = "lblProductName";
+            lblProductName.Size = new Size(198, 38);
+            lblProductName.TabIndex = 1;
+            lblProductName.Text = "ProductName";
             // 
-            // labelProductName
+            // lblVersion
             // 
-            labelProductName.Dock = DockStyle.Fill;
-            labelProductName.Location = new Point(191, 0);
-            labelProductName.Margin = new Padding(8, 0, 4, 0);
-            labelProductName.MaximumSize = new Size(0, 26);
-            labelProductName.Name = "labelProductName";
-            labelProductName.Size = new Size(361, 26);
-            labelProductName.TabIndex = 19;
-            labelProductName.Text = "Product Name";
-            labelProductName.TextAlign = ContentAlignment.MiddleLeft;
+            lblVersion.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblVersion.Location = new Point(195, 110);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(102, 25);
+            lblVersion.TabIndex = 2;
+            lblVersion.Text = "Version";
+            lblVersion.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // labelVersion
+            // lblVersionValue
             // 
-            labelVersion.Dock = DockStyle.Fill;
-            labelVersion.Location = new Point(191, 40);
-            labelVersion.Margin = new Padding(8, 0, 4, 0);
-            labelVersion.MaximumSize = new Size(0, 26);
-            labelVersion.Name = "labelVersion";
-            labelVersion.Size = new Size(361, 26);
-            labelVersion.TabIndex = 0;
-            labelVersion.Text = "Version";
-            labelVersion.TextAlign = ContentAlignment.MiddleLeft;
+            lblVersionValue.AutoSize = true;
+            lblVersionValue.Location = new Point(303, 112);
+            lblVersionValue.Name = "lblVersionValue";
+            lblVersionValue.Size = new Size(50, 20);
+            lblVersionValue.TabIndex = 3;
+            lblVersionValue.Text = "0.0.0.0";
             // 
-            // labelCopyright
+            // lblCopyright
             // 
-            labelCopyright.Dock = DockStyle.Fill;
-            labelCopyright.Location = new Point(191, 80);
-            labelCopyright.Margin = new Padding(8, 0, 4, 0);
-            labelCopyright.MaximumSize = new Size(0, 26);
-            labelCopyright.Name = "labelCopyright";
-            labelCopyright.Size = new Size(361, 26);
-            labelCopyright.TabIndex = 21;
-            labelCopyright.Text = "Copyright";
-            labelCopyright.TextAlign = ContentAlignment.MiddleLeft;
+            lblCopyright.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCopyright.Location = new Point(195, 140);
+            lblCopyright.Name = "lblCopyright";
+            lblCopyright.Size = new Size(102, 25);
+            lblCopyright.TabIndex = 4;
+            lblCopyright.Text = "Copyright";
+            lblCopyright.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // labelCompanyName
+            // lblCopyrightValue
             // 
-            labelCompanyName.Dock = DockStyle.Fill;
-            labelCompanyName.Location = new Point(191, 120);
-            labelCompanyName.Margin = new Padding(8, 0, 4, 0);
-            labelCompanyName.MaximumSize = new Size(0, 26);
-            labelCompanyName.Name = "labelCompanyName";
-            labelCompanyName.Size = new Size(361, 26);
-            labelCompanyName.TabIndex = 22;
-            labelCompanyName.Text = "Company Name";
-            labelCompanyName.TextAlign = ContentAlignment.MiddleLeft;
+            lblCopyrightValue.AutoSize = true;
+            lblCopyrightValue.Location = new Point(303, 142);
+            lblCopyrightValue.Name = "lblCopyrightValue";
+            lblCopyrightValue.Size = new Size(231, 20);
+            lblCopyrightValue.TabIndex = 5;
+            lblCopyrightValue.Text = "Copyright (c) Year Laim McKenzie";
             // 
-            // textBoxDescription
+            // lblDescription
             // 
-            textBoxDescription.Dock = DockStyle.Fill;
-            textBoxDescription.Location = new Point(191, 165);
-            textBoxDescription.Margin = new Padding(8, 5, 4, 5);
-            textBoxDescription.Multiline = true;
-            textBoxDescription.Name = "textBoxDescription";
-            textBoxDescription.ReadOnly = true;
-            textBoxDescription.ScrollBars = ScrollBars.Both;
-            textBoxDescription.Size = new Size(361, 193);
-            textBoxDescription.TabIndex = 23;
-            textBoxDescription.TabStop = false;
-            textBoxDescription.Text = "Description";
+            lblDescription.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDescription.Location = new Point(195, 170);
+            lblDescription.Name = "lblDescription";
+            lblDescription.Size = new Size(102, 25);
+            lblDescription.TabIndex = 6;
+            lblDescription.Text = "Description";
+            lblDescription.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // okButton
+            // lblDescriptionValue
             // 
-            okButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            okButton.DialogResult = DialogResult.Cancel;
-            okButton.Location = new Point(452, 368);
-            okButton.Margin = new Padding(4, 5, 4, 5);
-            okButton.Name = "okButton";
-            okButton.Size = new Size(100, 34);
-            okButton.TabIndex = 24;
-            okButton.Text = "&OK";
+            lblDescriptionValue.Location = new Point(303, 196);
+            lblDescriptionValue.Name = "lblDescriptionValue";
+            lblDescriptionValue.Size = new Size(231, 134);
+            lblDescriptionValue.TabIndex = 7;
+            lblDescriptionValue.Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+            // 
+            // btnOK
+            // 
+            btnOK.Location = new Point(440, 382);
+            btnOK.Name = "btnOK";
+            btnOK.Size = new Size(94, 29);
+            btnOK.TabIndex = 8;
+            btnOK.Text = "OK";
+            btnOK.UseVisualStyleBackColor = true;
+            btnOK.Click += btnOK_Click;
+            // 
+            // btnLicenses
+            // 
+            btnLicenses.Location = new Point(340, 382);
+            btnLicenses.Name = "btnLicenses";
+            btnLicenses.Size = new Size(94, 29);
+            btnLicenses.TabIndex = 9;
+            btnLicenses.Text = "Licenses";
+            btnLicenses.UseVisualStyleBackColor = true;
+            btnLicenses.Click += btnLicenses_Click;
             // 
             // FrmAbout
             // 
-            AcceptButton = okButton;
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(580, 435);
-            Controls.Add(tableLayoutPanel);
+            BackColor = Color.White;
+            ClientSize = new Size(580, 427);
+            Controls.Add(btnLicenses);
+            Controls.Add(btnOK);
+            Controls.Add(lblDescriptionValue);
+            Controls.Add(lblDescription);
+            Controls.Add(lblCopyrightValue);
+            Controls.Add(lblCopyright);
+            Controls.Add(lblVersionValue);
+            Controls.Add(lblVersion);
+            Controls.Add(lblProductName);
+            Controls.Add(pictureBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(4, 5, 4, 5);
             MaximizeBox = false;
@@ -169,21 +163,22 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "FrmAbout";
-            tableLayoutPanel.ResumeLayout(false);
-            tableLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)logoPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private System.Windows.Forms.PictureBox logoPictureBox;
-        private System.Windows.Forms.Label labelProductName;
-        private System.Windows.Forms.Label labelVersion;
-        private System.Windows.Forms.Label labelCopyright;
-        private System.Windows.Forms.Label labelCompanyName;
-        private System.Windows.Forms.TextBox textBoxDescription;
-        private System.Windows.Forms.Button okButton;
+        private PictureBox pictureBox1;
+        private Label lblProductName;
+        private Label lblVersion;
+        private Label lblVersionValue;
+        private Label lblCopyright;
+        private Label lblCopyrightValue;
+        private Label lblDescription;
+        private Label lblDescriptionValue;
+        private Button btnOK;
+        private Button btnLicenses;
     }
 }

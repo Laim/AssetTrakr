@@ -1,7 +1,7 @@
 using AssetTrakr.App.Forms.Miscellaneous;
 using AssetTrakr.Logging;
 
-namespace AssetTrakr.App.Setup
+namespace AssetTrakr.App.Migrator
 {
     internal static class Program
     {

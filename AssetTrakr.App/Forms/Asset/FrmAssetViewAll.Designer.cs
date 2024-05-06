@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAssetViewAll));
             dgvViewAll = new DataGridView();
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
@@ -166,6 +167,7 @@
             Controls.Add(lblNoAssetsTitle);
             Controls.Add(dgvViewAll);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAssetViewAll";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View All Assets";

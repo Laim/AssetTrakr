@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmContractModify));
             tabControlContract = new TabControl();
             tabInformation = new TabPage();
+            txtAgreementId = new TextBox();
+            lblAgreementId = new Label();
             cmbPaymentFrequency = new ComboBox();
             lblPaymentFrequency = new Label();
             lblPurchaseCost = new Label();
@@ -54,8 +56,6 @@
             tabNotes = new TabPage();
             txtDescription = new TextBox();
             btnAddUpdate = new Button();
-            lblAgreementId = new Label();
-            txtAgreementId = new TextBox();
             tabControlContract.SuspendLayout();
             tabInformation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numCost).BeginInit();
@@ -98,6 +98,22 @@
             tabInformation.TabIndex = 0;
             tabInformation.Text = "Information";
             tabInformation.UseVisualStyleBackColor = true;
+            // 
+            // txtAgreementId
+            // 
+            txtAgreementId.Location = new Point(130, 64);
+            txtAgreementId.Name = "txtAgreementId";
+            txtAgreementId.Size = new Size(235, 27);
+            txtAgreementId.TabIndex = 42;
+            // 
+            // lblAgreementId
+            // 
+            lblAgreementId.Location = new Point(21, 67);
+            lblAgreementId.Name = "lblAgreementId";
+            lblAgreementId.Size = new Size(103, 20);
+            lblAgreementId.TabIndex = 41;
+            lblAgreementId.Text = "Agreement ID";
+            lblAgreementId.TextAlign = ContentAlignment.MiddleRight;
             // 
             // cmbPaymentFrequency
             // 
@@ -174,7 +190,7 @@
             tabPeriods.Location = new Point(4, 29);
             tabPeriods.Name = "tabPeriods";
             tabPeriods.Padding = new Padding(3);
-            tabPeriods.Size = new Size(712, 393);
+            tabPeriods.Size = new Size(724, 393);
             tabPeriods.TabIndex = 2;
             tabPeriods.Text = "Periods";
             tabPeriods.UseVisualStyleBackColor = true;
@@ -255,7 +271,7 @@
             tabAttachments.Location = new Point(4, 29);
             tabAttachments.Name = "tabAttachments";
             tabAttachments.Padding = new Padding(3);
-            tabAttachments.Size = new Size(712, 393);
+            tabAttachments.Size = new Size(724, 393);
             tabAttachments.TabIndex = 3;
             tabAttachments.Text = "Attachments";
             tabAttachments.UseVisualStyleBackColor = true;
@@ -301,7 +317,7 @@
             tabNotes.Location = new Point(4, 29);
             tabNotes.Name = "tabNotes";
             tabNotes.Padding = new Padding(3);
-            tabNotes.Size = new Size(712, 393);
+            tabNotes.Size = new Size(724, 393);
             tabNotes.TabIndex = 1;
             tabNotes.Text = "Notes";
             tabNotes.UseVisualStyleBackColor = true;
@@ -312,7 +328,7 @@
             txtDescription.Location = new Point(3, 3);
             txtDescription.Multiline = true;
             txtDescription.Name = "txtDescription";
-            txtDescription.Size = new Size(706, 387);
+            txtDescription.Size = new Size(718, 387);
             txtDescription.TabIndex = 9;
             // 
             // btnAddUpdate
@@ -324,22 +340,6 @@
             btnAddUpdate.Text = "Save";
             btnAddUpdate.UseVisualStyleBackColor = true;
             btnAddUpdate.Click += btnAddUpdate_Click;
-            // 
-            // lblAgreementId
-            // 
-            lblAgreementId.Location = new Point(21, 67);
-            lblAgreementId.Name = "lblAgreementId";
-            lblAgreementId.Size = new Size(103, 20);
-            lblAgreementId.TabIndex = 41;
-            lblAgreementId.Text = "Agreement ID";
-            lblAgreementId.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // txtAgreementId
-            // 
-            txtAgreementId.Location = new Point(130, 64);
-            txtAgreementId.Name = "txtAgreementId";
-            txtAgreementId.Size = new Size(235, 27);
-            txtAgreementId.TabIndex = 42;
             // 
             // FrmContractModify
             // 

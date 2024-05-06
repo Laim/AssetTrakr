@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.App", "AssetTrakr.App\AssetTrakr.App.csproj", "{1268F79A-8277-4F8A-AD79-A5BBB28394E6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{32FA774F-9C37-49D4-8811-E25618803CE1} = {32FA774F-9C37-49D4-8811-E25618803CE1}
+		{6455E871-6FC8-46B0-9AD3-34DC0A3B3887} = {6455E871-6FC8-46B0-9AD3-34DC0A3B3887}
 		{6E281FCD-64C1-4E05-B4C4-72313B72D036} = {6E281FCD-64C1-4E05-B4C4-72313B72D036}
 		{906B8163-0913-4CF7-8445-EB60FCD5F7B7} = {906B8163-0913-4CF7-8445-EB60FCD5F7B7}
 	EndProjectSection
@@ -25,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Alerts", "AssetT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.Logging", "AssetTrakr.Logging\AssetTrakr.Logging.csproj", "{9A211211-B323-4A84-9455-A4EC4F05B4BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.App.Setup", "AssetTrakr.App.Setup\AssetTrakr.App.Setup.csproj", "{6455E871-6FC8-46B0-9AD3-34DC0A3B3887}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.App.Migrator", "AssetTrakr.App.Migrator\AssetTrakr.App.Migrator.csproj", "{6455E871-6FC8-46B0-9AD3-34DC0A3B3887}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssetTrakr.WinForms", "AssetTrakr.WinForms\AssetTrakr.WinForms.csproj", "{8C2C7025-57A2-4D28-A455-E1A881716690}"
 EndProject

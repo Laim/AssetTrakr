@@ -40,7 +40,7 @@ namespace AssetTrakr.App.Forms
 
                 if (!CanConnectDatabase())
                 {
-                    MessageBox.Show("Cannot connect to Database, have you ran AssetTrakr.App.Setup?", "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Cannot connect to Database, have you ran AssetTrakr.App.Migrator?", "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Application.Exit();
                     
                     // Return needed to stop blank db being created before app.exit finishes
@@ -90,7 +90,7 @@ namespace AssetTrakr.App.Forms
 
                 if(systemInformation == null)
                 {
-                    MessageBox.Show($"Unable to retrieve System Registration, run AssetTrakr.App.Setup!", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Unable to retrieve System Registration, run AssetTrakr.App.Migrator!", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     LogManager.Fatal<FrmMain>("Application has not been registered, exiting out.");
                     Application.Exit();
                     return;
@@ -98,7 +98,7 @@ namespace AssetTrakr.App.Forms
 
                 if(systemInformation.ProductVersion != Application.ProductVersion)
                 {
-                    MessageBox.Show("Stored product version does not match installed version, please run AssetTrakr.App.Setup to fix.", "Incompatible", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Stored product version does not match installed version, please run AssetTrakr.App.Migrator to fix.", "Incompatible", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Application.Exit();
                     return;
                 }
