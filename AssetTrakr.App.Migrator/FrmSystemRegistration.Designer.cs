@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSystemRegistration));
             lblFullName = new Label();
             txtFullName = new TextBox();
             txtProductVersion = new TextBox();
@@ -158,6 +159,7 @@
             Controls.Add(txtFullName);
             Controls.Add(lblFullName);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmSystemRegistration";
             StartPosition = FormStartPosition.CenterParent;
             Text = "System Registration";

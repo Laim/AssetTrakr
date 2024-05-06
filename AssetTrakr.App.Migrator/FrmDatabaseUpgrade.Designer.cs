@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDatabaseUpgrade));
             lblTitle = new Label();
             lblHr = new Label();
             lblNotice = new Label();
@@ -118,6 +119,7 @@
             Controls.Add(lblHr);
             Controls.Add(lblTitle);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmDatabaseUpgrade";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AssetTrakr - Database Upgrader";

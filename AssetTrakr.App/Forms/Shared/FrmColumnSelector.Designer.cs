@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmColumnSelector));
             lblSelectedColumns = new Label();
             lblAvailableColumns = new Label();
             lbSelectedColumns = new ListBox();
@@ -102,6 +103,7 @@
             Controls.Add(lblAvailableColumns);
             Controls.Add(lblSelectedColumns);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmColumnSelector";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Column Selector";

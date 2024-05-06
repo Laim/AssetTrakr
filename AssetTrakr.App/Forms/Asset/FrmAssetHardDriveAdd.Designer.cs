@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAssetHardDriveAdd));
             lblName = new Label();
             lblSizeInBytes = new Label();
             lblManufacturer = new Label();
@@ -146,6 +147,7 @@
             Controls.Add(lblSizeInBytes);
             Controls.Add(lblName);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmAssetHardDriveAdd";

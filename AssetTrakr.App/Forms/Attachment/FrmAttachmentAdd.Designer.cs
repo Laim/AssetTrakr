@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAttachmentAdd));
             lblName = new Label();
             txtName = new TextBox();
             cbIsUrl = new CheckBox();
@@ -179,6 +180,7 @@
             Controls.Add(txtName);
             Controls.Add(lblName);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmAttachmentAdd";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add Attachment";

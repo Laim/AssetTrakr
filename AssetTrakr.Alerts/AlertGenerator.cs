@@ -99,7 +99,7 @@ namespace AssetTrakr.Alerts
                 if (assetsWithExpiredWarranty.Any())
                 {
                     int count = assetsWithExpiredWarranty.Count();
-                    string text = (count == 1) ? "asset's warranty has" : "assets' warranties have";
+                    string text = (count == 1) ? "asset's warranty has" : "assets warranties have";
 
                     _alerts.Add(new Alert
                     {
@@ -134,7 +134,7 @@ namespace AssetTrakr.Alerts
                 if (assets.Any(a => a.AssetAttachments.Count == 0))
                 {
                     int count = assets.Count(l => l.AssetAttachments.Count == 0);
-                    string text = (count < 2) ? "asset" : "assets'";
+                    string text = (count < 2) ? "asset" : "assets";
 
                     _alerts.Add(new Alert
                     {

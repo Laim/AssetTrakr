@@ -169,6 +169,7 @@
             Controls.Add(lblHr);
             Controls.Add(lblTitle);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmDataExporter";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Data Exporter";

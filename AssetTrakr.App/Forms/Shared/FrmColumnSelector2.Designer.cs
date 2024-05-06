@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmColumnSelector2));
             chkLbColumns = new CheckedListBox();
             SuspendLayout();
             // 
@@ -48,6 +49,7 @@
             ClientSize = new Size(281, 394);
             Controls.Add(chkLbColumns);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "FrmColumnSelector2";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Column Selector";

@@ -105,14 +105,14 @@
             // 
             addLicenseToolStripMenuItem.Name = "addLicenseToolStripMenuItem";
             addLicenseToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.L;
-            addLicenseToolStripMenuItem.Size = new Size(224, 26);
+            addLicenseToolStripMenuItem.Size = new Size(217, 26);
             addLicenseToolStripMenuItem.Text = "Add License";
             addLicenseToolStripMenuItem.Click += addLicenseToolStripMenuItem_Click;
             // 
             // viewLicensesToolStripMenuItem
             // 
             viewLicensesToolStripMenuItem.Name = "viewLicensesToolStripMenuItem";
-            viewLicensesToolStripMenuItem.Size = new Size(224, 26);
+            viewLicensesToolStripMenuItem.Size = new Size(217, 26);
             viewLicensesToolStripMenuItem.Text = "View Licenses";
             viewLicensesToolStripMenuItem.Click += viewLicensesToolStripMenuItem_Click;
             // 
@@ -127,14 +127,14 @@
             // 
             addAssetToolStripMenuItem.Name = "addAssetToolStripMenuItem";
             addAssetToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.A;
-            addAssetToolStripMenuItem.Size = new Size(224, 26);
+            addAssetToolStripMenuItem.Size = new Size(207, 26);
             addAssetToolStripMenuItem.Text = "Add Asset";
             addAssetToolStripMenuItem.Click += addAssetToolStripMenuItem_Click;
             // 
             // viewAssetsToolStripMenuItem
             // 
             viewAssetsToolStripMenuItem.Name = "viewAssetsToolStripMenuItem";
-            viewAssetsToolStripMenuItem.Size = new Size(224, 26);
+            viewAssetsToolStripMenuItem.Size = new Size(207, 26);
             viewAssetsToolStripMenuItem.Text = "View Assets";
             viewAssetsToolStripMenuItem.Click += viewAssetsToolStripMenuItem_Click;
             // 
@@ -232,45 +232,45 @@
             // reportBugToolStripMenuItem
             // 
             reportBugToolStripMenuItem.Name = "reportBugToolStripMenuItem";
-            reportBugToolStripMenuItem.Size = new Size(224, 26);
+            reportBugToolStripMenuItem.Size = new Size(198, 26);
             reportBugToolStripMenuItem.Text = "Report Bug";
             reportBugToolStripMenuItem.Click += reportBugToolStripMenuItem_Click;
             // 
             // featureRequestToolStripMenuItem
             // 
             featureRequestToolStripMenuItem.Name = "featureRequestToolStripMenuItem";
-            featureRequestToolStripMenuItem.Size = new Size(224, 26);
+            featureRequestToolStripMenuItem.Size = new Size(198, 26);
             featureRequestToolStripMenuItem.Text = "Feature Request";
             featureRequestToolStripMenuItem.Click += featureRequestToolStripMenuItem_Click;
             // 
             // documentationToolStripMenuItem
             // 
             documentationToolStripMenuItem.Name = "documentationToolStripMenuItem";
-            documentationToolStripMenuItem.Size = new Size(224, 26);
+            documentationToolStripMenuItem.Size = new Size(198, 26);
             documentationToolStripMenuItem.Text = "Documentation";
             documentationToolStripMenuItem.Click += documentationToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(221, 6);
+            toolStripSeparator2.Size = new Size(195, 6);
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(224, 26);
+            aboutToolStripMenuItem.Size = new Size(198, 26);
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(221, 6);
+            toolStripSeparator4.Size = new Size(195, 6);
             // 
             // dataToolStripMenuItem
             // 
             dataToolStripMenuItem.Name = "dataToolStripMenuItem";
-            dataToolStripMenuItem.Size = new Size(224, 26);
+            dataToolStripMenuItem.Size = new Size(198, 26);
             dataToolStripMenuItem.Text = "Data";
             dataToolStripMenuItem.Click += dataToolStripMenuItem_Click;
             // 
