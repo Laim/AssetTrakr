@@ -1,4 +1,4 @@
-# <img width="48px" src="https://github.com/Laim/AssetTrakr/assets/14845036/ae72eef7-1d2b-4c64-8852-e0610557f186" alt="AssetTrakr"></img> AssetTrakr
+# <img width="24px" src="https://github.com/Laim/AssetTrakr/assets/14845036/ae72eef7-1d2b-4c64-8852-e0610557f186" alt="AssetTrakr"></img> AssetTrakr
 
 **AssetTrakr** is a License, Contract and Asset Tracker for home use built using [EF Core](https://github.com/dotnet/efcore) and [.NET 8](https://github.com/dotnet/core).
 
