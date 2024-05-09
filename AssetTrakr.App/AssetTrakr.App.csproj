@@ -35,6 +35,7 @@
     <ProjectReference Include="..\AssetTrakr.FileSystem\AssetTrakr.FileSystem.csproj" />
     <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
     <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
+    <ProjectReference Include="..\AssetTrakr.Updater\AssetTrakr.Updater.csproj" />
     <ProjectReference Include="..\AssetTrakr.Utils\AssetTrakr.Utils.csproj" />
     <ProjectReference Include="..\AssetTrakr.WinForms\AssetTrakr.WinForms.csproj" />
   </ItemGroup>

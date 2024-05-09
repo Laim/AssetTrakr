@@ -21,6 +21,7 @@ namespace AssetTrakr.Database
         {
 
             SystemSettings();
+            Alerts();
             UserSettings();
             AssetAlerts();
             LicenseAlerts();
@@ -124,27 +125,15 @@ namespace AssetTrakr.Database
                 (
                     new SystemSetting
                     {
-                        Name = nameof(Utils.Enums.SystemSettings.AlertThreshold),
+                        Name = nameof(Utils.Enums.SystemSettings.CheckForUpdates),
                         Category = SystemSettingsCategory.Application,
-                        Description = "How many days before something expires to notify the user. (0 if disabled)",
+                        Description = "Automatically check for Updates",
+                        SettingValue = "stable",
+                        DefaultSettingValue = "stable",
                         DefaultEnabled = true,
-                        SettingParentType = "Alerts",
                         Enabled = true,
-                        SettingValue = "30",
-                        DefaultSettingValue = "30"
+                        SettingParentType = "Updates",
                     },
-                    // TODO: Re-add this so CheckForUpdates can be used by the end user when Updates is added
-                    //new SystemSetting
-                    //{
-                    //    Name = nameof(Utils.Enums.SystemSettings.CheckForUpdates),
-                    //    Category = SystemSettingsCategory.Application,
-                    //    Description = "Automatically check for Updates",
-                    //    SettingValue = "stable",
-                    //    DefaultSettingValue = "stable",
-                    //    DefaultEnabled = true,
-                    //    Enabled = true,
-                    //    SettingParentType = "Updates",
-                    //},
                     new SystemSetting
                     {
                         Name = nameof(Utils.Enums.SystemSettings.AutomaticBackups),
@@ -201,6 +190,27 @@ namespace AssetTrakr.Database
                         DefaultEnabled = true,
                         DefaultSettingValue = null,
                         SettingParentType = "Archive"
+                    }
+                );
+            });
+        }
+
+        internal void Alerts()
+        {
+            _modelBuilder.Entity<SystemSetting>(e =>
+            {
+                e.HasData
+                (
+                    new SystemSetting
+                    {
+                        Name = nameof(Utils.Enums.SystemSettings.AlertThreshold),
+                        Category = SystemSettingsCategory.Alert,
+                        Description = "How many days before something expires to notify the user. (0 if disabled)",
+                        DefaultEnabled = true,
+                        SettingParentType = "Alerts",
+                        Enabled = true,
+                        SettingValue = "30",
+                        DefaultSettingValue = "30"
                     }
                 );
             });
