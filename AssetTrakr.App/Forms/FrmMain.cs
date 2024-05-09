@@ -8,6 +8,7 @@ using AssetTrakr.App.Helpers;
 using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
+using AssetTrakr.Updater;
 using AssetTrakr.Utils.Enums;
 using Microsoft.Data.Sqlite;
 using System.ComponentModel;
@@ -27,7 +28,7 @@ namespace AssetTrakr.App.Forms
             _dbContext ??= new DatabaseContext();
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
@@ -42,7 +43,7 @@ namespace AssetTrakr.App.Forms
                 {
                     MessageBox.Show("Cannot connect to Database, have you ran AssetTrakr.App.Migrator?", "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Application.Exit();
-                    
+
                     // Return needed to stop blank db being created before app.exit finishes
                     return;
                 }
@@ -70,6 +71,9 @@ namespace AssetTrakr.App.Forms
             LoadWidgets();
             RefreshAlerts();
 
+            CheckForUpdates checkForUpdates = new();
+            updateAvailableToolStripMenuItem.Visible = await checkForUpdates.UpdateAvailable(new Version(ProductVersion));
+
             aboutToolStripMenuItem.Text = $"About {ProductName}";
         }
 
@@ -88,7 +92,7 @@ namespace AssetTrakr.App.Forms
             {
                 var systemInformation = _dbContext.SystemInfo.FirstOrDefault();
 
-                if(systemInformation == null)
+                if (systemInformation == null)
                 {
                     MessageBox.Show($"Unable to retrieve System Registration, run AssetTrakr.App.Migrator!", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     LogManager.Fatal<FrmMain>("Application has not been registered, exiting out.");
@@ -96,7 +100,7 @@ namespace AssetTrakr.App.Forms
                     return;
                 }
 
-                if(systemInformation.ProductVersion != Application.ProductVersion)
+                if (systemInformation.ProductVersion != Application.ProductVersion)
                 {
                     MessageBox.Show("Stored product version does not match installed version, please run AssetTrakr.App.Migrator to fix.", "Incompatible", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Application.Exit();
@@ -255,6 +259,16 @@ namespace AssetTrakr.App.Forms
         {
             FrmDataExporter FrmDataExporter = new();
             FrmDataExporter.ShowDialog();
+        }
+
+        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(
+                new ProcessStartInfo($"https://github.com/Laim/AssetTrakr/releases")
+                {
+                    UseShellExecute = true
+                }
+            );
         }
 
         #region Help

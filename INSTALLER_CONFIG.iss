@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "AssetTrakr"
-#define MyAppVersion "1.0.5"
+#define MyAppVersion "1.0.6"
 #define MyAppPublisher "Laim McKenzie"
 #define MyAppURL "https://assettrakr.laim.scot"
 #define MyAppExeName "AssetTrakr.App.exe"
@@ -29,6 +29,7 @@ OutputBaseFilename=AssetTrakr_{#MyAppVersion}_win64-setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+SetupIconFile=C:\Development\Source Code\AssetTrakr\AssetTrakr\AssetTrakr.App\ATIcon-256.ico
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

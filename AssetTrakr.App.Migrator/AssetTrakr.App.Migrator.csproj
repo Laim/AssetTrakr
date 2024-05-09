@@ -31,9 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="FrmSystemRegistration.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="FrmSystemRegistration.cs" />
   </ItemGroup>
 
 </Project>

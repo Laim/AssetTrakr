@@ -57,6 +57,7 @@
             aboutToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator4 = new ToolStripSeparator();
             dataToolStripMenuItem = new ToolStripMenuItem();
+            updateAvailableToolStripMenuItem = new ToolStripMenuItem();
             gbLicenseCount = new GroupBox();
             lblLicenseCount = new Label();
             gbAssetsCount = new GroupBox();
@@ -87,7 +88,7 @@
             // menuStripMain
             // 
             menuStripMain.ImageScalingSize = new Size(20, 20);
-            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, contractsToolStripMenuItem, reportsToolStripMenuItem, administrationToolStripMenuItem, helpToolStripMenuItem });
+            menuStripMain.Items.AddRange(new ToolStripItem[] { licensesToolStripMenuItem, assetsToolStripMenuItem, contractsToolStripMenuItem, reportsToolStripMenuItem, administrationToolStripMenuItem, helpToolStripMenuItem, updateAvailableToolStripMenuItem });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
             menuStripMain.Size = new Size(1262, 28);
@@ -273,6 +274,14 @@
             dataToolStripMenuItem.Size = new Size(198, 26);
             dataToolStripMenuItem.Text = "Data";
             dataToolStripMenuItem.Click += dataToolStripMenuItem_Click;
+            // 
+            // updateAvailableToolStripMenuItem
+            // 
+            updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
+            updateAvailableToolStripMenuItem.Size = new Size(138, 24);
+            updateAvailableToolStripMenuItem.Text = "Update Available";
+            updateAvailableToolStripMenuItem.Visible = false;
+            updateAvailableToolStripMenuItem.Click += updateAvailableToolStripMenuItem_Click;
             // 
             // gbLicenseCount
             // 
@@ -536,5 +545,6 @@
         private ToolStripMenuItem dataToolStripMenuItem;
         private ToolStripMenuItem dataExporterToolStripMenuItem;
         private ToolStripMenuItem operatingSystemManagerToolStripMenuItem;
+        private ToolStripMenuItem updateAvailableToolStripMenuItem;
     }
 }
