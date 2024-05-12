@@ -69,6 +69,11 @@ namespace AssetTrakr.App.Forms.Contract
             dgvViewAll.Columns[nameof(Models.Contract.CreatedBy)].Visible = false;
             dgvViewAll.Columns[nameof(Models.Contract.ComboDisplayName)].Visible = false;
 
+            if (!_includeArchived)
+            {
+                dgvViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
+            }
+
             if (!contracts.Any())
             {
                 dgvViewAll.Visible = false;

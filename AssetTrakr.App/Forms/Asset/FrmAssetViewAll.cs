@@ -118,6 +118,11 @@ namespace AssetTrakr.App.Forms.Asset
             dgvViewAll.Columns[nameof(Models.Assets.Asset.UpdatedBy)].Visible = false;
             dgvViewAll.Columns[nameof(Models.Assets.Asset.CreatedBy)].Visible = false;
 
+            if(!_includeArchived)
+            {
+                dgvViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
+            }
+
             if (!assets.Any())
             {
                 dgvViewAll.Visible = false;

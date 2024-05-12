@@ -12,3 +12,6 @@ Download the latest release and run **AssetTrakr.App.Migrator**.  This will run 
 **Please note that building from source may prevent you from using the official releases and I cannot guarantee that migrations from official releases will work**
 
 See [Build from Source](https://github.com/Laim/assettrakr/wiki/Build-from-Source) on the Wiki.
+
+# Roadmap
+You can keep up to date with what's in progress for the next version of AssetTrakr on the [GitHub Project](https://github.com/orgs/McKenzie-Software/projects/4/views/1)

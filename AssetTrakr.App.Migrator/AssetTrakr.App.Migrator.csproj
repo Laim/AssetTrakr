@@ -11,7 +11,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
     <Description>AssetTrakr.  Track Assets, Licenses, and Contracts for free.</Description>
-    <Copyright>Laim McKenzie</Copyright>
+    <Copyright>McKenzie Software</Copyright>
     <Title>AssetTrakr.Setup.App</Title>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>AssetTrakr.App.Migrator.Program</StartupObject>

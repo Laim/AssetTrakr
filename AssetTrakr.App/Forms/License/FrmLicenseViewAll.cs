@@ -108,6 +108,11 @@ namespace AssetTrakr.App.Forms.License
             dgvViewAll.Columns[nameof(Models.License.UpdatedBy)].Visible = false;
             dgvViewAll.Columns[nameof(Models.License.CreatedBy)].Visible = false;
 
+            if (!_includeArchived)
+            {
+                dgvViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
+            }
+
             if (!licenses.Any())
             {
                 dgvViewAll.Visible = false;
