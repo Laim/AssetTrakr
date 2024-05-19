@@ -20,6 +20,7 @@ namespace AssetTrakr.App.Forms
     {
 
         private DatabaseContext _dbContext;
+        private bool _isUpdateAvailable = false;
 
         public FrmMain()
         {
@@ -69,10 +70,12 @@ namespace AssetTrakr.App.Forms
             }
 
             LoadWidgets();
-            RefreshAlerts();
 
             CheckForUpdates checkForUpdates = new();
-            updateAvailableToolStripMenuItem.Visible = await checkForUpdates.UpdateAvailable(new Version(ProductVersion));
+            _isUpdateAvailable = await checkForUpdates.UpdateAvailable(new Version(ProductVersion));
+            updateAvailableToolStripMenuItem.Visible = _isUpdateAvailable;
+             
+            RefreshAlerts();
 
             aboutToolStripMenuItem.Text = $"About {ProductName}";
         }
@@ -169,9 +172,15 @@ namespace AssetTrakr.App.Forms
         /// <summary>
         /// Creates the alerts for the AlertList for the User to view
         /// </summary>
+        /// <param name="isUpdateAvailable">
+        /// If true, the Update Available alert is included.
+        /// </param>
         private void RefreshAlerts()
         {
-            AlertGenerator alertGenerator = new();
+            AlertGenerator alertGenerator = new()
+            {
+                IsUpdateAvailable = _isUpdateAvailable
+            };
 
             dgvAlerts.DataSource = alertGenerator.GetAlerts();
         }

@@ -15,6 +15,7 @@ namespace AssetTrakr.Alerts
         internal int _thresholdValue = 0;
         internal DateOnly _thresholdDate;
         internal List<SystemSetting> _alertPreferences;
+        public bool IsUpdateAvailable = false;
 
         public AlertGenerator()
         {
@@ -47,6 +48,16 @@ namespace AssetTrakr.Alerts
             AssetAlerts(includeArchived);
             LicenseAlerts(includeArchived);
             ContractAlerts(includeArchived);
+
+            if(IsUpdateAvailable)
+            {
+                _alerts.Add(new Alert
+                {
+                    Category = ActionAlertCategory.System,
+                    Description = "You are not running the latest version",
+                    Severity = Severity.Severe,
+                });
+            }
 
             return _alerts;
         }
