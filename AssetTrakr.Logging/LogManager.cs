@@ -17,7 +17,6 @@ namespace AssetTrakr.Logging
                 .CreateLogger();
         }
 
-
         public static void Information<T>(string message) => Log.ForContext<T>().Information(message);
 
         /// <summary>
@@ -25,7 +24,7 @@ namespace AssetTrakr.Logging
         /// </summary>
         /// <param name="message">informational message</param>
         /// <param name="source">class name</param>
-        public static void Information(string message) => Log.Information(message);
+        public static void Information(string message, string source) => Log.Information($"[{source}] {message}");
 
         public static void Fatal<T>(string message) => Log.ForContext<T>().Fatal(message);
 
@@ -46,5 +45,12 @@ namespace AssetTrakr.Logging
         public static void Error(string message, string source) => Log.Error($"[{source}] {message}");
 
         public static void Debug<T>(string message) => Log.ForContext<T>().Debug(message);
+
+        /// <summary>
+        /// Should only be used in classes that are static where <see cref="Debug{T}(string)"/> is not suitable
+        /// </summary>
+        /// <param name="message">debug message</param>
+        /// <param name="source">class name</param>
+        public static void Debug(string message, string source) => Log.Debug($"[{source}] {message}");
     }
 }

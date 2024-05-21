@@ -1,4 +1,6 @@
 ﻿
+using Syncfusion.WinForms.DataGrid;
+
 namespace AssetTrakr.App.Forms.Shared
 {
     public partial class FrmColumnSelector2 : Form
@@ -6,24 +8,24 @@ namespace AssetTrakr.App.Forms.Shared
         public List<string> AvailableColumns = [];
         public List<string> SelectedColumns = [];
 
-        public FrmColumnSelector2(DataGridView dgv)
+        public FrmColumnSelector2(DataGridView? dgv2 = null, SfDataGrid? sfDgv = null)
         {
             InitializeComponent();
 
-            if(dgv == null)
+            if(sfDgv == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(dgv), "DataGridView has not been passed to form");
+                throw new ArgumentOutOfRangeException(nameof(sfDgv), "Data Grid has not been passed to form");
             }
 
-            foreach (DataGridViewColumn col in dgv.Columns)
+            foreach (var col in sfDgv.Columns)
             {
                 if (col.Visible)
                 {
-                    SelectedColumns.Add(col.Name);
+                    SelectedColumns.Add(col.MappingName);
                 }
                 else
                 {
-                    AvailableColumns.Add(col.Name);
+                    AvailableColumns.Add(col.MappingName);
                 }
             }
         }

@@ -10,6 +10,10 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.1.2" />
+    <PackageReference Include="Syncfusion.Core.WinForms" Version="25.2.4" />
+    <PackageReference Include="Syncfusion.DataGridExport.WinForms" Version="25.2.4" />
+    <PackageReference Include="Syncfusion.SfDataGrid.WinForms" Version="25.2.4" />
+    <PackageReference Include="Syncfusion.XlsIO.WinForms" Version="25.2.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,14 +20,18 @@ namespace AssetTrakr.Models
 
         [Required]
         [MaxLength(150)]
+        [Display(Name="Order Reference", Description ="Invoice Reference for Purchase")]
+        
         public required string OrderRef { get; set; } // UNIQUE
 
         [Required]
+        [Display(Name = "User Agreement Id", Description = "User/Vendor-choosen agreement Id")]
         public required string UserAgreementId { get; set; } // UNIQUE
 
         /// <summary>
         /// This is used on ComboBoxes on the 'DisplayMember' prop.
         /// </summary>
+        [Display(Name = "Name & User Agreement Id", Description = "Name and Agreement Id merged")]
         public string ComboDisplayName
         {
             get
@@ -45,6 +49,7 @@ namespace AssetTrakr.Models
 
         public decimal Price { get; set; }
 
+        [Display(Name = "Pay Frequency", Description = "Frequency that the entity is paid for")]
         public required PaymentFrequency PaymentFrequency { get; set; }
 
         [DisplayName("Archived")]

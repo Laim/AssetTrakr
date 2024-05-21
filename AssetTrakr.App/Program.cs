@@ -18,11 +18,14 @@ namespace AssetTrakr.App
             ApplicationConfiguration.Initialize();
 
             LogManager logManager = new();
-            LogManager.Information("Initialize...");
+            LogManager.Information("Initialize...", nameof(Program));
 
 #if DEBUG
-            LogManager.Information("APPLICATION IS IN DEBUG MODE");
+            LogManager.Information("APPLICATION IS IN DEBUG MODE", nameof(Program));
 #endif
+
+            LogManager.Debug("Registering SyncFusion", nameof(Program));
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("%SFLIC%");
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
