@@ -13,12 +13,38 @@
     <SelfContained>false</SelfContained>
     <ApplicationIcon>ATIcon-256.ico</ApplicationIcon>
     <Description>AssetTrakr.  Track Assets, Licenses, and Contracts for free.</Description>
-    <Copyright>McKenzie Software</Copyright>
+    <Copyright>$([System.DateTime]::Now.Year) McKenzie Software</Copyright>
     <Title>AssetTrakr</Title>
     <PlatformTarget>x64</PlatformTarget>
+
+	<SyncfusionLicense>nullkey</SyncfusionLicense>
+
+	<StartupObject>AssetTrakr.App.Program</StartupObject>
   </PropertyGroup>
 
-  <ItemGroup>
+  <Target Name="GenerateSyncfusionLicenseClass" BeforeTargets="BeforeBuild">
+    <Message Text="Generating Syncfusion License Class" />
+    <PropertyGroup>
+      <ClassData>
+      <![CDATA[
+      namespace AssetTrakr.App
+      {
+          public static class SyncfusionInfo
+          {
+              public const string LicenseKey = "$(SyncfusionLicense)"%3b // percentage 3 b is a semicolon
+          }
+      }
+      ]]>
+      </ClassData>
+    </PropertyGroup>
+    <WriteLinesToFile File="GeneratedSyncfusionLicense.cs" Overwrite="true" Lines="$(ClassData)" />
+    <ItemGroup>
+		<Compile Remove="GeneratedSyncfusionLicense.cs"></Compile>
+		<Compile Include="GeneratedSyncfusionLicense.cs"></Compile>
+    </ItemGroup>
+  </Target>
+
+	<ItemGroup>
     <PackageReference Include="EPPlus" Version="7.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
