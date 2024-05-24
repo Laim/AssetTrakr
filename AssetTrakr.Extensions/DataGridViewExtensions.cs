@@ -66,7 +66,7 @@ namespace AssetTrakr.Extensions
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogManager.Error($"{ex}", nameof(DataGridViewExtensions));
+                LogManager.Error($"{ex}", typeof(DataGridViewExtensions));
             }
 
         }
@@ -144,7 +144,7 @@ namespace AssetTrakr.Extensions
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogManager.Error($"{ex}", nameof(DataGridViewExtensions));
+                LogManager.Error($"{ex}", typeof(DataGridViewExtensions));
             }
         }
     }

@@ -1,7 +1,8 @@
 using AssetTrakr.Database;
+using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
 using OfficeOpenXml;
-using Serilog;
+using Syncfusion.Licensing;
 
 namespace AssetTrakr.App
 {
@@ -18,18 +19,35 @@ namespace AssetTrakr.App
             ApplicationConfiguration.Initialize();
 
             LogManager logManager = new();
-            LogManager.Information("Initialize...", nameof(Program));
+            LogManager.Information("Initialize...", typeof(Program));
 
 #if DEBUG
-            LogManager.Information("APPLICATION IS IN DEBUG MODE", nameof(Program));
+            LogManager.Information("APPLICATION IS IN DEBUG MODE", typeof(Program));
 #endif
 
-            LogManager.Information("Registering SyncFusion", nameof(Program));
+            LogManager.Information("Registering Syncfusion with Community License!", typeof(Program));
 
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(SyncfusionInfo.LicenseKey);
+            // SyncfusionInfo is generated during the build process.  If "GeneratedSyncfusionLicense.cs" does not exist in the AssetTrakr
+            // project yet, ensure you build per https://github.com/McKenzie-Software/AssetTrakr/wiki/Build-from-Source#107-onwards
+            SyncfusionLicenseProvider.RegisterLicense(SyncfusionInfo.LicenseKey);
+            bool sfLicenseStatus = SyncfusionLicenseProvider.ValidateLicense(Platform.WindowsForms, out var sfLicenseStatusMsg);
 
-            LogManager.Information("Registering EPPlus LicenseContext", nameof(Program));
+            if (SyncfusionInfo.LicenseKey == "nullkey")
+            {
+                LogManager.Fatal("SyncfusionInfo.LicenseKey is set to nullkey, a validate Sf License must be provided during build! see " +
+                    "https://github.com/McKenzie-Software/AssetTrakr/wiki/Build-from-Source#107-onwards", typeof(Program));
+            }
 
+            if (string.IsNullOrEmpty(sfLicenseStatusMsg))
+            {
+                LogManager.Information($"Syncfusion License Valid: {sfLicenseStatus}", typeof(Program));
+            } 
+            else
+            {
+                LogManager.Information($"Syncfusion Validate License Response: {sfLicenseStatusMsg}", typeof(Program));
+            }
+
+            LogManager.Information("Registering EPPlus LicenseContext", typeof(Program));
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             CreateDirectories();
