@@ -84,11 +84,6 @@ namespace AssetTrakr.App.Forms.Contract
 
             sfDgViewAll.DataSource = contracts;
 
-            if (!_includeArchived)
-            {
-                sfDgViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
-            }
-
             if (!contracts.Any())
             {
                 sfDgViewAll.Visible = false;
@@ -269,6 +264,12 @@ namespace AssetTrakr.App.Forms.Contract
             if(sfDgViewAll.Columns.Count == 0)
             {
                 return;
+            }
+
+            // hide the archive column if the system setting include archived is not enabled
+            if (!_includeArchived)
+            {
+                sfDgViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
             }
 
             sfDgViewAll.Columns[nameof(Models.Contract.ContractId)].Visible = false;
