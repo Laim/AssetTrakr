@@ -3,9 +3,11 @@ using OfficeOpenXml;
 using Syncfusion.WinForms.DataGrid;
 using Syncfusion.XlsIO;
 using System.Data;
+using System.Runtime.Versioning;
 
 namespace AssetTrakr.Extensions
 {
+    [SupportedOSPlatform("windows")]
     public static class DataGridViewExtensions
     {
         /// <summary>
