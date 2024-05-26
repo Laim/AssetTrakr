@@ -38,8 +38,6 @@ namespace AssetTrakr.App
             CreateDirectories();
 
             Application.Run(new Forms.FrmMain());
-
-            LogManager.Information("Application started", typeof(Program));
         }
 
         /// <summary>

@@ -167,8 +167,9 @@
             Controls.Add(dgvViewAll);
             Controls.Add(lblNoContractsDescription);
             Controls.Add(lblNoContractsTitle);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimizeBox = false;
             Name = "FrmContractViewAll";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View All Contracts";

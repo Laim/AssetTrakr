@@ -59,15 +59,7 @@ namespace AssetTrakr.App.Forms
 
             Registration();
 
-            // backup the database if setting is enabled
-            if (_dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.AutomaticBackups)))
-            {
-                BackupManager backupManager = new(Convert.ToInt32(_dbContext.SystemSettings.FirstOrDefault(ss => ss.Name == nameof(SystemSettings.AutomaticBackups))?.SettingValue));
-                if (!backupManager.Backup())
-                {
-                    MessageBox.Show("Backup failed, see log for more details.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            BackupDatabase();
 
             LoadWidgets();
 
@@ -83,6 +75,22 @@ namespace AssetTrakr.App.Forms
         private bool CanConnectDatabase()
         {
             return _dbContext.Database.CanConnect();
+        }
+
+        /// <summary>
+        /// Checks if <see cref="SystemSettings.AutomaticBackups"/> is true and backs up the database if so.
+        /// </summary>
+        private void BackupDatabase()
+        {
+            // backup the database if setting is enabled
+            if (_dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.AutomaticBackups)))
+            {
+                BackupManager backupManager = new(Convert.ToInt32(_dbContext.SystemSettings.FirstOrDefault(ss => ss.Name == nameof(SystemSettings.AutomaticBackups))?.SettingValue));
+                if (!backupManager.Backup())
+                {
+                    MessageBox.Show("Backup failed, see log for more details.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         /// <summary>
@@ -172,9 +180,6 @@ namespace AssetTrakr.App.Forms
         /// <summary>
         /// Creates the alerts for the AlertList for the User to view
         /// </summary>
-        /// <param name="isUpdateAvailable">
-        /// If true, the Update Available alert is included.
-        /// </param>
         private void RefreshAlerts()
         {
             AlertGenerator alertGenerator = new()
