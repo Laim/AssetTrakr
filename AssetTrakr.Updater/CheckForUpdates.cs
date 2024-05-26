@@ -16,7 +16,7 @@ namespace AssetTrakr.Updater
         public CheckForUpdates()
         {
             _dbContext ??= new();
-            _checkForUpdates = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.AlertThreshold));
+            _checkForUpdates = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.CheckForUpdates));
 
             LogManager.Information<CheckForUpdates>($"Starting Updater Client");
         }
