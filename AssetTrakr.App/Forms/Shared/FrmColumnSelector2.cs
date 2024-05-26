@@ -12,21 +12,36 @@ namespace AssetTrakr.App.Forms.Shared
         {
             InitializeComponent();
 
-            if(sfDgv == null)
+            if(sfDgv != null)
             {
-                throw new ArgumentOutOfRangeException(nameof(sfDgv), "Data Grid has not been passed to form");
+                foreach (var col in sfDgv.Columns)
+                {
+                    if (col.Visible)
+                    {
+                        SelectedColumns.Add(col.MappingName);
+                    }
+                    else
+                    {
+                        AvailableColumns.Add(col.MappingName);
+                    }
+                }
             }
-
-            foreach (var col in sfDgv.Columns)
+            else if(dgv2 != null)
             {
-                if (col.Visible)
+                foreach (DataGridViewColumn col in dgv2.Columns)
                 {
-                    SelectedColumns.Add(col.MappingName);
+                    if (col.Visible)
+                    {
+                        SelectedColumns.Add(col.Name);
+                    }
+                    else
+                    {
+                        AvailableColumns.Add(col.Name);
+                    }
                 }
-                else
-                {
-                    AvailableColumns.Add(col.MappingName);
-                }
+            } else
+            {
+                throw new Exception($"{nameof(dgv2)} and {nameof(sfDgv)} are null!  At least one is required!");
             }
         }
 
