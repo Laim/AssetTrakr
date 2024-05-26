@@ -97,7 +97,7 @@ namespace AssetTrakr.Extensions
 
             try
             {
-                using (ExcelEngine excelEngine = new ExcelEngine())
+                using (ExcelEngine excelEngine = new())
                 {
                     IWorkbook workbook = excelEngine.Excel.Workbooks.Create();
                     IWorksheet worksheet = workbook.Worksheets[0];

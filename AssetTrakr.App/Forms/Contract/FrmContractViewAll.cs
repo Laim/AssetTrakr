@@ -51,10 +51,10 @@ namespace AssetTrakr.App.Forms.Contract
         {
             if (needReload)
             {
-                dgvViewAll.DataSource = null;
+                sfDgViewAll.DataSource = null;
             }
 
-            dgvViewAll.Visible = true;
+            sfDgViewAll.Visible = true;
             lblNoContractsDescription.Visible = false;
             lblNoContractsTitle.Visible = false;
 
@@ -82,16 +82,16 @@ namespace AssetTrakr.App.Forms.Contract
                 .Where(c => _includeArchived || !c.IsArchived)
                 .ToListAsync();
 
-            dgvViewAll.DataSource = contracts;
+            sfDgViewAll.DataSource = contracts;
 
             if (!_includeArchived)
             {
-                dgvViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
+                sfDgViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
             }
 
             if (!contracts.Any())
             {
-                dgvViewAll.Visible = false;
+                sfDgViewAll.Visible = false;
                 lblNoContractsDescription.Visible = true;
                 lblNoContractsTitle.Visible = true;
             }
@@ -116,7 +116,7 @@ namespace AssetTrakr.App.Forms.Contract
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dgvViewAll.Export();
+            sfDgViewAll.Export();
         }
 
         private async void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -246,12 +246,12 @@ namespace AssetTrakr.App.Forms.Contract
 
         private void dgvViewAll_SelectionChanged(object sender, Syncfusion.WinForms.DataGrid.Events.SelectionChangedEventArgs e)
         {
-            if (dgvViewAll.CurrentItem != null)
+            if (sfDgViewAll.CurrentItem != null)
             {
 
-                var test = dgvViewAll.CurrentItem.GetType();
+                var test = sfDgViewAll.CurrentItem.GetType();
 
-                object? v = test.GetProperty("ContractId")?.GetValue(dgvViewAll.CurrentItem, null);
+                object? v = test.GetProperty("ContractId")?.GetValue(sfDgViewAll.CurrentItem, null);
 
                 if(v == null)
                 {
@@ -266,18 +266,18 @@ namespace AssetTrakr.App.Forms.Contract
         private void dgvViewAll_DataSourceChanged(object sender, Syncfusion.WinForms.DataGrid.Events.DataSourceChangedEventArgs e)
         {
             // hide non-default columns
-            if(dgvViewAll.Columns.Count == 0)
+            if(sfDgViewAll.Columns.Count == 0)
             {
                 return;
             }
 
-            dgvViewAll.Columns[nameof(Models.Contract.ContractId)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.Description)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.CreatedDate)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.UpdatedDate)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.UpdatedBy)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.CreatedBy)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.ComboDisplayName)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.ContractId)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.Description)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.CreatedDate)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.UpdatedDate)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.UpdatedBy)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.CreatedBy)].Visible = false;
+            sfDgViewAll.Columns[nameof(Models.Contract.ComboDisplayName)].Visible = false;
         }
 
     }
