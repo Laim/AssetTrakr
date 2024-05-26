@@ -27,6 +27,7 @@ namespace AssetTrakr.App.Forms.Miscellaneous
             cmbCategory.DataSource = _dbContext.SystemSettings.GroupBy(a => a.Category).Select(x => x.First()).ToList();
             cmbCategory.DisplayMember = "Category";
             cmbCategory.ValueMember = "Category";
+
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -56,17 +57,17 @@ namespace AssetTrakr.App.Forms.Miscellaneous
 
             if (sender is ComboBox cmb && cmb.SelectedItem != null)
             {
-                if(cmb.SelectedItem != null)
+                if (cmb.SelectedItem != null)
                 {
                     var temp = (SystemSetting)cmb.SelectedItem;
 
                     _category = temp.Category;
                 }
-     
+
             }
 
             _dbContext = new();
-            
+
             // need to load the data before binding it otherwise it never appears lol
             _dbContext.SystemSettings.Where(c => c.Category == _category).Load();
 
@@ -87,6 +88,28 @@ namespace AssetTrakr.App.Forms.Miscellaneous
                     return;
             }
             dgvSystemSettings.Columns["settingValueDataGridViewTextBoxColumn"].Visible = true;
+        }
+
+        private void dgvSystemSettings_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1 || !dgvSystemSettings.Columns[e.ColumnIndex].Name.Equals($"{nameof(SystemSetting.SettingValue)}DataGridViewTextBoxColumn", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
+            int row = e.RowIndex;
+            string settingName = (string)dgvSystemSettings.Rows[row].Cells[0].Value;
+            var modifiedCell = dgvSystemSettings.Rows[row].Cells[e.ColumnIndex];
+
+            if (settingName == nameof(SystemSettings.CheckForUpdates))
+            {
+                List<string> options = ["stable", "beta"];
+                if (!options.Contains(modifiedCell.Value))
+                {
+                    modifiedCell.Value = options[0];
+                    MessageBox.Show($"Invalid setting value for {settingName}, please use one of the supported values:\r\n\r\n{string.Join(", ", options)}", "Invalid Value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

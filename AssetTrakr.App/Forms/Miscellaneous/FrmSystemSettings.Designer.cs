@@ -63,6 +63,7 @@
             dgvSystemSettings.RowHeadersWidth = 51;
             dgvSystemSettings.Size = new Size(1010, 435);
             dgvSystemSettings.TabIndex = 0;
+            dgvSystemSettings.CellValueChanged += dgvSystemSettings_CellValueChanged;
             // 
             // dataGridViewTextBoxColumn1
             // 

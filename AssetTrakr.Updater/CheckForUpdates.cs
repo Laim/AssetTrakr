@@ -12,13 +12,15 @@ namespace AssetTrakr.Updater
         private readonly DatabaseContext _dbContext;
         private const string _updateUrl = "https://api.github.com/repos/laim/assettrakr/releases/latest";
         private readonly bool _checkForUpdates;
+        private readonly string _releaseChannel;
 
         public CheckForUpdates()
         {
             _dbContext ??= new();
             _checkForUpdates = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.CheckForUpdates));
+            _releaseChannel = _dbContext.SystemSettings.Where(ss => ss.Name == nameof(SystemSettings.CheckForUpdates)).Select(ss => ss.SettingValue).First() ?? "stable";
 
-            LogManager.Information<CheckForUpdates>($"Starting Updater Client");
+            LogManager.Information<CheckForUpdates>($"Starting Updater Client against release channel {_releaseChannel}");
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace AssetTrakr.Updater
 
                 if(!_checkForUpdates)
                 {
-                    LogManager.Information<CheckForUpdates>($"Update Checking Disabled, cancelled check");
+                    LogManager.Information<CheckForUpdates>($"Update Checking Disabled, killing Updater Client");
                     return false;
                 }
 
@@ -84,17 +86,16 @@ namespace AssetTrakr.Updater
 
                 if (data == null)
                 {
-                    LogManager.Error<CheckForUpdates>($"Response Data is empty, cancelled.");
+                    LogManager.Error<CheckForUpdates>($"Response Data is empty, cancelled");
                     return false;
                 }
 
                 Version latestVersion = new(data.tag_name);
-                LogManager.Information<CheckForUpdates>($"Installed Version: {currentVersion}");
-                LogManager.Information<CheckForUpdates>($"Latest Version from GitHub: {latestVersion}");
+                LogManager.Information<CheckForUpdates>($"Installed Version: {currentVersion}, Latest Version from GitHub: {latestVersion}");
 
                 if(latestVersion > currentVersion)
                 {
-                    LogManager.Information<CheckForUpdates>($"New version available, alerting user");
+                    LogManager.Information<CheckForUpdates>($"Newer version available for install");
                     return true;
                 }
 
