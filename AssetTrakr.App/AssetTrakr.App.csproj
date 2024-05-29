@@ -22,6 +22,7 @@
 	<StartupObject>AssetTrakr.App.Program</StartupObject>
   </PropertyGroup>
 
+  <!-- This depends on SyncfusinLicense in PropertyGroup which can be set during build with /p:SyncfusionLicense=XXX -->
   <Target Name="GenerateSyncfusionLicenseClass" BeforeTargets="BeforeBuild">
     <Message Text="Generating Syncfusion License Class" />
     <PropertyGroup>

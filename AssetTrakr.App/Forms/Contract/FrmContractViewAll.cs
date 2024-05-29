@@ -3,11 +3,13 @@ using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
+using AssetTrakr.Utils.Attributes;
 using AssetTrakr.Utils.Enums;
 using AssetTrakr.WinForms.ActionLog;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.Data.Extensions;
 using Syncfusion.WinForms.DataGrid;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace AssetTrakr.App.Forms.Contract
@@ -105,7 +107,7 @@ namespace AssetTrakr.App.Forms.Contract
 
             foreach (var col in dgv.Columns)
             {
-                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.MappingName);
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.HeaderText);
             }
         }
 
@@ -266,19 +268,23 @@ namespace AssetTrakr.App.Forms.Contract
                 return;
             }
 
-            // hide the archive column if the system setting include archived is not enabled
-            if (!_includeArchived)
+            // show the archive column if the system setting is enabled
+            if (_includeArchived)
             {
-                sfDgViewAll.Columns[nameof(Models.Assets.Asset.IsArchived)].Visible = false;
+                sfDgViewAll.Columns[nameof(Models.Contract.IsArchived)].Visible = true;
             }
 
-            sfDgViewAll.Columns[nameof(Models.Contract.ContractId)].Visible = false;
-            sfDgViewAll.Columns[nameof(Models.Contract.Description)].Visible = false;
-            sfDgViewAll.Columns[nameof(Models.Contract.CreatedDate)].Visible = false;
-            sfDgViewAll.Columns[nameof(Models.Contract.UpdatedDate)].Visible = false;
-            sfDgViewAll.Columns[nameof(Models.Contract.UpdatedBy)].Visible = false;
-            sfDgViewAll.Columns[nameof(Models.Contract.CreatedBy)].Visible = false;
-            sfDgViewAll.Columns[nameof(Models.Contract.ComboDisplayName)].Visible = false;
+            // rename the columns to their respective DisplayName value from the model
+            // the efcore result is an anonymous object so we gotta do this
+            foreach(var column in sfDgViewAll.Columns)
+            {
+                // Get the property name from the column
+                string propertyName = column.MappingName;
+
+                // Set the header text of the column to the display name and column visibility
+                column.HeaderText = propertyName.GetPropertyDisplayName<Models.Contract>();
+                column.Visible = propertyName.GetPropertyVisibility<Models.Contract>();
+            }
         }
 
     }

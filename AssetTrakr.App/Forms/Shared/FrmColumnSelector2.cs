@@ -18,11 +18,11 @@ namespace AssetTrakr.App.Forms.Shared
                 {
                     if (col.Visible)
                     {
-                        SelectedColumns.Add(col.MappingName);
+                        SelectedColumns.Add(col.HeaderText);
                     }
                     else
                     {
-                        AvailableColumns.Add(col.MappingName);
+                        AvailableColumns.Add(col.HeaderText);
                     }
                 }
             }
