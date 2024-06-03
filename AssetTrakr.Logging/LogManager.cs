@@ -92,13 +92,28 @@ namespace AssetTrakr.Logging
             logger.Error(message);
         }
 
-        public static void Debug<T>(string message) => Log.ForContext<T>().Debug(message);
+        public static void Warning<T>(string message) => Log.ForContext<T>().Warning(message);
 
         /// <summary>
-        /// Should only be used in classes that are static where <see cref="Debug{T}(string)"/> is not suitable
+        /// Modified version of <see cref="Warning{T}(string)"/> that can be used on Static Classes.
         /// </summary>
-        /// <param name="message">debug message</param>
-        /// <param name="source">class name</param>
-        public static void Debug(string message, string source) => Log.Debug($"[{source}] {message}");
+        /// <param name="message">error message</param>
+        /// <param name="type">class type</param>
+        public static void Warning(string message, Type type)
+        {
+            // Get the method info for the generic method
+            var method = typeof(Log).GetMethod("ForContext", new Type[] { });
+
+            // Create the generic method using the type parameter
+            var genericMethod = method.MakeGenericMethod(type);
+
+            // Invoke the generic method to get the logger
+            var logger = genericMethod.Invoke(null, null) as ILogger;
+
+            // Use the logger to log the info message
+            logger.Warning(message);
+        }
+
+
     }
 }

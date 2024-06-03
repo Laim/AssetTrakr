@@ -1,5 +1,7 @@
-﻿using AssetTrakr.Utils.Attributes;
+﻿using AssetTrakr.Logging;
+using AssetTrakr.Utils.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace AssetTrakr.Extensions
 {
@@ -25,7 +27,7 @@ namespace AssetTrakr.Extensions
         /// </returns>
         public static string GetPropertyDisplayName<T>(this string propertyName)
         {
-            var property = typeof(T).GetProperties()
+            PropertyInfo? property = typeof(T).GetProperties()
                 .FirstOrDefault(p => p.Name == propertyName);
 
             if (property == null)
@@ -33,7 +35,7 @@ namespace AssetTrakr.Extensions
                 return propertyName;
             }
 
-            var displayAttribute = property.GetCustomAttributes(typeof(DisplayAttribute), false)
+            var displayAttribute = property?.GetCustomAttributes(typeof(DisplayAttribute), false)
                 .FirstOrDefault() as DisplayAttribute;
 
             return displayAttribute?.Name ?? propertyName;
@@ -58,15 +60,15 @@ namespace AssetTrakr.Extensions
         /// </returns>
         public static bool GetPropertyVisibility<T>(this string propertyName)
         {
-            var property = typeof(T).GetProperties()
+            PropertyInfo? property = typeof(T).GetProperties()
                 .FirstOrDefault(p => p.Name == propertyName);
 
-            if (property == null)
+            if(property == null)
             {
-                return false;
+                LogManager.Warning($"{property} is null", typeof(DataGridViewExtensions));
             }
 
-            var visibilityAttribute = property.GetCustomAttributes(typeof(VisibleByDefaultAttribute), false)
+            var visibilityAttribute = property?.GetCustomAttributes(typeof(VisibleByDefaultAttribute), false)
                 .FirstOrDefault() as VisibleByDefaultAttribute;
 
             return visibilityAttribute?.IsVisible ?? false;

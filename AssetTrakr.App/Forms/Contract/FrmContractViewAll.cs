@@ -243,48 +243,12 @@ namespace AssetTrakr.App.Forms.Contract
 
         private void dgvViewAll_SelectionChanged(object sender, Syncfusion.WinForms.DataGrid.Events.SelectionChangedEventArgs e)
         {
-            if (sfDgViewAll.CurrentItem != null)
-            {
-
-                var test = sfDgViewAll.CurrentItem.GetType();
-
-                object? v = test.GetProperty("ContractId")?.GetValue(sfDgViewAll.CurrentItem, null);
-
-                if(v == null)
-                {
-                    LogManager.Fatal<FrmContractViewAll>("Unable to pull ContractId using Reflection!");
-                    return;
-                }
-
-                _selectedContract = _dbContext.Contracts.FirstOrDefault(c => c.ContractId == (int)v);
-            }
+            _selectedContract = sfDgViewAll.GetCurrentItemProperty<Models.Contract>(nameof(Models.Contract.ContractId), _dbContext);
         }
 
         private void dgvViewAll_DataSourceChanged(object sender, Syncfusion.WinForms.DataGrid.Events.DataSourceChangedEventArgs e)
         {
-            // hide non-default columns
-            if(sfDgViewAll.Columns.Count == 0)
-            {
-                return;
-            }
-
-            // show the archive column if the system setting is enabled
-            if (_includeArchived)
-            {
-                sfDgViewAll.Columns[nameof(Models.Contract.IsArchived)].Visible = true;
-            }
-
-            // rename the columns to their respective DisplayName value from the model
-            // the efcore result is an anonymous object so we gotta do this
-            foreach(var column in sfDgViewAll.Columns)
-            {
-                // Get the property name from the column
-                string propertyName = column.MappingName;
-
-                // Set the header text of the column to the display name and column visibility
-                column.HeaderText = propertyName.GetPropertyDisplayName<Models.Contract>();
-                column.Visible = propertyName.GetPropertyVisibility<Models.Contract>();
-            }
+            sfDgViewAll.CustomColumnModifier<Models.Contract>(_includeArchived);
         }
 
     }
