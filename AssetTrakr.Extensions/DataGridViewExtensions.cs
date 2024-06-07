@@ -211,7 +211,6 @@ namespace AssetTrakr.Extensions
                 // Get the property name from the column
                 string propertyName = column.MappingName;
 
-
                 // Set the header text of the column to the display name and column visibility
                 column.HeaderText = propertyName.GetPropertyDisplayName<T>();
                 column.Visible = propertyName.GetPropertyVisibility<T>();
