@@ -168,7 +168,7 @@ namespace AssetTrakr.App.Forms.Contract
                 catch (Exception ex)
                 {
                     MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogManager.Error<FrmAssetModify>($"{ex}");
+                    LogManager.Error<FrmContractViewAll>($"{ex}");
                 }
             }
         }
@@ -213,12 +213,12 @@ namespace AssetTrakr.App.Forms.Contract
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogManager.Error<FrmAssetModify>($"{ex}");
+                LogManager.Error<FrmContractViewAll>($"{ex}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogManager.Error<FrmAssetModify>($"{ex}");
+                LogManager.Error<FrmContractViewAll>($"{ex}");
             }
         }
 

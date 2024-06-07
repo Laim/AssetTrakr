@@ -67,6 +67,7 @@ namespace AssetTrakr.App.Forms.Asset
                     a.AssetId,
                     a.Name,
                     a.Model,
+                    a.Purchased,
                     a.Hardware.AssetType,
                     Manufacturer = a.Manufacturer.Name ?? "",
                     Platform = a.Platform.Name ?? "",

@@ -34,9 +34,25 @@ namespace AssetTrakr.Models.Assets
         [VisibleByDefault(false)]
         public string? Description { get; set; }
 
+        /// <summary>
+        /// N.B: This never gets shown in the Syncfusion Datagrid.  Review comment for <see cref="Purchased"/> for more information.
+        /// As a result, VisibleByDefault is set to FALSE to prevent random re-appearance.  Manual review required in future.
+        /// </summary>
         [Display(Name = "Purchase Date", Description = "The Purchase Date of the Asset")]
-        [VisibleByDefault]
+        [VisibleByDefault(false)]
         public DateOnly PurchaseDate { get; set; }
+
+        /// <summary>
+        /// String version of <see cref="PurchaseDate"/> 
+        /// <br></br>
+        /// <remark>
+        /// N.B: For some reason Syncfusion's DataGrid doesn't seem to support 'DateOnly'?  As a result, the PurchaseDate property
+        /// never get's shown.  As a work around, we convert it to a string and then show that in the DataGrid instead.
+        /// </remark>
+        /// </summary>
+        [VisibleByDefault]
+        [Display(Name = "Purchase Date", Description = "The Purchase Date of the Asset")]
+        public string Purchased { get => PurchaseDate.ToString(); }
 
         [Display(Name = "User", Description = "The Registered User of the Asset")]
         [VisibleByDefault(false)]

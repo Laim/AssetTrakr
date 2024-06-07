@@ -51,13 +51,13 @@
             // 
             dgvSystemSettings.AllowUserToAddRows = false;
             dgvSystemSettings.AllowUserToDeleteRows = false;
+            dgvSystemSettings.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvSystemSettings.AutoGenerateColumns = false;
             dgvSystemSettings.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvSystemSettings.BackgroundColor = Color.White;
             dgvSystemSettings.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvSystemSettings.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, categoryDataGridViewTextBoxColumn, settingParentTypeDataGridViewTextBoxColumn, dataGridViewCheckBoxColumn1, dataGridViewCheckBoxColumn2, settingValueDataGridViewTextBoxColumn, defaultSettingValueDataGridViewTextBoxColumn });
             dgvSystemSettings.DataSource = systemSettingBindingSource;
-            dgvSystemSettings.Dock = DockStyle.Bottom;
             dgvSystemSettings.Location = new Point(0, 56);
             dgvSystemSettings.Name = "dgvSystemSettings";
             dgvSystemSettings.RowHeadersWidth = 51;

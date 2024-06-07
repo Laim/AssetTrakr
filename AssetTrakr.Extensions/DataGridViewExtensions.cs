@@ -204,18 +204,6 @@ namespace AssetTrakr.Extensions
                 return;
             }
 
-            // show the archive column if the system setting is enabled
-            if (includeArchived)
-            {
-                try
-                {
-                    sfDataGrid.Columns["IsArchived"].Visible = true;
-                } catch
-                {
-                    LogManager.Fatal($"Unable to modify IsArchived visibility, is the column name correct in {typeof(T)}?", typeof(DataGridViewExtensions));
-                }
-            }
-
             // rename the columns to their respective DisplayName value from the model
             // the efcore result is an anonymous object so we gotta do this
             foreach (var column in sfDataGrid.Columns)
@@ -227,6 +215,19 @@ namespace AssetTrakr.Extensions
                 // Set the header text of the column to the display name and column visibility
                 column.HeaderText = propertyName.GetPropertyDisplayName<T>();
                 column.Visible = propertyName.GetPropertyVisibility<T>();
+            }
+
+            // show the archive column if the system setting is enabled
+            if (includeArchived)
+            {
+                try
+                {
+                    sfDataGrid.Columns["IsArchived"].Visible = true;
+                }
+                catch
+                {
+                    LogManager.Fatal($"Unable to modify IsArchived visibility, is the column name correct in {typeof(T)}?", typeof(DataGridViewExtensions));
+                }
             }
         }
     }
