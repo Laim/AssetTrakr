@@ -165,8 +165,9 @@
             Controls.Add(sfDgViewAll);
             Controls.Add(lblNoAssetsDescription);
             Controls.Add(lblNoAssetsTitle);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimizeBox = false;
             Name = "FrmAssetViewAll";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View All Assets";

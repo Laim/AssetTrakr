@@ -261,6 +261,8 @@ namespace AssetTrakr.App.Forms.Asset
         private void sfDgViewAll_DataSourceChanged(object sender, Syncfusion.WinForms.DataGrid.Events.DataSourceChangedEventArgs e)
         {
             sfDgViewAll.CustomColumnModifier<Models.Assets.Asset>(_includeArchived);
+
+            sfDgViewAll.Columns["WarrantyPeriodsFormatted"].HeaderText = "Warranty Periods";
         }
     }
 }

@@ -7,7 +7,6 @@ using Syncfusion.WinForms.DataGrid;
 using Syncfusion.XlsIO;
 using System.Data;
 using System.Runtime.Versioning;
-using System.Windows.Forms;
 
 namespace AssetTrakr.Extensions
 {
@@ -32,7 +31,7 @@ namespace AssetTrakr.Extensions
 
             if (saveFileDialog.ShowDialog() != DialogResult.OK)
             {
-                MessageBox.Show("Export Cancelled", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //MessageBox.Show("Export Cancelled", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -95,7 +94,7 @@ namespace AssetTrakr.Extensions
 
             if (saveFileDialog.ShowDialog() != DialogResult.OK)
             {
-                MessageBox.Show("Export Cancelled", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //MessageBox.Show("Export Cancelled", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

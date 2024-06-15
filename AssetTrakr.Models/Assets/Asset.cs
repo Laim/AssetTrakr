@@ -70,14 +70,14 @@ namespace AssetTrakr.Models.Assets
         [VisibleByDefault(false)]
         public string? OrderReference { get; set; }
 
-        [Display(Name = "Has Warranty", Description = "Whether or not the Asset is Under Warranty")]
+        [Display(Name = "Warranty", Description = "Whether or not the Asset is Under Warranty")]
         [VisibleByDefault]
         public bool IsUnderWarranty { get; set; } = false;
 
         [Display(Name = "Archived", Description = "Whether or not the contract is Archived")]
         public bool IsArchived { get; set; } = false;
 
-        [Display(Name = "Warranties", Description = "Any warranties assigned to the Asset")]
+        [Display(Name = "Asset Periods", Description = "Any warranties assigned to the Asset")]
         [VisibleByDefault]
         public List<AssetPeriod> AssetPeriods { get; set; } = [];
 
@@ -88,6 +88,7 @@ namespace AssetTrakr.Models.Assets
         public List<AssetAttachment> AssetAttachments { get; set; } = [];
 
         [ForeignKey("OperatingSystemId")] // Define ForeignKey attribute to represent the relationship
+        [Display(Name = "Operating System", Description = "Operating System of the Asset")]
         [VisibleByDefault]
         public AssetOperatingSystem? OperatingSystem { get; set; } // Direct navigation property to OperatingSystem entity
 

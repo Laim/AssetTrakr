@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "AssetTrakr"
-#define MyAppVersion "1.0.6"
-#define MyAppPublisher "Laim McKenzie"
+#define MyAppVersion "1.0.7"
+#define MyAppPublisher "McKenzie Software"
 #define MyAppURL "https://assettrakr.laim.scot"
 #define MyAppExeName "AssetTrakr.App.exe"
 

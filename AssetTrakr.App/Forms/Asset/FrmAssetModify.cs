@@ -9,7 +9,6 @@ using AssetTrakr.Models.Assets;
 using AssetTrakr.Utils.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
-using System.Diagnostics;
 using AssetTrakr.WinForms.ActionLog;
 using AssetTrakr.Extensions;
 
@@ -380,7 +379,6 @@ namespace AssetTrakr.App.Forms.Asset
             }
 
             var selectedManufacturer = cmbManufacturers.SelectedItem as Manufacturer;
-            int? selectedContractId = (cmbContracts.SelectedItem as Models.Contract)?.ContractId;
             var selectedContract = cmbContracts.SelectedItem as Models.Contract;
             var selectedPlatform = cmbPlatforms.SelectedItem as Platform;
             var selectedOS = cmbOperatingSystems.SelectedItem as AssetOperatingSystem;
@@ -397,7 +395,6 @@ namespace AssetTrakr.App.Forms.Asset
                 return;
             }
 
-
             if (selectedOS == null)
             {
                 MessageBox.Show($"Operating System is a required field", "Operating System", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -412,19 +409,9 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 UpdateAsset(selectedManufacturer, selectedPlatform, selectedOS, selectedContract);
             }
-
-            if (_dbContext.SaveChanges() > 0)
-            {
-                MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Close();
-            }
-            else
-            {
-                MessageBox.Show($"Something has gone wrong during save of {txtName.Text}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
-        private void UpdateAsset(Manufacturer manufacturer, Platform platform, AssetOperatingSystem operatingSystem, Models.Contract contract)
+        private void UpdateAsset(Manufacturer manufacturer, Platform platform, AssetOperatingSystem operatingSystem, Models.Contract? contract)
         {
             if (_assetData == null)
             {
@@ -592,19 +579,36 @@ namespace AssetTrakr.App.Forms.Asset
                 LogManager.Error<FrmAssetModify>($"{ex}");
             }
 
+            if (_dbContext.SaveChanges() > 0)
+            {
+                MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
+            }
+            else
+            {
+                MessageBox.Show($"Something has gone wrong during save of {txtName.Text}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
-        private void AddAsset(Manufacturer manufacturer, Platform platform, AssetOperatingSystem os, Models.Contract contract)
+        private void AddAsset(Manufacturer manufacturer, Platform platform, AssetOperatingSystem os, Models.Contract? contract)
         {
             // Ensure that we don't accidentally mark it as having warranty if there are no warranty periods available
-            if (_warrantyPeriods.Count == 0)
+            if (_warrantyPeriods.Count == 0 && cbHasWarranty.Checked)
             {
                 cbHasWarranty.Checked = false;
 
                 if(cbHasWarranty.Checked)
                 {
-                    MessageBox.Show("No Warranty Periods added so HasWarranty will be unchecked", "Warranty", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No Warranty Periods added so Has Warranty will be unchecked", "Warranty", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+            }
+
+            // Check the name is unique and an asset with the name doesn't already exist
+            if (_dbContext.Assets.Where(a => a.Name == txtName.Text).FirstOrDefault() != null)
+            {
+                MessageBox.Show($"Name is a unique field and must not match the name of an existing asset.", "Asset Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             List<AssetHardDrive> driveList = [];
@@ -680,6 +684,16 @@ namespace AssetTrakr.App.Forms.Asset
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Add Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 LogManager.Error<FrmAssetModify>($"{ex}");
+            }
+
+            if (_dbContext.SaveChanges() > 0)
+            {
+                MessageBox.Show($"{txtName.Text} saved successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Close();
+            }
+            else
+            {
+                MessageBox.Show($"Something has gone wrong during save of {txtName.Text}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
