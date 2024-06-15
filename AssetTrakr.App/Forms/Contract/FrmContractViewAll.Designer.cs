@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmContractViewAll));
             lblNoContractsDescription = new Label();
             lblNoContractsTitle = new Label();
-            dgvViewAll = new DataGridView();
             cmsDgvRightClick = new ContextMenuStrip(components);
             columnSelectorToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
@@ -43,8 +42,9 @@
             toolStripSeparator3 = new ToolStripSeparator();
             deleteToolStripMenuItem = new ToolStripMenuItem();
             archiveOrUnarchiveToolStripMenuItem = new ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)dgvViewAll).BeginInit();
+            sfDgViewAll = new Syncfusion.WinForms.DataGrid.SfDataGrid();
             cmsDgvRightClick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)sfDgViewAll).BeginInit();
             SuspendLayout();
             // 
             // lblNoContractsDescription
@@ -67,32 +67,6 @@
             lblNoContractsTitle.Size = new Size(202, 41);
             lblNoContractsTitle.TabIndex = 25;
             lblNoContractsTitle.Text = "No Contracts";
-            // 
-            // dgvViewAll
-            // 
-            dgvViewAll.AllowUserToAddRows = false;
-            dgvViewAll.AllowUserToDeleteRows = false;
-            dgvViewAll.AllowUserToOrderColumns = true;
-            dgvViewAll.AllowUserToResizeRows = false;
-            dgvViewAll.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvViewAll.BackgroundColor = Color.White;
-            dgvViewAll.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvViewAll.ContextMenuStrip = cmsDgvRightClick;
-            dgvViewAll.Dock = DockStyle.Fill;
-            dgvViewAll.Location = new Point(0, 0);
-            dgvViewAll.MultiSelect = false;
-            dgvViewAll.Name = "dgvViewAll";
-            dgvViewAll.ReadOnly = true;
-            dgvViewAll.RowHeadersVisible = false;
-            dgvViewAll.RowHeadersWidth = 51;
-            dgvViewAll.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dgvViewAll.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvViewAll.ShowCellErrors = false;
-            dgvViewAll.ShowCellToolTips = false;
-            dgvViewAll.ShowEditingIcon = false;
-            dgvViewAll.ShowRowErrors = false;
-            dgvViewAll.Size = new Size(1098, 661);
-            dgvViewAll.TabIndex = 24;
             // 
             // cmsDgvRightClick
             // 
@@ -159,22 +133,48 @@
             archiveOrUnarchiveToolStripMenuItem.Text = "Archive";
             archiveOrUnarchiveToolStripMenuItem.Click += archiveOrUnarchiveToolStripMenuItem_Click;
             // 
+            // sfDgViewAll
+            // 
+            sfDgViewAll.AccessibleName = "Table";
+            sfDgViewAll.AllowEditing = false;
+            sfDgViewAll.AllowFiltering = true;
+            sfDgViewAll.AutoSizeColumnsMode = Syncfusion.WinForms.DataGrid.Enums.AutoSizeColumnsMode.Fill;
+            sfDgViewAll.ContextMenuStrip = cmsDgvRightClick;
+            sfDgViewAll.Dock = DockStyle.Fill;
+            sfDgViewAll.Location = new Point(0, 0);
+            sfDgViewAll.Name = "sfDgViewAll";
+            sfDgViewAll.PreviewRowHeight = 35;
+            sfDgViewAll.ShowBusyIndicator = true;
+            sfDgViewAll.ShowGroupDropArea = true;
+            sfDgViewAll.ShowHeaderToolTip = true;
+            sfDgViewAll.Size = new Size(1098, 661);
+            sfDgViewAll.Style.BorderColor = Color.FromArgb(100, 100, 100);
+            sfDgViewAll.Style.CheckBoxStyle.CheckedBackColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.Style.CheckBoxStyle.CheckedBorderColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.Style.CheckBoxStyle.IndeterminateBorderColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.Style.HyperlinkStyle.DefaultLinkColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.TabIndex = 27;
+            sfDgViewAll.Text = "sfDataGrid1";
+            sfDgViewAll.SelectionChanged += dgvViewAll_SelectionChanged;
+            sfDgViewAll.DataSourceChanged += dgvViewAll_DataSourceChanged;
+            // 
             // FrmContractViewAll
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1098, 661);
+            Controls.Add(sfDgViewAll);
             Controls.Add(lblNoContractsDescription);
             Controls.Add(lblNoContractsTitle);
-            Controls.Add(dgvViewAll);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimizeBox = false;
             Name = "FrmContractViewAll";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View All Contracts";
-            ((System.ComponentModel.ISupportInitialize)dgvViewAll).EndInit();
             cmsDgvRightClick.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)sfDgViewAll).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -183,7 +183,6 @@
 
         private Label lblNoContractsDescription;
         private Label lblNoContractsTitle;
-        private DataGridView dgvViewAll;
         private ContextMenuStrip cmsDgvRightClick;
         private ToolStripMenuItem columnSelectorToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
@@ -194,5 +193,6 @@
         private ToolStripMenuItem deleteToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem archiveOrUnarchiveToolStripMenuItem;
+        private Syncfusion.WinForms.DataGrid.SfDataGrid sfDgViewAll;
     }
 }

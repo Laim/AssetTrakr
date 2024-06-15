@@ -3,16 +3,24 @@ using AssetTrakr.App.Forms.Shared;
 using AssetTrakr.Database;
 using AssetTrakr.Extensions;
 using AssetTrakr.Logging;
+using AssetTrakr.Utils.Attributes;
 using AssetTrakr.Utils.Enums;
 using AssetTrakr.WinForms.ActionLog;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.Data.Extensions;
+using Syncfusion.WinForms.DataGrid;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace AssetTrakr.App.Forms.Contract
 {
     public partial class FrmContractViewAll : Form
     {
-        private readonly DatabaseContext _dbContext;
+        private DatabaseContext _dbContext;
         private readonly bool _includeArchived = false;
+        private Models.Contract? _selectedContract;
+        private bool _firstLoad = true;
+
 
         public FrmContractViewAll()
         {
@@ -21,14 +29,19 @@ namespace AssetTrakr.App.Forms.Contract
             _dbContext ??= new DatabaseContext();
 
             _includeArchived = _dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.IncludeArchivedInViewAll));
+
+            Activated += AfterLoading;
         }
 
-        protected override void OnLoad(EventArgs e)
+        private async void AfterLoading(object? sender, EventArgs e)
         {
-            base.OnLoad(e);
-
-            LoadData();
+            if(_firstLoad)
+            {
+                await LoadData();
+                _firstLoad = false;
+            }
         }
+
 
         /// <summary>
         /// Loads all of the Contracts data into the DataGridView
@@ -36,104 +49,112 @@ namespace AssetTrakr.App.Forms.Contract
         /// <param name="needReload">
         /// True or False, true resets the datasource to NULL before loading data
         /// </param>
-        /// <param name="includeArchived">
-        /// True or False, true includes archived entities in the result
-        /// </param>
-        private void LoadData(bool needReload = false)
+        private async Task LoadData(bool needReload = false)
         {
             if (needReload)
             {
-                dgvViewAll.DataSource = null;
+                sfDgViewAll.DataSource = null;
             }
 
-            dgvViewAll.Visible = true;
+            sfDgViewAll.Visible = true;
             lblNoContractsDescription.Visible = false;
             lblNoContractsTitle.Visible = false;
 
-            var contracts = _dbContext.Contracts.Where(c => _includeArchived || !c.IsArchived).ToList();
+            //var contracts = await _dbContext.Contracts.Where(c => _includeArchived || !c.IsArchived).ToListAsync();
 
-            dgvViewAll.DataSource = contracts;
+            var contracts = await _dbContext.Contracts
+                .Select(c => new
+                {
+                    c.ContractId,
+                    c.Name,
+                    c.OrderRef,
+                    c.UserAgreementId,
+                    c.PaymentFrequency,
+                    c.Price,
+                    c.IsArchived,
+                    c.ComboDisplayName,
+                    c.Description,
+                    c.CreatedDate,
+                    c.UpdatedDate,
+                    c.CreatedBy,
+                    c.UpdatedBy,
+                    c.ContractPeriods,
+                    c.ContractAttachments
+                })
+                .Where(c => _includeArchived || !c.IsArchived)
+                .ToListAsync();
 
-            // Rename columns since it's an anonymous type and ignores [DisplayName] attribute in the License model
-            dgvViewAll.Columns[nameof(Models.Contract.OrderRef)].HeaderText = "Order Reference";
-            dgvViewAll.Columns[nameof(Models.Contract.PaymentFrequency)].HeaderText = "Pay Frequency";
-            dgvViewAll.Columns[nameof(Models.Contract.ComboDisplayName)].HeaderText = "Name & User Agreement Id";
-            dgvViewAll.Columns[nameof(Models.Contract.UserAgreementId)].HeaderText = "User Agreement Id";
-
-            // hide columns
-            dgvViewAll.Columns[nameof(Models.Contract.ContractId)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.Description)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.CreatedDate)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.UpdatedDate)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.UpdatedBy)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.CreatedBy)].Visible = false;
-            dgvViewAll.Columns[nameof(Models.Contract.ComboDisplayName)].Visible = false;
+            sfDgViewAll.DataSource = contracts;
 
             if (!contracts.Any())
             {
-                dgvViewAll.Visible = false;
+                sfDgViewAll.Visible = false;
                 lblNoContractsDescription.Visible = true;
                 lblNoContractsTitle.Visible = true;
             }
+
         }
 
         private void columnSelectorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            if (cmsDgvRightClick.SourceControl is not SfDataGrid dgv)
             {
                 return;
             }
 
-            FrmColumnSelector2 frmColumnSelector = new(dgv);
+            FrmColumnSelector2 frmColumnSelector = new(sfDgv: dgv);
             frmColumnSelector.ShowDialog();
 
-            foreach (DataGridViewColumn col in dgv.Columns)
+            foreach (var col in dgv.Columns)
             {
-                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.Name);
+                col.Visible = frmColumnSelector.SelectedColumns.Contains(col.HeaderText);
             }
         }
 
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dgvViewAll.Export();
+            sfDgViewAll.Export();
         }
 
-        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            if (_selectedContract == null)
             {
+                MessageBox.Show("Unable to open contract as it is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            FrmContractModify frmContractModify = new(contractId: (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value);
+            FrmContractModify frmContractModify = new(contractId: _selectedContract.ContractId);
             frmContractModify.ShowDialog();
-            LoadData(true);
+            await LoadData(true);
         }
 
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            if (_selectedContract == null)
             {
+                MessageBox.Show("Unable to open contract as it is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            FrmContractModify frmContractModify = new(contractId: (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value, isReadOnly: true);
+            FrmContractModify frmContractModify = new(contractId: _selectedContract.ContractId, isReadOnly: true);
             frmContractModify.ShowDialog();
         }
 
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            if (_selectedContract == null)
             {
+                MessageBox.Show("Unable to open contract as it is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            string name = (string)dgv.Rows[dgv.SelectedRows[0].Index].Cells["Name"].Value;
+            string name = _selectedContract.Name;
             DialogResult dr = MessageBox.Show($"This action cannot be reversed, do you wish to delete {name}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (dr == DialogResult.Yes)
             {
-                var contractId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[0].Value;
+                var contractId = _selectedContract.ContractId;
 
                 try
                 {
@@ -141,33 +162,33 @@ namespace AssetTrakr.App.Forms.Contract
                     {
                         ActionLogMethods.Deleted(_dbContext, ActionAlertCategory.Contract, name);
 
-                        LoadData(true);
+                        await LoadData(true);
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogManager.Error<FrmAssetModify>($"{ex}");
+                    LogManager.Error<FrmContractViewAll>($"{ex}");
                 }
             }
         }
 
-        private void archiveOrUnarchiveToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void archiveOrUnarchiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            if (_selectedContract == null)
             {
+                MessageBox.Show("Unable to open contract as it is null.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             string? tooltipName = archiveOrUnarchiveToolStripMenuItem.Text;
 
-            string name = (string)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Contract.Name)].Value;
+            string name = _selectedContract.Name;
             DialogResult dr = MessageBox.Show($"Do you wish to {tooltipName} {name}?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (dr != DialogResult.Yes) { return; }
 
-            var contractId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Contract.ContractId)].Value;
-            var contract = _dbContext.Contracts.FirstOrDefault(a => a.ContractId == contractId);
+            var contract = _selectedContract;
 
             if (contract == null) { return; }
 
@@ -187,30 +208,31 @@ namespace AssetTrakr.App.Forms.Contract
                     ActionLogMethods.Unarchived(_dbContext, ActionAlertCategory.Contract, name);
                 }
 
-                LoadData(true);
+                await LoadData(true);
             }
             catch (DbUpdateException ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogManager.Error<FrmAssetModify>($"{ex}");
+                LogManager.Error<FrmContractViewAll>($"{ex}");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message} \r\nSee log for more details.", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogManager.Error<FrmAssetModify>($"{ex}");
+                LogManager.Error<FrmContractViewAll>($"{ex}");
             }
         }
 
         private void cmsDgvRightClick_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // If the item is already in the archive, change the archive tool item to unarchive and disable editing
-            if (cmsDgvRightClick.SourceControl is not DataGridView dgv)
+            if (_selectedContract == null)
             {
+                cmsDgvRightClick.HideItems();
                 return;
             }
+            cmsDgvRightClick.ShowItems();
 
-            var contractId = (int)dgv.Rows[dgv.SelectedRows[0].Index].Cells[nameof(Models.Contract.ContractId)].Value;
-            var contract = _dbContext.Contracts.FirstOrDefault(c => c.ContractId == contractId);
+            // If the item is already in the archive, change the archive tool item to unarchive and disable editing
+            var contract = _selectedContract;
 
             if (contract == null) { return; }
 
@@ -218,5 +240,16 @@ namespace AssetTrakr.App.Forms.Contract
             archiveOrUnarchiveToolStripMenuItem.Text = contract.IsArchived ? "Unarchive" : "Archive";
 
         }
+
+        private void dgvViewAll_SelectionChanged(object sender, Syncfusion.WinForms.DataGrid.Events.SelectionChangedEventArgs e)
+        {
+            _selectedContract = sfDgViewAll.GetCurrentItemProperty<Models.Contract>(nameof(Models.Contract.ContractId), _dbContext);
+        }
+
+        private void dgvViewAll_DataSourceChanged(object sender, Syncfusion.WinForms.DataGrid.Events.DataSourceChangedEventArgs e)
+        {
+            sfDgViewAll.CustomColumnModifier<Models.Contract>(_includeArchived);
+        }
+
     }
 }

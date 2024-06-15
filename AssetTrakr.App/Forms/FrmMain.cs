@@ -20,6 +20,7 @@ namespace AssetTrakr.App.Forms
     {
 
         private DatabaseContext _dbContext;
+        private bool _isUpdateAvailable = false;
 
         public FrmMain()
         {
@@ -58,6 +59,29 @@ namespace AssetTrakr.App.Forms
 
             Registration();
 
+            BackupDatabase();
+
+            LoadWidgets();
+
+            CheckForUpdates checkForUpdates = new();
+            _isUpdateAvailable = await checkForUpdates.UpdateAvailable(new Version(ProductVersion));
+            updateAvailableToolStripMenuItem.Visible = _isUpdateAvailable;
+             
+            RefreshAlerts();
+
+            aboutToolStripMenuItem.Text = $"About {ProductName}";
+        }
+
+        private bool CanConnectDatabase()
+        {
+            return _dbContext.Database.CanConnect();
+        }
+
+        /// <summary>
+        /// Checks if <see cref="SystemSettings.AutomaticBackups"/> is true and backs up the database if so.
+        /// </summary>
+        private void BackupDatabase()
+        {
             // backup the database if setting is enabled
             if (_dbContext.SystemSettings.WhereEnabled(nameof(SystemSettings.AutomaticBackups)))
             {
@@ -67,19 +91,6 @@ namespace AssetTrakr.App.Forms
                     MessageBox.Show("Backup failed, see log for more details.", "Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
-            LoadWidgets();
-            RefreshAlerts();
-
-            CheckForUpdates checkForUpdates = new();
-            updateAvailableToolStripMenuItem.Visible = await checkForUpdates.UpdateAvailable(new Version(ProductVersion));
-
-            aboutToolStripMenuItem.Text = $"About {ProductName}";
-        }
-
-        private bool CanConnectDatabase()
-        {
-            return _dbContext.Database.CanConnect();
         }
 
         /// <summary>
@@ -171,7 +182,10 @@ namespace AssetTrakr.App.Forms
         /// </summary>
         private void RefreshAlerts()
         {
-            AlertGenerator alertGenerator = new();
+            AlertGenerator alertGenerator = new()
+            {
+                IsUpdateAvailable = _isUpdateAvailable
+            };
 
             dgvAlerts.DataSource = alertGenerator.GetAlerts();
         }

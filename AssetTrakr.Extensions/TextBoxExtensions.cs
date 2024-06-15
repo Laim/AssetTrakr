@@ -1,5 +1,8 @@
-﻿namespace AssetTrakr.Extensions
+﻿using System.Runtime.Versioning;
+
+namespace AssetTrakr.Extensions
 {
+    [SupportedOSPlatform("windows")]
     public static class TextBoxExtensions
     {
         /// <summary>

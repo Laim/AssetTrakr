@@ -69,7 +69,7 @@ namespace AssetTrakr.Extensions
             }
             catch (Exception ex)
             {
-                LogManager.Fatal($"{ex}");
+                LogManager.Fatal($"{ex}", typeof(LinqExtensions));
                 return false;
             }
         }

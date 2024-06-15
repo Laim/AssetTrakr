@@ -1,4 +1,6 @@
 ﻿
+using Syncfusion.WinForms.DataGrid;
+
 namespace AssetTrakr.App.Forms.Shared
 {
     public partial class FrmColumnSelector2 : Form
@@ -6,25 +8,40 @@ namespace AssetTrakr.App.Forms.Shared
         public List<string> AvailableColumns = [];
         public List<string> SelectedColumns = [];
 
-        public FrmColumnSelector2(DataGridView dgv)
+        public FrmColumnSelector2(DataGridView? dgv2 = null, SfDataGrid? sfDgv = null)
         {
             InitializeComponent();
 
-            if(dgv == null)
+            if(sfDgv != null)
             {
-                throw new ArgumentOutOfRangeException(nameof(dgv), "DataGridView has not been passed to form");
+                foreach (var col in sfDgv.Columns)
+                {
+                    if (col.Visible)
+                    {
+                        SelectedColumns.Add(col.HeaderText);
+                    }
+                    else
+                    {
+                        AvailableColumns.Add(col.HeaderText);
+                    }
+                }
             }
-
-            foreach (DataGridViewColumn col in dgv.Columns)
+            else if(dgv2 != null)
             {
-                if (col.Visible)
+                foreach (DataGridViewColumn col in dgv2.Columns)
                 {
-                    SelectedColumns.Add(col.Name);
+                    if (col.Visible)
+                    {
+                        SelectedColumns.Add(col.Name);
+                    }
+                    else
+                    {
+                        AvailableColumns.Add(col.Name);
+                    }
                 }
-                else
-                {
-                    AvailableColumns.Add(col.Name);
-                }
+            } else
+            {
+                throw new Exception($"{nameof(dgv2)} and {nameof(sfDgv)} are null!  At least one is required!");
             }
         }
 

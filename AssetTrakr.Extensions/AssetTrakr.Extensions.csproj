@@ -5,13 +5,19 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Copyright>McKenzie Software</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.1.2" />
+    <PackageReference Include="Syncfusion.Core.WinForms" Version="26.1.35" />
+    <PackageReference Include="Syncfusion.DataGridExport.WinForms" Version="26.1.35" />
+    <PackageReference Include="Syncfusion.SfDataGrid.WinForms" Version="26.1.35" />
+    <PackageReference Include="Syncfusion.XlsIO.WinForms" Version="26.1.35" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AssetTrakr.Database\AssetTrakr.Database.csproj" />
     <ProjectReference Include="..\AssetTrakr.Logging\AssetTrakr.Logging.csproj" />
     <ProjectReference Include="..\AssetTrakr.Models\AssetTrakr.Models.csproj" />
   </ItemGroup>

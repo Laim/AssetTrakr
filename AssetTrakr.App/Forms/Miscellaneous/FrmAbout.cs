@@ -11,7 +11,7 @@ namespace AssetTrakr.App.Forms.Miscellaneous
         {
             InitializeComponent();
             Text = $"About {AssemblyTitle}";
-            lblProductName.Text = $"Product: {AssemblyProduct}";
+            lblProductName.Text = $"{AssemblyProduct}";
             lblVersionValue.Text = $"Version: v{AssemblyVersion}";
             lblCopyrightValue.Text = $"Copyright (c) {AssemblyCopyright}";
             lblDescriptionValue.Text = $"AssetTrakr is a License, Contract and Asset Tracker for home use built using EF Core and .NET 8.";

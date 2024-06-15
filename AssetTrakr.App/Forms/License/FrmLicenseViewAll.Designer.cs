@@ -40,11 +40,11 @@
             toolStripSeparator3 = new ToolStripSeparator();
             deleteToolStripMenuItem = new ToolStripMenuItem();
             archiveOrUnarchiveToolStripMenuItem = new ToolStripMenuItem();
-            dgvViewAll = new DataGridView();
             lblNoLicensesDescription = new Label();
             lblNoLicensesTitle = new Label();
+            sfDgViewAll = new Syncfusion.WinForms.DataGrid.SfDataGrid();
             cmsDgvRightClick.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvViewAll).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)sfDgViewAll).BeginInit();
             SuspendLayout();
             // 
             // cmsDgvRightClick
@@ -112,32 +112,6 @@
             archiveOrUnarchiveToolStripMenuItem.Text = "Archive";
             archiveOrUnarchiveToolStripMenuItem.Click += archiveOrUnarchiveToolStripMenuItem_Click;
             // 
-            // dgvViewAll
-            // 
-            dgvViewAll.AllowUserToAddRows = false;
-            dgvViewAll.AllowUserToDeleteRows = false;
-            dgvViewAll.AllowUserToOrderColumns = true;
-            dgvViewAll.AllowUserToResizeRows = false;
-            dgvViewAll.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvViewAll.BackgroundColor = Color.White;
-            dgvViewAll.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvViewAll.ContextMenuStrip = cmsDgvRightClick;
-            dgvViewAll.Dock = DockStyle.Fill;
-            dgvViewAll.Location = new Point(0, 0);
-            dgvViewAll.MultiSelect = false;
-            dgvViewAll.Name = "dgvViewAll";
-            dgvViewAll.ReadOnly = true;
-            dgvViewAll.RowHeadersVisible = false;
-            dgvViewAll.RowHeadersWidth = 51;
-            dgvViewAll.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dgvViewAll.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvViewAll.ShowCellErrors = false;
-            dgvViewAll.ShowCellToolTips = false;
-            dgvViewAll.ShowEditingIcon = false;
-            dgvViewAll.ShowRowErrors = false;
-            dgvViewAll.Size = new Size(1098, 661);
-            dgvViewAll.TabIndex = 18;
-            // 
             // lblNoLicensesDescription
             // 
             lblNoLicensesDescription.AutoSize = true;
@@ -159,23 +133,49 @@
             lblNoLicensesTitle.TabIndex = 22;
             lblNoLicensesTitle.Text = "No Licenses";
             // 
+            // sfDgViewAll
+            // 
+            sfDgViewAll.AccessibleName = "Table";
+            sfDgViewAll.AllowEditing = false;
+            sfDgViewAll.AllowFiltering = true;
+            sfDgViewAll.AutoSizeColumnsMode = Syncfusion.WinForms.DataGrid.Enums.AutoSizeColumnsMode.Fill;
+            sfDgViewAll.ContextMenuStrip = cmsDgvRightClick;
+            sfDgViewAll.Dock = DockStyle.Fill;
+            sfDgViewAll.Location = new Point(0, 0);
+            sfDgViewAll.Name = "sfDgViewAll";
+            sfDgViewAll.PreviewRowHeight = 35;
+            sfDgViewAll.ShowBusyIndicator = true;
+            sfDgViewAll.ShowGroupDropArea = true;
+            sfDgViewAll.ShowHeaderToolTip = true;
+            sfDgViewAll.Size = new Size(1098, 661);
+            sfDgViewAll.Style.BorderColor = Color.FromArgb(100, 100, 100);
+            sfDgViewAll.Style.CheckBoxStyle.CheckedBackColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.Style.CheckBoxStyle.CheckedBorderColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.Style.CheckBoxStyle.IndeterminateBorderColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.Style.HyperlinkStyle.DefaultLinkColor = Color.FromArgb(0, 120, 215);
+            sfDgViewAll.TabIndex = 28;
+            sfDgViewAll.Text = "sfDataGrid1";
+            sfDgViewAll.SelectionChanged += sfDgViewAll_SelectionChanged;
+            sfDgViewAll.DataSourceChanged += sfDgViewAll_DataSourceChanged;
+            // 
             // FrmLicenseViewAll
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1098, 661);
+            Controls.Add(sfDgViewAll);
             Controls.Add(lblNoLicensesDescription);
             Controls.Add(lblNoLicensesTitle);
-            Controls.Add(dgvViewAll);
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimizeBox = false;
             MinimumSize = new Size(1116, 708);
             Name = "FrmLicenseViewAll";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View All Licenses";
             cmsDgvRightClick.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvViewAll).EndInit();
+            ((System.ComponentModel.ISupportInitialize)sfDgViewAll).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -183,7 +183,6 @@
         #endregion
         private ContextMenuStrip cmsDgvRightClick;
         private ToolStripMenuItem columnSelectorToolStripMenuItem;
-        private DataGridView dgvViewAll;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem viewToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
@@ -194,5 +193,6 @@
         private ToolStripMenuItem deleteToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem archiveOrUnarchiveToolStripMenuItem;
+        private Syncfusion.WinForms.DataGrid.SfDataGrid sfDgViewAll;
     }
 }

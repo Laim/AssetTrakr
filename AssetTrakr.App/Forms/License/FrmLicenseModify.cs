@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using AssetTrakr.Logging;
 using AssetTrakr.Utils.Enums;
 using AssetTrakr.WinForms.ActionLog;
+using AssetTrakr.Extensions;
 
 namespace AssetTrakr.App.Forms.License
 {
@@ -101,9 +102,8 @@ namespace AssetTrakr.App.Forms.License
 
         private void btnAddUpdate_Click(object sender, EventArgs e)
         {
-            if (txtName.Text.Length > 155 || txtName.Text.Length == 0)
+            if (txtName.IsRequired("Name", 155))
             {
-                MessageBox.Show("Name is a required field and must be be less than 156 characters", "Name", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

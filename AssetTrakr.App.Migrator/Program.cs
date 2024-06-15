@@ -16,7 +16,7 @@ namespace AssetTrakr.App.Migrator
             ApplicationConfiguration.Initialize();
 
             LogManager logManager = new("setupApp.log");
-            LogManager.Information("Initialize...");
+            LogManager.Information("Initialize...", typeof(Program));
 
             Application.Run(new FrmDatabaseUpgrade());
         }
